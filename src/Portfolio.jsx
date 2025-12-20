@@ -5,6 +5,7 @@ import AfterEffects from '../image/AfterEffcts.png';
 import DaVinciResolve from '../image/Davinchi Resolve.png';
 import Photoshop from '../image/PhotoShop.png';
 import ProfileVideo from '../public/Final 001.webm';
+import ProfilePic from '../image/WhatsApp Image 2025-12-02 at 5.40.26 PM.jpeg.jpg';
 
 const Portfolio = () => {
     const [activeCategory, setActiveCategory] = useState('all');
@@ -217,7 +218,7 @@ const Portfolio = () => {
                     {/* Image Window */}
                     <WindowCard title="Profile_Pic.jpg" className="overflow-hidden">
                         <img
-                            src="\PriyanshuDandapath\image\WhatsApp Image 2025-12-02 at 5.40.26 PM.jpeg.jpg"
+                            src={ProfilePic}
                             alt="Priyanshu Dandapath - Profile"
                             className="w-full h-full object-cover rounded-lg"
                         />
