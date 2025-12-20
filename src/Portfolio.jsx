@@ -123,21 +123,21 @@ const Portfolio = () => {
             </div>
 
             {/* --- Taskbar / Navigation --- */}
-            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[90vw]">
-                <div className="flex flex-col md:flex-row items-center gap-2 px-3 md:px-4 py-2 md:py-3 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/10 shadow-2xl hover:scale-105 transition-transform duration-300 ring-1 ring-white/5">
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95vw] overflow-x-auto">
+                <div className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/10 shadow-2xl hover:scale-105 transition-transform duration-300 ring-1 ring-white/5 whitespace-nowrap">
                     {['About', 'Experience', 'Work', 'Contact'].map((item) => (
                         <button
                             key={item}
                             onClick={() => scrollToSection(item.toLowerCase())}
-                            className="px-2 md:px-4 py-1 md:py-2 rounded-xl text-xs md:text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white transition-all active:scale-95 w-full md:w-auto text-center"
+                            className="px-2 md:px-4 py-1 md:py-2 rounded-xl text-xs md:text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white transition-all active:scale-95 flex-shrink-0"
                         >
                             {item}
                         </button>
                     ))}
-                    <div className="w-full md:w-px h-px md:h-6 bg-white/10 mx-0 md:mx-2 my-1 md:my-0"></div>
+                    <div className="w-px h-6 bg-white/10 mx-1 md:mx-2 flex-shrink-0"></div>
                     <button
                         onClick={() => scrollToSection('contact')}
-                        className="px-2 md:px-4 py-1 md:py-2 rounded-xl bg-purple-600 text-white font-bold text-xs md:text-sm shadow-lg hover:bg-purple-500 transition-all active:scale-95 w-full md:w-auto"
+                        className="px-2 md:px-4 py-1 md:py-2 rounded-xl bg-purple-600 text-white font-bold text-xs md:text-sm shadow-lg hover:bg-purple-500 transition-all active:scale-95 flex-shrink-0"
                     >
                         Hire Me
                     </button>
