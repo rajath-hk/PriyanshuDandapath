@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Instagram, Linkedin, Mail, Phone, ExternalLink, Scissors, Film, MonitorPlay, Sparkles, ChevronDown, Folder, Maximize2, Minus, X } from 'lucide-react';
+import PremierePro from '../image/PrimerPro.png';
+import AfterEffects from '../image/AfterEffcts.png';
+import DaVinciResolve from '../image/Davinchi Resolve.png';
+import Photoshop from '../image/PhotoShop.png';
+import ProfileVideo from '../public/Final 001.webm';
 
 const Portfolio = () => {
     const [activeCategory, setActiveCategory] = useState('all');
@@ -23,10 +28,10 @@ const Portfolio = () => {
     }, []);
 
     const software = [
-        { name: 'Premiere Pro', image: '/image/PrimerPro.png' },
-        { name: 'After Effects', image: '/image/AfterEffcts.png' },
-        { name: 'DaVinci Resolve', image: '/image/Davinchi Resolve.png' },
-        { name: 'Photoshop', image: '/image/PhotoShop.png' }
+        { name: 'Premiere Pro', image: PremierePro },
+        { name: 'After Effects', image: AfterEffects },
+        { name: 'DaVinci Resolve', image: DaVinciResolve },
+        { name: 'Photoshop', image: Photoshop }
     ];
 
     const experience = [
@@ -172,7 +177,7 @@ const Portfolio = () => {
                             className="h-56 md:h-96 w-auto object-contain"
                             style={{ mixBlendMode: 'screen' }}
                         >
-                            <source src="/Final 001.webm" type="video/webm" />
+                            <source src={ProfileVideo} type="video/webm" />
                         </video>
                     </div>
 
