@@ -217,7 +217,7 @@ const Portfolio = () => {
                     {/* Image Window */}
                     <WindowCard title="Profile_Pic.jpg" className="overflow-hidden">
                         <img
-                            src="/WhatsApp Image 2025-12-02 at 5.40.26 PM.jpeg.jpg"
+                            src="\PriyanshuDandapath\image\WhatsApp Image 2025-12-02 at 5.40.26 PM.jpeg.jpg"
                             alt="Priyanshu Dandapath - Profile"
                             className="w-full h-full object-cover rounded-lg"
                         />
