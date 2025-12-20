@@ -5,7 +5,8 @@ import AfterEffects from '../image/AfterEffcts.png';
 import DaVinciResolve from '../image/Davinchi Resolve.png';
 import Photoshop from '../image/PhotoShop.png';
 import ProfileVideo from '../public/Final 001.webm';
-import ProfilePic from '../image/profile.jpg';
+// @ts-ignore
+import ProfilePic from '../image/WhatsApp Image 2025-12-02 at 5.40.26 PM.jpeg.jpg';
 
 const Portfolio = () => {
     const [activeCategory, setActiveCategory] = useState('all');
