@@ -65,7 +65,6 @@ const Portfolio = () => {
     const portfolioItems = {
         fastPaced: [1, 2, 3, 4],
         motionGraphics: [1, 2, 3, 4],
-        aiReels: [1, 2, 3, 4],
         youtube: [
             { title: 'Documentary Edit', type: 'doc' },
             { title: 'Music Video Edit', type: 'music' }
@@ -342,27 +341,6 @@ const Portfolio = () => {
                     </WindowCard>
                 </div>
 
-                {/* --- AI Folder --- */}
-                <div className="mb-16">
-                    <div className="flex items-center gap-2 mb-4 pl-2">
-                        <Folder className="text-blue-500 fill-blue-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Generative_AI</h3>
-                    </div>
-                    <WindowCard title="Gen_AI_Output">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {portfolioItems.aiReels.map((item) => (
-                                <div key={item} className="aspect-[9/16] rounded-lg bg-gradient-to-br from-indigo-950 to-purple-950 relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-blue-500/20 transition-all hover:-translate-y-1 border border-white/5">
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <Sparkles className="w-12 h-12 text-white opacity-80 group-hover:rotate-12 transition-transform" />
-                                    </div>
-                                    <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
-                                        <p className="text-white text-xs font-mono">AI_Gen_{item}.mp4</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </WindowCard>
-                </div>
 
                 {/* --- YouTube Folder --- */}
                 <div>
