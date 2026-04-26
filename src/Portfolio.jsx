@@ -65,6 +65,7 @@ const Portfolio = () => {
     const portfolioItems = {
         fastPaced: [1, 2, 3, 4],
         motionGraphics: [1, 2, 3, 4],
+        aiReels: [1, 2, 3, 4],
         youtube: [
             { title: 'Documentary Edit', type: 'doc' },
             { title: 'Music Video Edit', type: 'music' }
