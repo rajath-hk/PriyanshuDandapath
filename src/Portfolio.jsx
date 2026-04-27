@@ -66,8 +66,8 @@ const Portfolio = () => {
         fastPaced: [1, 2, 3, 4],
         motionGraphics: [1, 2, 3, 4],
         youtube: [
-            { title: 'Documentary Edit', type: 'doc' },
-            { title: 'Music Video Edit', type: 'music' }
+            { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
+            { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' }
         ]
     };
 
@@ -353,8 +353,18 @@ const Portfolio = () => {
                             {portfolioItems.youtube.map((item, idx) => (
                                 <div key={idx} className="group">
                                     <div className="aspect-video rounded-lg bg-slate-800 border border-white/10 overflow-hidden relative mb-4 shadow-inner flex items-center justify-center">
-                                        <MonitorPlay size={48} className="text-slate-600 mb-2" />
-                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors"></div>
+                                        {item.videoId ? (
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${item.videoId}`}
+                                                title={item.title}
+                                                className="w-full h-full border-0 absolute inset-0 z-10"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        ) : (
+                                            <MonitorPlay size={48} className="text-slate-600 mb-2" />
+                                        )}
+                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
                                     </div>
                                     <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
                                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">{item.type}</p>
