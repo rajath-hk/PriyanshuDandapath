@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Play, Instagram, Linkedin, Mail, Phone, ExternalLink, Scissors, Film, MonitorPlay, Sparkles, ChevronDown, Folder, Maximize2, Minus, X } from 'lucide-react';
 import PremierePro from '../image/PrimerPro.png';
 import AfterEffects from '../image/AfterEffcts.png';
@@ -7,10 +7,15 @@ import Photoshop from '../image/PhotoShop.png';
 import ProfileVideo from '../public/Final 001.webm';
 import ProfilePic from '../image/profile.jpg';
 
+const ProfileVideo = '/Final 001.webm';
+
 const Portfolio = () => {
     const [activeCategory, setActiveCategory] = useState('all');
     const [scrolled, setScrolled] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [heroVideoInView, setHeroVideoInView] = useState(false);
+    const heroVideoRef = useRef(null);
+    const heroSectionRef = useRef(null);
 
     // Handle scroll effect for navbar
     useEffect(() => {
@@ -27,6 +32,33 @@ const Portfolio = () => {
             clearInterval(timer);
         };
     }, []);
+
+    // Hero video IntersectionObserver
+    useEffect(() => {
+        if (!heroSectionRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setHeroVideoInView(entry.isIntersecting);
+            },
+            { threshold: 0.3 }
+        );
+
+        observer.observe(heroSectionRef.current);
+
+        return () => observer.disconnect();
+    }, []);
+
+    // Play/pause hero video based on visibility
+    useEffect(() => {
+        if (heroVideoRef.current) {
+            if (heroVideoInView) {
+                heroVideoRef.current.play().catch(console.error);
+            } else {
+                heroVideoRef.current.pause();
+            }
+        }
+    }, [heroVideoInView]);
 
     const software = [
         { name: 'Premiere Pro', image: PremierePro },
@@ -64,7 +96,10 @@ const Portfolio = () => {
 
     const portfolioItems = {
         fastPaced: [1, 2, 3, 4],
-        motionGraphics: [1, 2, 3, 4],
+        motionGraphics: [
+            { title: 'Motion Graphics Reels', type: 'playlist', playlistId: 'PLojEBD-YcrIeyc6WAahvxBtSPb1CFfOfx' },
+            { title: 'Advanced Motion Design', type: 'playlist', playlistId: 'PLojEBD-YcrIcvbzTg0dTMQT-kpHOx8rsT' }
+        ],
         youtube: [
             { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
             { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' }
@@ -160,7 +195,7 @@ const Portfolio = () => {
             </div>
 
             {/* --- Hero Section --- */}
-            <header className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4 pt-20 pb-32">
+            <header ref={heroSectionRef} className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4 pt-20 pb-32">
 
                 <WindowCard title="System_Profile.exe" className="max-w-4xl w-full text-center bg-slate-900/40 border-white/10">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-purple-300 text-xs font-bold tracking-wide uppercase mb-8 shadow-sm">
@@ -168,18 +203,18 @@ const Portfolio = () => {
                         Professional Video Editor v4.0
                     </div>
 
-                    <div className="mb-6 flex justify-center">
-                        <video
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="h-56 md:h-96 w-auto object-contain"
-                            style={{ mixBlendMode: 'screen' }}
-                        >
-                            <source src={ProfileVideo} type="video/webm" />
-                        </video>
-                    </div>
+                <div className="mb-6 flex justify-center">
+                    <video
+                        ref={heroVideoRef}
+                        loop
+                        muted
+                        playsInline
+                        className="h-56 md:h-96 w-auto object-contain"
+                        style={{ mixBlendMode: 'screen' }}
+                    >
+                        <source src={ProfileVideo} type="video/webm" />
+                    </video>
+                </div>
 
                     <p className="max-w-xl mx-auto text-slate-400 mb-10 text-xl leading-relaxed font-medium">
                         Visual Storyteller & Motion Designer. <br />
@@ -325,16 +360,21 @@ const Portfolio = () => {
                         <h3 className="text-2xl font-bold text-slate-200">Motion_Graphics</h3>
                     </div>
                     <WindowCard title="After_Effects_Renders">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {portfolioItems.motionGraphics.map((item) => (
-                                <div key={item} className="aspect-[9/16] rounded-lg bg-slate-900 relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-purple-500/20 transition-all hover:-translate-y-1 border border-purple-500/20">
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <Play className="w-12 h-12 text-yellow-400 opacity-80 group-hover:scale-110 transition-transform" fill="currentColor" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {portfolioItems.motionGraphics.map((item, idx) => (
+                                <div key={idx} className="group">
+                                    <div className="aspect-video rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/videoseries?list=${item.playlistId}`}
+                                            title={item.title}
+                                            className="w-full h-full border-0 absolute inset-0 z-10"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
                                     </div>
-                                    <div className="absolute top-2 right-2 px-2 py-0.5 bg-yellow-400 text-black text-[10px] font-bold rounded">AE</div>
-                                    <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
-                                        <p className="text-white text-xs font-mono">MG_{item}.mov</p>
-                                    </div>
+                                    <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
+                                    <p className="text-xs text-purple-400 uppercase font-bold tracking-wider">{item.type}</p>
                                 </div>
                             ))}
                         </div>
