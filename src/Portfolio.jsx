@@ -95,10 +95,18 @@ const Portfolio = () => {
     ];
 
     const portfolioItems = {
-        fastPaced: [1, 2, 3, 4],
+        fastPaced: [
+            { title: 'Fast Paced Edit 1', type: 'short', videoId: 'zxKrdu-Qwe0' },
+            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'nzh3kbO4-Bs' },
+            { title: 'Fast Paced Edit 3', type: 'short', videoId: '_fIOLS-wdM8' },
+            { title: 'Fast Paced Edit 4', type: 'short', videoId: 'dHJg6uceDyw' }
+        ],
         motionGraphics: [
             { title: 'Motion Graphics Reels', type: 'playlist', playlistId: 'PLojEBD-YcrIeyc6WAahvxBtSPb1CFfOfx' },
-            { title: 'Advanced Motion Design', type: 'playlist', playlistId: 'PLojEBD-YcrIcvbzTg0dTMQT-kpHOx8rsT' }
+            { title: 'Advanced Motion Design', type: 'playlist', playlistId: 'PLojEBD-YcrIcvbzTg0dTMQT-kpHOx8rsT' },
+            { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
+            { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
+            { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
         ],
         youtube: [
             { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
@@ -339,13 +347,22 @@ const Portfolio = () => {
                     </div>
                     <WindowCard title="Viewer">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {portfolioItems.fastPaced.map((item) => (
-                                <div key={item} className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-yellow-500/20 transition-all hover:-translate-y-1 border border-white/5">
+                            {portfolioItems.fastPaced.map((item, idx) => (
+                                <div key={idx} className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-yellow-500/20 transition-all hover:-translate-y-1 border border-white/5">
+                                    {item.videoId && (
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${item.videoId}`}
+                                            title={item.title}
+                                            className="w-full h-full border-0 absolute inset-0 z-10"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    )}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <Play className="w-12 h-12 text-white opacity-80 group-hover:scale-110 transition-transform" fill="white" />
                                     </div>
                                     <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
-                                        <p className="text-white text-xs font-mono">Reel_{item}.mp4</p>
+                                        <p className="text-white text-xs font-mono">{item.title}</p>
                                     </div>
                                 </div>
                             ))}
@@ -364,13 +381,23 @@ const Portfolio = () => {
                             {portfolioItems.motionGraphics.map((item, idx) => (
                                 <div key={idx} className="group">
                                     <div className="aspect-video rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/videoseries?list=${item.playlistId}`}
-                                            title={item.title}
-                                            className="w-full h-full border-0 absolute inset-0 z-10"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        ></iframe>
+                                        {item.videoId ? (
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${item.videoId}`}
+                                                title={item.title}
+                                                className="w-full h-full border-0 absolute inset-0 z-10"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        ) : (
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/videoseries?list=${item.playlistId}`}
+                                                title={item.title}
+                                                className="w-full h-full border-0 absolute inset-0 z-10"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        )}
                                         <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
                                     </div>
                                     <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
