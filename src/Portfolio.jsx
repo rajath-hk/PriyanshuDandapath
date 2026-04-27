@@ -380,23 +380,15 @@ const Portfolio = () => {
                             {portfolioItems.motionGraphics.map((item, idx) => (
                                 <div key={idx} className="group">
                                     <div className="aspect-[9/16] rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
-                                        {item.videoId ? (
-                                            <iframe
-                                                src={`https://www.youtube.com/embed/${item.videoId}`}
-                                                title={item.title}
-                                                className="w-full h-full border-0 absolute inset-0 z-10"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe>
-                                        ) : (
-                                            <iframe
-                                                src={`https://www.youtube.com/embed/videoseries?list=${item.playlistId}`}
-                                                title={item.title}
-                                                className="w-full h-full border-0 absolute inset-0 z-10"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe>
-                                        )}
+                                        {item.videoId && (
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${item.videoId}`}
+                                            title={item.title}
+                                            className="w-full h-full border-0 absolute inset-0 z-10"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    )}
                                         <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
                                     </div>
                                     <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
