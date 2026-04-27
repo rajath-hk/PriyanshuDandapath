@@ -379,7 +379,7 @@ const Portfolio = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {portfolioItems.motionGraphics.map((item, idx) => (
                                 <div key={idx} className="group">
-                                    <div className="aspect-video rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
+                                    <div className="aspect-[9/16] rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
                                         {item.videoId ? (
                                             <iframe
                                                 src={`https://www.youtube.com/embed/${item.videoId}`}
