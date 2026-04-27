@@ -371,7 +371,7 @@ const Portfolio = () => {
 
                 {/* --- Motion Graphics Folder --- */}
                 <div className="mb-16">
-                    <div className="flex items-center gap-2 mb-4 pl-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <Folder className="text-purple-500 fill-purple-500/20" size={28} />
                         <h3 className="text-2xl font-bold text-slate-200">Motion_Graphics</h3>
                     </div>
@@ -379,7 +379,7 @@ const Portfolio = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {portfolioItems.motionGraphics.map((item, idx) => (
                                 <div key={idx} className="group">
-                                    <div className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-yellow-500/20 transition-all hover:-translate-y-1 border border-white/5">
+                                    <div className="aspect-[9/16] rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
                                         {item.videoId && (
                                         <iframe
                                             src={`https://www.youtube.com/embed/${item.videoId}`}
