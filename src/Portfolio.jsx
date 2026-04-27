@@ -371,16 +371,15 @@ const Portfolio = () => {
 
                 {/* --- Motion Graphics Folder --- */}
                 <div className="mb-16">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="flex items-center gap-2 mb-4 pl-2">
                         <Folder className="text-purple-500 fill-purple-500/20" size={28} />
                         <h3 className="text-2xl font-bold text-slate-200">Motion_Graphics</h3>
                     </div>
                     <WindowCard title="After_Effects_Renders">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {portfolioItems.motionGraphics.map((item, idx) => (
-                                <div key={idx} className="group">
-                                    <div className="aspect-[9/16] rounded-lg bg-slate-800 border border-purple-500/20 overflow-hidden relative mb-4 shadow-inner">
-                                        {item.videoId && (
+                                <div key={idx} className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-purple-500/20 transition-all hover:-translate-y-1 border border-white/5">
+                                    {item.videoId && (
                                         <iframe
                                             src={`https://www.youtube.com/embed/${item.videoId}`}
                                             title={item.title}
@@ -389,10 +388,12 @@ const Portfolio = () => {
                                             allowFullScreen
                                         ></iframe>
                                     )}
-                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <Play className="w-12 h-12 text-white opacity-80 group-hover:scale-110 transition-transform" fill="white" />
                                     </div>
-                                    <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
-                                    <p className="text-xs text-purple-400 uppercase font-bold tracking-wider">{item.type}</p>
+                                    <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
+                                        <p className="text-white text-xs font-mono">{item.title}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
