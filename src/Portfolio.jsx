@@ -7,7 +7,6 @@ import Photoshop from '../image/PhotoShop.png';
 import ProfileVideo from '../public/Final 001.webm';
 import ProfilePic from '../image/profile.jpg';
 
-const ProfileVideo = '/Final 001.webm';
 
 const Portfolio = () => {
     const [activeCategory, setActiveCategory] = useState('all');
