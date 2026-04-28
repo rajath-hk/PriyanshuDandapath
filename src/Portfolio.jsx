@@ -101,8 +101,6 @@ const Portfolio = () => {
             { title: 'Fast Paced Edit 4', type: 'short', videoId: 'dHJg6uceDyw' }
         ],
         motionGraphics: [
-            { title: 'Motion Graphics Reels', type: 'playlist', playlistId: 'PLojEBD-YcrIeyc6WAahvxBtSPb1CFfOfx' },
-            { title: 'Advanced Motion Design', type: 'playlist', playlistId: 'PLojEBD-YcrIcvbzTg0dTMQT-kpHOx8rsT' },
             { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
             { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
             { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
