@@ -102,9 +102,9 @@ const Portfolio = () => {
         ],
         motionGraphics: [
             { title: 'Motion Graphics Short 1', type: 'short', videoId: 'VVOVSyZuNAM' },
-            { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
+            { title: 'Motion Graphics Short 2', type: 'short', videoId: '9qDAw8fE5Q0' },
             { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' },
-            { title: 'Motion Graphics Short 3', type: 'short', videoId: 'ORbp7xWkFtY' }
+            { title: 'Motion Graphics Short 3', type: 'short', videoId: '9VNqKz8nhq4' }
         ],
         youtube: [
             { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
