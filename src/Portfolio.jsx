@@ -96,7 +96,7 @@ const Portfolio = () => {
     const portfolioItems = {
         fastPaced: [
             { title: 'Fast Paced Edit 1', type: 'short', videoId: 'zxKrdu-Qwe0' },
-            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'nzh3kbO4-Bs' },
+            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'U1S8MJ-_xtI' },
             { title: 'Fast Paced Edit 3', type: 'short', videoId: '_fIOLS-wdM8' },
             { title: 'Fast Paced Edit 4', type: 'short', videoId: 'dHJg6uceDyw' }
         ],
