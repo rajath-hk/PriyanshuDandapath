@@ -341,7 +341,7 @@ const Portfolio = () => {
                 <div className="mb-16">
                     <div className="flex items-center gap-2 mb-4 pl-2">
                         <Folder className="text-yellow-500 fill-yellow-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Fast_Paced_Edits</h3>
+                        <h3 className="text-2xl font-bold text-slate-200">Fast Paced Edits</h3>
                     </div>
                     <WindowCard title="Viewer">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -372,7 +372,7 @@ const Portfolio = () => {
                 <div className="mb-16">
                     <div className="flex items-center gap-2 mb-4 pl-2">
                         <Folder className="text-purple-500 fill-purple-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Motion_Graphics</h3>
+                        <h3 className="text-2xl font-bold text-slate-200">Motion Graphics</h3>
                     </div>
                     <WindowCard title="After_Effects_Renders">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -404,7 +404,7 @@ const Portfolio = () => {
                 <div>
                     <div className="flex items-center gap-2 mb-4 pl-2">
                         <Folder className="text-red-500 fill-red-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">YouTube_Uploads</h3>
+                        <h3 className="text-2xl font-bold text-slate-200">YouTube Uploads</h3>
                     </div>
                     <WindowCard title="Web_Browser">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
