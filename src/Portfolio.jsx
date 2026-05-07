@@ -104,13 +104,14 @@ const Portfolio = () => {
     const portfolioItems = {
         fastPaced: [
             { title: 'Fast Paced Edit 1', type: 'short', videoId: 'zxKrdu-Qwe0' },
-            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'nzh3kbO4-Bs' },
+            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'U1S8MJ-_xtI' },
             { title: 'Fast Paced Edit 3', type: 'short', videoId: '_fIOLS-wdM8' },
             { title: 'Fast Paced Edit 4', type: 'short', videoId: 'dHJg6uceDyw' }
         ],
         motionGraphics: [
             { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
             { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
+            { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' },
             { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
         ],
         youtube: [
