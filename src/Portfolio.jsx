@@ -22,13 +22,16 @@ const Portfolio = () => {
             setScrolled(window.scrollY > 50);
         };
 
-        // Clock timer
-        const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+        let timeoutId;
+        const debouncedHandleScroll = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(handleScroll, 100);
+        };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', debouncedHandleScroll);
         return () => {
-            window.removeEventListener('scroll', handleScroll);
-            clearInterval(timer);
+            window.removeEventListener('scroll', debouncedHandleScroll);
+            clearTimeout(timeoutId);
         };
     }, []);
 
@@ -43,9 +46,14 @@ const Portfolio = () => {
             { threshold: 0.3 }
         );
 
-        observer.observe(heroSectionRef.current);
+        const currentRef = heroSectionRef.current;
+        observer.observe(currentRef);
 
-        return () => observer.disconnect();
+        return () => {
+            if (currentRef) {
+                observer.unobserve(currentRef);
+            }
+        };
     }, []);
 
     // Play/pause hero video based on visibility
@@ -103,7 +111,6 @@ const Portfolio = () => {
         motionGraphics: [
             { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
             { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
-            { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' },
             { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
         ],
         youtube: [
@@ -142,14 +149,6 @@ const Portfolio = () => {
     return (
         <div className="min-h-screen bg-[#0f172a] text-slate-200 font-sans selection:bg-purple-500/30 selection:text-white overflow-x-hidden transition-colors duration-1000">
 
-            {/* Import Script Font */}
-            <style>
-                {`
-          @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
-          .font-signature { font-family: 'Dancing Script', cursive; }
-          .scrollbar-hide::-webkit-scrollbar { display: none; }
-        `}
-            </style>
 
             {/* --- Animated Background Elements --- */}
             <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -170,6 +169,8 @@ const Portfolio = () => {
                             key={item}
                             onClick={() => scrollToSection(item.toLowerCase())}
                             className="px-2 md:px-4 py-1 md:py-2 rounded-xl text-xs md:text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white transition-all active:scale-95 flex-shrink-0"
+                            role="button"
+                            aria-label={`Navigate to ${item} section`}
                         >
                             {item}
                         </button>
@@ -215,8 +216,8 @@ const Portfolio = () => {
                         loop
                         muted
                         playsInline
-                        className="h-56 md:h-96 w-auto object-contain"
-                        style={{ mixBlendMode: 'screen' }}
+                        className="h-auto md:h-96 w-full object-contain max-w-lg mx-auto video-content"
+                        controls
                     >
                         <source src={ProfileVideo} type="video/webm" />
                     </video>
@@ -230,14 +231,15 @@ const Portfolio = () => {
                     {/* Software Dock */}
                     <div className="inline-flex gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 shadow-inner backdrop-blur-sm">
                         {software.map((soft) => (
-                            <div key={soft.name} className="group relative flex flex-col items-center">
-                                <div className="w-16 h-16 rounded-xl bg-slate-800/50 shadow-lg flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-white/5 p-2">
+                            <div className="group relative flex flex-col items-center">
+                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-slate-800/50 shadow-lg flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-white/5 p-2">
                                     <img
                                         src={soft.image}
                                         alt={soft.name}
                                         className="w-full h-full object-contain"
                                     />
                                 </div>
+
                                 <div className="absolute -bottom-8 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-bold bg-black text-white px-2 py-1 rounded-md border border-white/10">
                                     {soft.name}
                                 </div>
@@ -307,7 +309,7 @@ const Portfolio = () => {
                                 <div key={index} className={`relative flex flex-col md:flex-row gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
 
                                     {/* Timeline Dot */}
-                                    <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-slate-900 border-4 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 mt-6"></div>
+                                    <div className="timeline-dot mt-6"></div>
 
                                     {/* Content Card */}
                                     <div className="ml-12 md:ml-0 md:w-1/2">
@@ -480,7 +482,7 @@ const Portfolio = () => {
                                 <ExternalLink size={16} className="text-slate-500 group-hover:text-purple-400" />
                             </a>
 
-                            <a href="https://www.linkedin.com/in/priyanshu-dandapath-a99773300/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-700/20 hover:border-blue-700/30 transition-all group">
+                            <a href="https9://www.linkedin.com/in/priyanshu-dandapath-a99773300/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-700/20 hover:border-blue-700/30 transition-all group">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 rounded-full bg-blue-700/20 text-blue-400 group-hover:scale-110 transition-transform">
                                         <Linkedin size={20} />
@@ -498,31 +500,6 @@ const Portfolio = () => {
                 <p>&copy; {new Date().getFullYear()} by Rajath Hegde . System Status: Online.</p>
             </footer>
 
-            {/* Styles */}
-            <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(-20px, 20px); }
-        }
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        @keyframes grid-move {
-          0% { background-position: 0 0; }
-          100% { background-position: 40px 40px; }
-        }
-        .animate-grid-fast {
-          animation: grid-move 1.5s linear infinite;
-        }
-      `}</style>
         </div>
     );
 };
-
-export default Portfolio;
