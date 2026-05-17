@@ -4,12 +4,10 @@ import PremierePro from '../image/PrimerPro.png';
 import AfterEffects from '../image/AfterEffcts.png';
 import DaVinciResolve from '../image/Davinchi Resolve.png';
 import Photoshop from '../image/PhotoShop.png';
-import ProfileVideo from '../public/Final 001.webm';
 import ProfilePic from '../image/profile.jpg';
 
 
 const Portfolio = () => {
-    const [activeCategory, setActiveCategory] = useState('all');
     const [scrolled, setScrolled] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [heroVideoInView, setHeroVideoInView] = useState(false);
@@ -111,12 +109,14 @@ const Portfolio = () => {
         motionGraphics: [
             { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
             { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
-            { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' },
             { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
         ],
         youtube: [
             { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
             { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' }
+        ],
+        saasAnimation: [
+            { title: 'SaaS Animation', type: 'animation', videoId: 'h8LH8smtVwU' }
         ]
     };
 
@@ -164,7 +164,7 @@ const Portfolio = () => {
 
             {/* --- Taskbar / Navigation --- */}
             <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95vw] overflow-x-auto">
-                <div className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/10 shadow-2xl hover:scale-105 transition-transform duration-300 ring-1 ring-white/5 whitespace-nowrap">
+                <div className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 rounded-2xl backdrop-blur-2xl border border-white/10 hover:scale-105 transition-all duration-300 ring-1 ring-white/5 whitespace-nowrap ${scrolled ? 'bg-slate-900/80 shadow-[0_0_30px_rgba(168,85,247,0.2)]' : 'bg-slate-900/50 shadow-2xl'}`}>
                     {['About', 'Experience', 'Work', 'Contact'].map((item) => (
                         <button
                             key={item}
@@ -220,7 +220,7 @@ const Portfolio = () => {
                         className="h-auto md:h-96 w-full object-contain max-w-lg mx-auto video-content"
                         controls
                     >
-                        <source src={ProfileVideo} type="video/webm" />
+                        <source src="/Final 001.webm" type="video/webm" />
                     </video>
                 </div>
 
@@ -232,7 +232,7 @@ const Portfolio = () => {
                     {/* Software Dock */}
                     <div className="inline-flex gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 shadow-inner backdrop-blur-sm">
                         {software.map((soft) => (
-                            <div className="group relative flex flex-col items-center">
+                            <div key={soft.name} className="group relative flex flex-col items-center">
                                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-slate-800/50 shadow-lg flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-white/5 p-2">
                                     <img
                                         src={soft.image}
@@ -435,6 +435,38 @@ const Portfolio = () => {
                     </WindowCard>
                 </div>
 
+                {/* --- Saas Animation Folder --- */}
+                <div className="mt-16">
+                    <div className="flex items-center gap-2 mb-4 pl-2">
+                        <Folder className="text-cyan-500 fill-cyan-500/20" size={28} />
+                        <h3 className="text-2xl font-bold text-slate-200">Saas Animation</h3>
+                    </div>
+                    <WindowCard title="Web_Browser">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {portfolioItems.saasAnimation.map((item, idx) => (
+                                <div key={idx} className="group">
+                                    <div className="aspect-video rounded-lg bg-slate-800 border border-white/10 overflow-hidden relative mb-4 shadow-inner flex items-center justify-center">
+                                        {item.videoId ? (
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${item.videoId}`}
+                                                title={item.title}
+                                                className="w-full h-full border-0 absolute inset-0 z-10"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        ) : (
+                                            <MonitorPlay size={48} className="text-slate-600 mb-2" />
+                                        )}
+                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
+                                    </div>
+                                    <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
+                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">{item.type}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </WindowCard>
+                </div>
+
             </section>
 
             {/* --- Get In Touch Section --- */}
@@ -483,7 +515,7 @@ const Portfolio = () => {
                                 <ExternalLink size={16} className="text-slate-500 group-hover:text-purple-400" />
                             </a>
 
-                            <a href="https9://www.linkedin.com/in/priyanshu-dandapath-a99773300/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-700/20 hover:border-blue-700/30 transition-all group">
+                            <a href="https://www.linkedin.com/in/priyanshu-dandapath-a99773300/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-700/20 hover:border-blue-700/30 transition-all group">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 rounded-full bg-blue-700/20 text-blue-400 group-hover:scale-110 transition-transform">
                                         <Linkedin size={20} />
@@ -498,7 +530,7 @@ const Portfolio = () => {
             </section>
 
             <footer className="py-8 text-center text-slate-500 text-sm border-t border-white/5 relative z-10 bg-slate-900/50 backdrop-blur-md mb-20">
-                <p>&copy; {new Date().getFullYear()} by Rajath Hegde . System Status: Online.</p>
+                <p>&copy; {new Date().getFullYear()} by Priyanshu Dandapath . System Status: Online.</p>
             </footer>
 
         </div>
