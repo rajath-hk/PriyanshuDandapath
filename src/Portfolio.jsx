@@ -109,6 +109,7 @@ const Portfolio = () => {
         youtube: [
             { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
             { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' }
+            { title: 'Saas Animation', type: 'music', videoId: '8LH8smtVwU' }
         ]
     };
 
