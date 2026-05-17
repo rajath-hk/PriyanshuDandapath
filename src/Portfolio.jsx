@@ -216,9 +216,9 @@ const Portfolio = () => {
                         ref={heroVideoRef}
                         loop
                         muted
+                        autoPlay
                         playsInline
                         className="h-auto md:h-96 w-full object-contain max-w-lg mx-auto video-content"
-                        controls
                     >
                         <source src="/Final 001.webm" type="video/webm" />
                     </video>
