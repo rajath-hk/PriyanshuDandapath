@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw uncompressed video files (>100MB disallowed by GitHub)
+*.mov
+*.m4v
+image/HidMacros/
+screenshot-*.png

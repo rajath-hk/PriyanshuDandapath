@@ -1,541 +1,1266 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Instagram, Linkedin, Mail, Phone, ExternalLink, Scissors, Film, MonitorPlay, Sparkles, ChevronDown, Folder, Maximize2, Minus, X } from 'lucide-react';
+import { 
+    Play, 
+    Instagram, 
+    Linkedin, 
+    Mail, 
+    Phone, 
+    ExternalLink, 
+    Copy, 
+    Check, 
+    Menu, 
+    X, 
+    ArrowUpRight,
+    Film,
+    Sparkles,
+    Scissors
+} from 'lucide-react';
+
 import PremierePro from '../image/PrimerPro.png';
 import AfterEffects from '../image/AfterEffcts.png';
 import DaVinciResolve from '../image/Davinchi Resolve.png';
 import Photoshop from '../image/PhotoShop.png';
 import ProfilePic from '../image/profile.jpg';
+import PortfolioBanner from '../image/Portfolio-baner.png';
 
+// Resolves relative asset URLs dynamically for GitHub Pages (/repo-name/) and local root (./)
+const getAssetUrl = (path) => {
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    return `${cleanBase}${cleanPath}`;
+};
 
-const Portfolio = () => {
-    const [scrolled, setScrolled] = useState(false);
-    const [currentTime, setCurrentTime] = useState(new Date());
-    const [heroVideoInView, setHeroVideoInView] = useState(false);
-    const heroVideoRef = useRef(null);
-    const heroSectionRef = useRef(null);
+/* =========================================================================
+   MONOCHROME GLYPHS (Matching Reference: ✦ ★ ♣)
+   ========================================================================= */
 
-    // Handle scroll effect for navbar
+// 4-point pointed sparkle star
+const GlyphSparkle = ({ className = "w-5 h-5 text-zinc-950" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 2C12.5 7.5 16.5 11.5 22 12C16.5 12.5 12.5 16.5 12 22C11.5 16.5 7.5 12.5 2 12C7.5 11.5 11.5 7.5 12 2Z"/>
+    </svg>
+);
+
+// 8-point faceted star
+const GlyphStar = ({ className = "w-5 h-5 text-zinc-950" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
+    </svg>
+);
+
+// 3-leaf clover / club mark
+const GlyphClover = ({ className = "w-5 h-5 text-zinc-950" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="7.5" r="4.5"/>
+        <circle cx="7.5" cy="14" r="4.5"/>
+        <circle cx="16.5" cy="14" r="4.5"/>
+        <path d="M11 14H13V22H11Z"/>
+        <path d="M10 20C10 20 12 21 14 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+);
+
+/* =========================================================================
+   FRAMED ALPHA-CHANNEL LOOPING 3D CHARACTER COMPONENT (3D sub roated.mov)
+   Muted inline loop, full figure visible.
+   ========================================================================= */
+const AlphaVideoFrame = ({ posterImage }) => {
+    const videoRef = useRef(null);
+    const containerRef = useRef(null);
+    const [hasError, setHasError] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [prefersReduced, setPrefersReduced] = useState(false);
+    const activePoster = posterImage || getAssetUrl('images/3d-figure-poster.png');
+
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReduced(mediaQuery.matches);
+
+        const handleMotionChange = (e) => {
+            setPrefersReduced(e.matches);
+            if (e.matches && videoRef.current) {
+                videoRef.current.pause();
+            }
         };
 
-        let timeoutId;
-        const debouncedHandleScroll = () => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(handleScroll, 100);
-        };
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', handleMotionChange);
+        }
 
-        window.addEventListener('scroll', debouncedHandleScroll);
-        return () => {
-            window.removeEventListener('scroll', debouncedHandleScroll);
-            clearTimeout(timeoutId);
-        };
-    }, []);
+        if (mediaQuery.matches && videoRef.current) {
+            videoRef.current.pause();
+            return;
+        }
 
-    // Hero video IntersectionObserver
-    useEffect(() => {
-        if (!heroSectionRef.current) return;
+        if (videoRef.current && !mediaQuery.matches) {
+            videoRef.current.play().catch(() => {});
+        }
+
+        // Pause/defer playback when offscreen
+        if (!containerRef.current || !videoRef.current) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                setHeroVideoInView(entry.isIntersecting);
+                if (videoRef.current) {
+                    if (entry.isIntersecting && !mediaQuery.matches) {
+                        videoRef.current.play().catch(() => {});
+                    } else {
+                        videoRef.current.pause();
+                    }
+                }
             },
-            { threshold: 0.3 }
+            { threshold: 0.1 }
         );
 
-        const currentRef = heroSectionRef.current;
-        observer.observe(currentRef);
-
+        observer.observe(containerRef.current);
         return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef);
+            observer.disconnect();
+            if (mediaQuery.removeEventListener) {
+                mediaQuery.removeEventListener('change', handleMotionChange);
             }
         };
     }, []);
 
-    // Play/pause hero video based on visibility
-    useEffect(() => {
-        if (heroVideoRef.current) {
-            if (heroVideoInView) {
-                heroVideoRef.current.play().catch(console.error);
-            } else {
-                heroVideoRef.current.pause();
-            }
-        }
-    }, [heroVideoInView]);
+    return (
+        <div ref={containerRef} className="relative w-full h-full flex items-center justify-center select-none">
+            {!hasError && !prefersReduced ? (
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    poster={activePoster}
+                    onError={() => setHasError(true)}
+                    onLoadedData={() => setIsLoaded(true)}
+                    onCanPlay={() => setIsLoaded(true)}
+                    className={`w-full h-full max-h-[380px] sm:max-h-[420px] object-contain relative z-10 transition-opacity duration-300 ${
+                        isLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    title="Priyanshu Dandapath 3D character animation (3D sub roated.mov)"
+                >
+                    <source src={getAssetUrl('videos/3D-sub-roated.webm')} type="video/webm" />
+                    <source src={getAssetUrl('videos/3D sub roated.webm')} type="video/webm" />
+                </video>
+            ) : null}
 
-    const software = [
-        { name: 'Premiere Pro', image: PremierePro },
-        { name: 'After Effects', image: AfterEffects },
-        { name: 'DaVinci Resolve', image: DaVinciResolve },
-        { name: 'Photoshop', image: Photoshop }
+            {/* Fallback Still Poster */}
+            {(!isLoaded || hasError || prefersReduced) && (
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <img 
+                        src={activePoster} 
+                        alt="Priyanshu Dandapath 3D figure standing still"
+                        className="w-full h-full object-contain"
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
+
+/* =========================================================================
+   CENTRAL TORN-PAPER BANNER COMPONENT (Banner My photoo.mov)
+   Updated MOV with prominent portrait in torn black band and scrolling text.
+   ========================================================================= */
+const CentralTornBanner = ({ fallbackPoster }) => {
+    const bannerVideoRef = useRef(null);
+    const bannerContainerRef = useRef(null);
+    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    const [hasVideoError, setHasVideoError] = useState(false);
+    const [prefersReduced, setPrefersReduced] = useState(false);
+    const activePoster = fallbackPoster || getAssetUrl('images/banner-poster.png');
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReduced(mediaQuery.matches);
+
+        const handleMotionChange = (e) => {
+            setPrefersReduced(e.matches);
+            if (e.matches && bannerVideoRef.current) {
+                bannerVideoRef.current.pause();
+                setIsVideoPlaying(false);
+            }
+        };
+
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', handleMotionChange);
+        }
+
+        if (mediaQuery.matches && bannerVideoRef.current) {
+            bannerVideoRef.current.pause();
+            return;
+        }
+
+        if (bannerVideoRef.current && !mediaQuery.matches) {
+            bannerVideoRef.current.play().catch(() => {});
+        }
+
+        if (!bannerContainerRef.current || !bannerVideoRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (bannerVideoRef.current) {
+                    if (entry.isIntersecting && !mediaQuery.matches) {
+                        bannerVideoRef.current.play().catch(() => {});
+                    } else {
+                        bannerVideoRef.current.pause();
+                    }
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(bannerContainerRef.current);
+        return () => {
+            observer.disconnect();
+            if (mediaQuery.removeEventListener) {
+                mediaQuery.removeEventListener('change', handleMotionChange);
+            }
+        };
+    }, []);
+
+    return (
+        <section 
+            ref={bannerContainerRef} 
+            className="relative my-8 sm:my-14 md:my-18 w-full overflow-hidden select-none active:scale-[0.99] transition-transform duration-150 cursor-pointer"
+            aria-label="Motion Video Banner"
+        >
+            <div className="relative w-full flex items-center justify-center overflow-hidden">
+                {!hasVideoError && !prefersReduced ? (
+                    <video
+                        ref={bannerVideoRef}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        poster={activePoster}
+                        onPlaying={() => setIsVideoPlaying(true)}
+                        onLoadedData={() => setIsVideoPlaying(true)}
+                        onCanPlay={() => setIsVideoPlaying(true)}
+                        onError={() => setHasVideoError(true)}
+                        className="w-full h-auto min-w-full block object-contain mx-auto select-none pointer-events-none scale-[1.02] sm:scale-105 md:scale-110 transition-transform duration-300"
+                        title="Priyanshu Dandapath motion torn-paper banner (Banner My photoo.mov)"
+                    >
+                        <source src={`${getAssetUrl('videos/Banner-My-photoo.webm')}?v=2`} type="video/webm" />
+                        <source src={`${getAssetUrl('videos/Banner My photoo.webm')}?v=2`} type="video/webm" />
+                    </video>
+                ) : null}
+
+                {/* Fallback Still Poster */}
+                {(!isVideoPlaying || hasVideoError || prefersReduced) && (
+                    <img 
+                        src={activePoster} 
+                        alt="Priyanshu Dandapath motion banner still" 
+                        className="w-full h-auto min-w-full block object-contain mx-auto select-none scale-[1.02] sm:scale-105 md:scale-110"
+                    />
+                )}
+            </div>
+        </section>
+    );
+};
+
+/* =========================================================================
+   VERTICAL VIDEO CARD (True 9:16 Portrait Ratio)
+   ========================================================================= */
+const ProjectCardVertical = ({ project, isPlaying, onPlay }) => (
+    <div 
+        tabIndex={0}
+        className="group rounded-2xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl card-hover-lift overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-red-500 focus:outline-none w-full"
+    >
+        {/* Card Header Bar */}
+        <div className="px-4 py-2.5 bg-zinc-950/80 border-b border-zinc-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                <span className="font-mono text-xs font-bold text-zinc-200">
+                    #{project.id}
+                </span>
+                <span className="text-zinc-500">/</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-300">
+                    {project.categoryLabel}
+                </span>
+            </div>
+            <span className="font-mono text-xs text-zinc-400 font-semibold">
+                {project.date}
+            </span>
+        </div>
+
+        {/* Video Player Frame with true 9:16 portrait ratio */}
+        <div className="p-3 sm:p-3.5 bg-black/60 border-b border-zinc-800 flex items-center justify-center">
+            <div className="aspect-[9/16] w-full rounded-xl overflow-hidden bg-black relative border border-zinc-800 shadow-inner">
+                {isPlaying ? (
+                    <iframe
+                        src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&rel=0`}
+                        title={project.title}
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                ) : (
+                    <div className="relative w-full h-full group/video">
+                        <img 
+                            src={`https://img.youtube.com/vi/${project.videoId}/hqdefault.jpg`} 
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover/video:scale-105"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-black/35 flex items-center justify-center transition-colors group-hover/video:bg-black/20">
+                            <button
+                                onClick={onPlay}
+                                className="w-14 h-14 rounded-2xl bg-red-600/95 hover:bg-red-500 active:scale-90 active:bg-red-700 text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-all cursor-pointer backdrop-blur-sm border border-white/20 select-none"
+                                aria-label={`Play ${project.title}`}
+                            >
+                                <Play size={24} className="fill-white translate-x-0.5" />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+
+        {/* Card Footer & Metadata */}
+        <div className="p-4 sm:p-5 flex items-center justify-between gap-2 mt-auto bg-zinc-950/60">
+            <div className="min-w-0">
+                <h3 className="font-display font-black text-sm sm:text-base text-white leading-tight truncate">
+                    {project.title}
+                </h3>
+                <span className="inline-block px-2 py-0.5 mt-1 rounded bg-zinc-800 text-[10px] font-mono font-bold text-zinc-300 border border-zinc-700 uppercase">
+                    {project.tag}
+                </span>
+            </div>
+
+            <a
+                href={`https://www.youtube.com/watch?v=${project.videoId}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 active:scale-95 active:bg-red-700 text-white font-mono font-bold text-[11px] tracking-wider uppercase transition-all shrink-0 cursor-pointer shadow-md"
+            >
+                YOUTUBE <ArrowUpRight size={13} />
+            </a>
+        </div>
+    </div>
+);
+
+/* =========================================================================
+   HORIZONTAL VIDEO CARD (True 16:9 Landscape Ratio)
+   ========================================================================= */
+const ProjectCardHorizontal = ({ project, isPlaying, onPlay }) => (
+    <div 
+        tabIndex={0}
+        className="group rounded-2xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl card-hover-lift overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-red-500 focus:outline-none w-full"
+    >
+        {/* Card Header Bar */}
+        <div className="px-4 sm:px-5 py-3 bg-zinc-950/80 border-b border-zinc-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span className="font-mono text-xs sm:text-sm font-bold text-zinc-200">
+                    #{project.id}
+                </span>
+                <span className="text-zinc-500">/</span>
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-300">
+                    {project.categoryLabel}
+                </span>
+            </div>
+            <span className="font-mono text-xs sm:text-sm text-zinc-400 font-semibold">
+                {project.date}
+            </span>
+        </div>
+
+        {/* Video Player Frame with true 16:9 landscape ratio */}
+        <div className="p-3 sm:p-5 bg-black/60 border-b border-zinc-800">
+            <div className="aspect-video w-full rounded-xl overflow-hidden bg-black relative border border-zinc-800 shadow-inner">
+                {isPlaying ? (
+                    <iframe
+                        src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&rel=0`}
+                        title={project.title}
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                ) : (
+                    <div className="relative w-full h-full group/video">
+                        <img 
+                            src={`https://img.youtube.com/vi/${project.videoId}/maxresdefault.jpg`} 
+                            onError={(e) => {
+                                e.target.src = `https://img.youtube.com/vi/${project.videoId}/hqdefault.jpg`;
+                            }}
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover/video:scale-105"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-black/35 flex items-center justify-center transition-colors group-hover/video:bg-black/20">
+                            <button
+                                onClick={onPlay}
+                                className="w-18 h-12 rounded-xl bg-red-600/95 hover:bg-red-500 active:scale-90 active:bg-red-700 text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-all cursor-pointer backdrop-blur-sm border border-white/20 select-none"
+                                aria-label={`Play ${project.title}`}
+                            >
+                                <Play size={26} className="fill-white translate-x-0.5" />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+
+        {/* Card Footer & Metadata */}
+        <div className="p-4 sm:p-5 flex items-center justify-between gap-3 mt-auto bg-zinc-950/60">
+            <div className="min-w-0">
+                <h3 className="font-display font-black text-base sm:text-xl text-white leading-tight truncate">
+                    {project.title}
+                </h3>
+                <span className="inline-block px-2.5 py-0.5 mt-1 rounded bg-zinc-800 text-[10px] sm:text-xs font-mono font-bold text-zinc-300 border border-zinc-700 uppercase">
+                    {project.tag}
+                </span>
+            </div>
+
+            <a
+                href={`https://www.youtube.com/watch?v=${project.videoId}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 active:scale-95 active:bg-red-700 text-white font-mono font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shrink-0 cursor-pointer shadow-md"
+            >
+                YOUTUBE <ArrowUpRight size={15} />
+            </a>
+        </div>
+    </div>
+);
+
+/* =========================================================================
+   MAIN PORTFOLIO COMPONENT
+   ========================================================================= */
+const Portfolio = () => {
+    const [activeSection, setActiveSection] = useState('home');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [activeWorkCategory, setActiveWorkCategory] = useState('all');
+    const [copiedEmail, setCopiedEmail] = useState(false);
+    const [playingVideoId, setPlayingVideoId] = useState(null);
+
+    // Track active section on scroll
+    useEffect(() => {
+        const sections = ['home', 'about', 'services', 'work', 'contact'];
+        const handleScroll = () => {
+            const scrollPos = window.scrollY + 250;
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const sec = document.getElementById(sections[i]);
+                if (sec && sec.offsetTop <= scrollPos) {
+                    setActiveSection(sections[i]);
+                    break;
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToSection = (id) => {
+        const targetId = id === 'experience' ? 'services' : id;
+        const element = document.getElementById(targetId) || document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            setMobileMenuOpen(false);
+        }
+    };
+
+    const handleCopyEmail = () => {
+        navigator.clipboard.writeText('artpriyans@gmail.com');
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 2000);
+    };
+
+    // Full software names (no ellipses truncation)
+    const softwareSkills = [
+        { code: 'Pr', name: 'Premiere Pro', desc: 'Fast Cut & Rhythm', icon: PremierePro },
+        { code: 'Ae', name: 'After Effects', desc: 'Motion & VFX', icon: AfterEffects },
+        { code: 'Da', name: 'DaVinci Resolve', desc: 'Color & Sound', icon: DaVinciResolve },
+        { code: 'Ps', name: 'Photoshop', desc: 'Thumbnails & Assets', icon: Photoshop }
     ];
 
-    const experience = [
+    // High-value creative services replacing timeline
+    const creativeServices = [
         {
-            year: '2022',
-            title: 'The Beginning',
-            desc: 'Started my video editing journey working on personal passion projects, learning the fundamentals of rhythm and cut.',
-            type: 'Personal'
+            title: 'Short-Form Viral Retention',
+            tag: '9:16 Shorts',
+            desc: 'High-pace TikTok, Reels & YT Shorts engineered with psychological hooks, rapid beat sync & retention graphs.',
+            metrics: '90%+ Avg. Watch Retention'
         },
         {
-            year: '2023',
-            title: 'Agency Internship & Freelance',
-            desc: 'Landed my first internship at a media agency. Balanced agency work with freelance gigs to expand my portfolio.',
-            type: 'Internship'
+            title: 'Docu-Style YouTube Storytelling',
+            tag: '16:9 Long-Form',
+            desc: 'Immersive long-form pacing, narrative chapter cuts, cinematic B-roll storytelling and viewer engagement retention.',
+            metrics: 'High Conversion & AVD'
         },
         {
-            year: '2024',
-            title: 'Niche Specialization',
-            desc: 'Second internship focusing on the Gym/Fitness niche. My dedication paid off—promoted to full-time after just 3 months.',
-            type: 'Full-time'
+            title: 'Motion Graphics & Visual FX',
+            tag: 'Ae Motion',
+            desc: 'Kinetic typography, animated 2D/3D elements, custom title cards and dynamic UI explainer animations.',
+            metrics: 'Custom 60FPS Assets'
         },
         {
-            year: '2025',
-            title: 'Current Status',
-            desc: 'Continuing full-time agency work while pushing boundaries with high-end freelance clients and personal creative works.',
-            type: 'Professional'
+            title: 'Sound Design & Audio Mastering',
+            tag: 'Foley & Color',
+            desc: 'Multi-layered cinematic Foley, hard-hitting impact risers, vocal tuning, crisp EQ and cinematic color grades.',
+            metrics: '4K ProRes Audio/Video'
         }
     ];
 
     const portfolioItems = {
         fastPaced: [
-            { title: 'Fast Paced Edit 1', type: 'short', videoId: 'zxKrdu-Qwe0' },
-            { title: 'Fast Paced Edit 2', type: 'short', videoId: 'U1S8MJ-_xtI' },
-            { title: 'Fast Paced Edit 3', type: 'short', videoId: '_fIOLS-wdM8' },
-            { title: 'Fast Paced Edit 4', type: 'short', videoId: 'dHJg6uceDyw' }
+            { id: '01', title: 'Fast Paced Edit 1', type: 'Short Form', videoId: 'zxKrdu-Qwe0', tag: 'High Retention', date: '2025', isVertical: true },
+            { id: '02', title: 'Fast Paced Edit 2', type: 'Short Form', videoId: 'U1S8MJ-_xtI', tag: 'Gym Rhythm', date: '2025', isVertical: true },
+            { id: '03', title: 'Fast Paced Edit 3', type: 'Short Form', videoId: '_fIOLS-wdM8', tag: 'Speed Cut', date: '2024', isVertical: true },
+            { id: '04', title: 'Fast Paced Edit 4', type: 'Short Form', videoId: 'dHJg6uceDyw', tag: 'Beat Sync', date: '2024', isVertical: true }
         ],
         motionGraphics: [
-            { title: 'Motion Graphics Short 1', type: 'short', videoId: 'ORbp7xWkFtY' },
-            { title: 'Motion Graphics Short 2', type: 'short', videoId: '9VNqKz8nhq4' },
-            { title: 'Motion Graphics Short 3', type: 'short', videoId: '2VFJNTEjmTQ' }
+            { id: '05', title: 'Motion Graphics Short 1', type: 'Motion', videoId: 'ORbp7xWkFtY', tag: 'Visual FX', date: '2025', isVertical: true },
+            { id: '06', title: 'Motion Graphics Short 2', type: 'Motion', videoId: '9VNqKz8nhq4', tag: 'Kinetic Type', date: '2025', isVertical: true },
+            { id: '07', title: 'Motion Graphics Short 3', type: 'Motion', videoId: '2VFJNTEjmTQ', tag: '3D Space', date: '2024', isVertical: true }
         ],
         youtube: [
-            { title: 'Long form', type: 'doc', videoId: 'jFvz7VQbN2g' },
-<<<<<<< HEAD
-            { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' },
-            { title: 'Saas Animation', type: 'Saas', videoId: '8LH8smtVwU' }
-=======
-            { title: 'Music video', type: 'music', videoId: 'LYhWxt61a_I' }
+            { id: '08', title: 'Long form Storytelling', type: 'Docu-Style', videoId: 'jFvz7VQbN2g', tag: 'YouTube Main', isWide: true, date: '2025', isVertical: false },
+            { id: '09', title: 'Music Video Edit', type: 'Music Video', videoId: 'LYhWxt61a_I', tag: 'Beat Sync', isWide: true, date: '2024', isVertical: false }
         ],
         saasAnimation: [
-            { title: 'SaaS Animation', type: 'animation', videoId: 'h8LH8smtVwU' }
->>>>>>> 14b6b99d97c7bae28dd30040e5b86eb35782badb
+            { id: '10', title: 'SaaS Product Animation', type: 'Product Motion', videoId: 'h8LH8smtVwU', tag: 'UI Explainer', isWide: true, date: '2025', isVertical: false }
         ]
     };
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    // All 7 Vertical projects (4 fast-paced + 3 motion graphics)
+    const allVerticalProjects = [
+        ...portfolioItems.fastPaced.map(p => ({ ...p, category: 'fastPaced', categoryLabel: 'Fast Paced' })),
+        ...portfolioItems.motionGraphics.map(p => ({ ...p, category: 'motionGraphics', categoryLabel: 'Motion Graphics' }))
+    ];
 
-    // Reusable Window Component
-    const WindowCard = ({ title, children, className = "" }) => (
-        <div className={`relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900/60 backdrop-blur-xl ${className}`}>
-            {/* Window Title Bar */}
-            <div className="h-10 bg-white/5 border-b border-white/10 flex items-center justify-between px-4">
-                <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400/80 border border-red-500/30"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-400/80 border border-yellow-500/30"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-400/80 border border-green-500/30"></div>
-                </div>
-                <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{title}</div>
-                <div className="w-10"></div> {/* Spacer for alignment */}
-            </div>
-            {/* Window Content */}
-            <div className="p-6 md:p-8">
-                {children}
-            </div>
-        </div>
-    );
+    // All 3 Horizontal projects (2 youtube + 1 saas animation)
+    const allHorizontalProjects = [
+        ...portfolioItems.youtube.map(p => ({ ...p, category: 'youtube', categoryLabel: 'YouTube Uploads' })),
+        ...portfolioItems.saasAnimation.map(p => ({ ...p, category: 'saasAnimation', categoryLabel: 'SaaS Animation' }))
+    ];
+
+    const fastPacedProjects = portfolioItems.fastPaced.map(p => ({
+        ...p,
+        category: 'fastPaced',
+        categoryLabel: 'Fast Paced'
+    }));
+
+    const motionGraphicsProjects = portfolioItems.motionGraphics.map(p => ({
+        ...p,
+        category: 'motionGraphics',
+        categoryLabel: 'Motion Graphics'
+    }));
+
+    const youtubeProjects = portfolioItems.youtube.map(p => ({
+        ...p,
+        category: 'youtube',
+        categoryLabel: 'YouTube Uploads'
+    }));
+
+    const saasAnimationProjects = portfolioItems.saasAnimation.map(p => ({
+        ...p,
+        category: 'saasAnimation',
+        categoryLabel: 'SaaS Animation'
+    }));
+
+    const filterCategories = [
+        { id: 'all', label: 'ALL FILES', count: 10 },
+        { id: 'fastPaced', label: 'FAST PACED EDITS', count: 4 },
+        { id: 'motionGraphics', label: 'MOTION GRAPHICS', count: 3 },
+        { id: 'youtube', label: 'YOUTUBE UPLOADS', count: 2 },
+        { id: 'saasAnimation', label: 'SAAS ANIMATION', count: 1 },
+    ];
 
     return (
-        <div className="min-h-screen bg-[#0f172a] text-slate-200 font-sans selection:bg-purple-500/30 selection:text-white overflow-x-hidden transition-colors duration-1000">
+        <div className="min-h-screen bg-graph-grid text-[#F4F4F6] font-sans selection:bg-red-500 selection:text-white relative overflow-x-hidden">
 
-
-            {/* --- Animated Background Elements --- */}
-            <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-                {/* Dark Grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] animate-grid-fast"></div>
-
-                {/* Floating Gradient Orbs (Darker/More Vibrant) */}
-                <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/20 rounded-full blur-[120px] animate-float"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-600/20 rounded-full blur-[120px] animate-float animation-delay-2000"></div>
-                <div className="absolute top-[40%] left-[30%] w-[30vw] h-[30vw] bg-pink-600/20 rounded-full blur-[100px] animate-float animation-delay-4000"></div>
-            </div>
-
-            {/* --- Taskbar / Navigation --- */}
-            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95vw] overflow-x-auto">
-                <div className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 rounded-2xl backdrop-blur-2xl border border-white/10 hover:scale-105 transition-all duration-300 ring-1 ring-white/5 whitespace-nowrap ${scrolled ? 'bg-slate-900/80 shadow-[0_0_30px_rgba(168,85,247,0.2)]' : 'bg-slate-900/50 shadow-2xl'}`}>
-                    {['About', 'Experience', 'Work', 'Contact'].map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => scrollToSection(item.toLowerCase())}
-                            className="px-2 md:px-4 py-1 md:py-2 rounded-xl text-xs md:text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white transition-all active:scale-95 flex-shrink-0"
-                            role="button"
-                            aria-label={`Navigate to ${item} section`}
-                        >
-                            {item}
-                        </button>
-                    ))}
-                    <div className="w-px h-6 bg-white/10 mx-1 md:mx-2 flex-shrink-0"></div>
-                    <button
-                        onClick={() => scrollToSection('contact')}
-                        className="px-2 md:px-4 py-1 md:py-2 rounded-xl bg-purple-600 text-white font-bold text-xs md:text-sm shadow-lg hover:bg-purple-500 transition-all active:scale-95 flex-shrink-0"
+            {/* =========================================================================
+               MINIMAL EDITORIAL TOP NAVIGATION (Dark Translucent Bar)
+               ========================================================================= */}
+            <header className="sticky top-0 z-50 px-4 sm:px-8 py-3.5 backdrop-blur-md bg-[#0E0F12]/85 border-b border-zinc-800/80">
+                <div className="max-w-7xl mx-auto flex items-center justify-between">
+                    
+                    {/* Left: Brand / Initials */}
+                    <button 
+                        onClick={() => scrollToSection('home')}
+                        className="group flex items-center gap-2.5 text-left cursor-pointer"
+                        aria-label="Back to top"
                     >
-                        Hire Me
+                        <span className="w-8 h-8 rounded-full border-2 border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-xs text-white group-hover:bg-red-500 group-hover:border-red-500 transition-colors">
+                            PD
+                        </span>
+                        <span className="font-display font-black text-sm tracking-tight text-white uppercase hidden sm:inline">
+                            PRIYANSHU DANDAPATH
+                        </span>
                     </button>
-                </div>
-            </nav>
 
-            {/* --- Top Bar (OS Style) --- */}
-            <div className="fixed top-0 w-full z-40 px-6 py-2 flex justify-between items-center text-xs font-medium text-slate-400 bg-slate-900/30 backdrop-blur-md border-b border-white/5">
-                <div className="flex items-center gap-4">
-                    <span className="font-bold text-slate-200"> PriyansArt OS</span>
-                    <span className="hidden md:inline hover:text-white cursor-pointer transition-colors">File</span>
-                    <span className="hidden md:inline hover:text-white cursor-pointer transition-colors">Edit</span>
-                    <span className="hidden md:inline hover:text-white cursor-pointer transition-colors">View</span>
-                    <span className="hidden md:inline hover:text-white cursor-pointer transition-colors">Window</span>
-                    <span className="hidden md:inline hover:text-white cursor-pointer transition-colors">Help</span>
-                </div>
-                <div className="flex items-center gap-4">
-                    <span className="uppercase text-green-400">Bat 100%</span>
-                    <span className="text-slate-200">{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-            </div>
+                    {/* Center: Clean Navigation */}
+                    <nav className="hidden md:flex items-center gap-6" aria-label="Main Navigation">
+                        {[
+                            { id: 'home', label: 'HOME' },
+                            { id: 'about', label: 'ABOUT' },
+                            { id: 'services', label: 'SERVICES' },
+                            { id: 'work', label: 'WORK' },
+                            { id: 'contact', label: 'CONTACT' },
+                        ].map((item) => {
+                            const isActive = activeSection === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => scrollToSection(item.id)}
+                                    className={`text-xs font-bold tracking-widest uppercase transition-all duration-150 cursor-pointer relative py-1 active:scale-95 ${
+                                        isActive 
+                                            ? 'text-white font-black' 
+                                            : 'text-zinc-400 hover:text-white'
+                                    }`}
+                                >
+                                    {item.label}
+                                    {isActive && (
+                                        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-500" />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </nav>
 
-            {/* --- Hero Section --- */}
-            <header ref={heroSectionRef} className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4 pt-20 pb-32">
+                    {/* Right: Action & Hamburger */}
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => scrollToSection('contact')}
+                            className="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-500 active:scale-95 active:bg-red-700 text-white text-xs font-bold tracking-wider uppercase border border-red-500 transition-all cursor-pointer shadow-md"
+                        >
+                            COLLABORATE
+                        </button>
 
-                <WindowCard title="System_Profile.exe" className="max-w-4xl w-full text-center bg-slate-900/40 border-white/10">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-purple-300 text-xs font-bold tracking-wide uppercase mb-8 shadow-sm">
-                        <Sparkles size={14} />
-                        Professional Video Editor v4.0
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden p-1.5 rounded-md border border-zinc-700 text-zinc-300 hover:text-white active:scale-90 transition-transform cursor-pointer"
+                            aria-label="Toggle navigation menu"
+                            aria-expanded={mobileMenuOpen}
+                        >
+                            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                        </button>
                     </div>
-
-                <div className="mb-6 flex justify-center">
-                    <video
-                        ref={heroVideoRef}
-                        loop
-                        muted
-                        autoPlay
-                        playsInline
-                        className="h-auto md:h-96 w-full object-contain max-w-lg mx-auto video-content"
-                    >
-                        <source src="/Final 001.webm" type="video/webm" />
-                    </video>
                 </div>
 
-                    <p className="max-w-xl mx-auto text-slate-400 mb-10 text-xl leading-relaxed font-medium">
-                        Visual Storyteller & Motion Designer. <br />
-                        <span className="text-sm opacity-60">Located in Howrah, Bagnan</span>
-                    </p>
-
-                    {/* Software Dock */}
-                    <div className="inline-flex gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 shadow-inner backdrop-blur-sm">
-                        {software.map((soft) => (
-                            <div key={soft.name} className="group relative flex flex-col items-center">
-                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-slate-800/50 shadow-lg flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-white/5 p-2">
-                                    <img
-                                        src={soft.image}
-                                        alt={soft.name}
-                                        className="w-full h-full object-contain"
-                                    />
-                                </div>
-
-                                <div className="absolute -bottom-8 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-bold bg-black text-white px-2 py-1 rounded-md border border-white/10">
-                                    {soft.name}
-                                </div>
-                            </div>
+                {/* Mobile Dropdown */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden mt-3 p-4 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl space-y-2">
+                        {[
+                            { id: 'home', label: 'HOME' },
+                            { id: 'about', label: 'ABOUT' },
+                            { id: 'services', label: 'SERVICES' },
+                            { id: 'work', label: 'SELECTED WORK' },
+                            { id: 'contact', label: 'CONTACT' },
+                        ].map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => scrollToSection(item.id)}
+                                className={`w-full text-left py-2 px-3 rounded-lg text-xs font-bold tracking-wider uppercase active:scale-98 transition-transform cursor-pointer ${
+                                    activeSection === item.id ? 'bg-red-950/80 text-red-400 border border-red-800/60' : 'text-zinc-300'
+                                }`}
+                            >
+                                {item.label}
+                            </button>
                         ))}
                     </div>
-                </WindowCard>
-
-                <div className="absolute bottom-24 animate-bounce text-slate-600">
-                    <ChevronDown size={24} />
-                </div>
+                )}
             </header>
 
-            {/* --- About Section --- */}
-            <section id="about" className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
-                <div className="grid md:grid-cols-2 gap-8 items-start">
+            <main>
+                {/* =========================================================================
+                   HERO SECTION (Scaled Up Title with Entire Face and Chin Fully Visible)
+                   Annotation arrow and label removed as requested.
+                   ========================================================================= */}
+                <section id="home" className="relative pt-6 sm:pt-8 pb-10 sm:pb-14 px-4 sm:px-6 max-w-6xl mx-auto">
+                    
+                    {/* Top Tracking Header Labels (VIDEO EDITOR / MOTION DESIGNER ... PORTFOLIO 2026) */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm font-display font-black tracking-widest uppercase text-zinc-200 border-b border-zinc-800 pb-3 mb-6 sm:mb-8 animate-reveal-up">
+                        <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                            <span>VIDEO EDITOR / MOTION DESIGNER</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-zinc-400">
+                            <span className="px-2.5 py-0.5 rounded bg-zinc-800 text-[11px] font-mono font-bold text-zinc-300 border border-zinc-700">
+                                PORTFOLIO
+                            </span>
+                            <span className="font-mono font-bold">2026</span>
+                        </div>
+                    </div>
 
-                    {/* Image Window */}
-                    <WindowCard title="Profile_Pic.jpg" className="overflow-hidden">
-                        <img
-                            src={ProfilePic}
-                            alt="Priyanshu Dandapath - Profile"
-                            className="w-full h-full object-cover rounded-lg"
-                        />
-                    </WindowCard>
+                    {/* MAIN HERO TITLE AREA: Deliberate Subdued Paper Panel with Uncropped Chin */}
+                    <div className="relative flex flex-col items-center justify-center my-3 sm:my-6">
+                        
+                        <div className="relative w-full max-w-5xl lg:max-w-6xl mx-auto rounded-3xl bg-subdued-paper border-2 border-zinc-700/60 p-6 sm:p-10 md:p-12 shadow-2xl overflow-visible select-none animate-reveal-up">
+                            
+                            {/* The PORTFOLIO Graphic with Entire Face and Chin Fully Visible */}
+                            <div className="relative w-full overflow-visible">
+                                <img 
+                                    src={PortfolioBanner} 
+                                    alt="PORTFOLIO - Priyanshu Dandapath" 
+                                    className="w-full h-auto object-contain select-none mx-auto block overflow-visible"
+                                />
+                            </div>
 
-                    {/* Text Window */}
-                    <WindowCard title="About_Me.txt">
-                        <h2 className="text-3xl font-bold mb-6 text-white">
-                            Hello, World! 👋
-                        </h2>
-                        <div className="space-y-4 text-slate-300 font-medium leading-relaxed">
-                            <p>
-                                My name is <span className="text-purple-300 font-bold bg-purple-500/10 px-1 rounded border border-purple-500/20">Priyanshu Dandapath</span>. I have a 4-year track record of turning boring footage into retention-grabbing content.
-                            </p>
-                            <p>
-                                "Transforming raw footage into compelling stories is more than just a job for me—it's a rhythm I live by. Every cut, every transition is a heartbeat in the narrative I craft."
-                            </p>
-
-                            <div className="mt-8 grid grid-cols-2 gap-4">
-                                <div className="p-4 rounded-lg bg-yellow-900/20 border border-yellow-500/20">
-                                    <div className="text-xs text-yellow-400 font-bold uppercase mb-1">Experience</div>
-                                    <div className="text-xl font-bold text-white">4 Years</div>
-                                </div>
-                                <div className="p-4 rounded-lg bg-purple-900/20 border border-purple-500/20">
-                                    <div className="text-xs text-purple-400 font-bold uppercase mb-1">Projects</div>
-                                    <div className="text-xl font-bold text-white">150+</div>
-                                </div>
+                            {/* Cluster of Monochrome Marks below the hero (✦ ★ ♣) */}
+                            <div className="flex items-center justify-center gap-5 mt-6 sm:mt-8 text-zinc-950 select-none" aria-hidden="true">
+                                <GlyphStar className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-950" />
+                                <GlyphSparkle className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-950" />
+                                <GlyphClover className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-950" />
                             </div>
                         </div>
-                    </WindowCard>
 
-                </div>
-            </section>
+                    </div>
+                </section>
 
-            {/* --- Experience Section --- */}
-            <section id="experience" className="relative z-10 py-24 px-6 max-w-5xl mx-auto">
-                <WindowCard title="Career_Timeline.pdf">
-                    <h2 className="text-3xl font-bold mb-12 text-center text-white">Experience Log</h2>
+                {/* =========================================================================
+                   ABOUT SECTION: COMPACT BENTO GRID (5 Distinct Cards with Aligned Edges)
+                   1. 3D Character Card
+                   2. Intro & Biography Card
+                   3. Track Record / Statistics Card
+                   4. Skills Card
+                   5. Experience Timeline Card
+                   ========================================================================= */}
+                <section id="about" className="relative py-12 sm:py-18 px-4 sm:px-6 max-w-6xl mx-auto">
+                    
+                    {/* Section Label */}
+                    <div className="flex items-center gap-2 mb-6 sm:mb-8">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                        <h2 className="font-display font-black text-xs sm:text-sm tracking-widest uppercase text-zinc-300">
+                            ABOUT // IDENTITY & TRACK RECORD
+                        </h2>
+                    </div>
 
-                    <div className="relative">
-                        {/* Vertical Line */}
-                        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-white/10 rounded-full"></div>
+                    {/* Bento Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-stretch">
+                        
+                        {/* BENTO CARD 1: CHARACTER VIDEO CARD (Tall Outlined Glass Card) */}
+                        <div className="col-span-12 md:col-span-5 lg:col-span-4 rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-4 sm:p-5 flex flex-col justify-between items-center overflow-hidden">
+                            <div className="w-full flex items-center justify-between text-xs font-mono text-zinc-400 mb-2 pb-2 border-b border-zinc-800">
+                                <span className="flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                                    <span className="font-bold text-zinc-200">3D AVATAR</span>
+                                </span>
+                                <span className="text-[11px] text-zinc-400 font-semibold">ALPHA_LOOP</span>
+                            </div>
+                            
+                            <div className="w-full flex-1 flex items-center justify-center my-2 min-h-[360px] sm:min-h-[420px]">
+                                <AlphaVideoFrame posterImage="/images/3d-figure-poster.png" />
+                            </div>
 
-                        <div className="space-y-12">
-                            {experience.map((exp, index) => (
-                                <div key={index} className={`relative flex flex-col md:flex-row gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                            <div className="w-full text-center pt-2.5 border-t border-zinc-800">
+                                <span className="text-[11px] font-mono text-zinc-400 font-semibold tracking-wider uppercase">
+                                    3D_FIGURE • INTERACTIVE MODEL
+                                </span>
+                            </div>
+                        </div>
 
-                                    {/* Timeline Dot */}
-                                    <div className="timeline-dot mt-6"></div>
+                        {/* BENTO CARD 2: INTRODUCTION & BIOGRAPHY CARD (Roomy & High Legibility) */}
+                        <div className="col-span-12 md:col-span-7 lg:col-span-8 rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-6 sm:p-8 md:p-10 flex flex-col justify-between">
+                            <div>
+                                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4 pb-2.5 border-b border-zinc-800">
+                                    <span className="text-red-400 font-bold tracking-wider">// INTRODUCTION</span>
+                                    <span className="text-zinc-400">BASED IN INDIA • REMOTE WORLDWIDE</span>
+                                </div>
 
-                                    {/* Content Card */}
-                                    <div className="ml-12 md:ml-0 md:w-1/2">
-                                        <div className="p-6 rounded-2xl bg-white/5 border border-white/10 shadow-lg hover:shadow-purple-500/10 hover:border-purple-500/30 hover:scale-[1.02] transition-all duration-300">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-300 text-xs font-bold border border-purple-500/20">
-                                                    {exp.year}
-                                                </span>
-                                                <span className="text-xs font-bold text-slate-500 uppercase">{exp.type}</span>
-                                            </div>
-                                            <h3 className="text-lg font-bold text-white mb-2">{exp.title}</h3>
-                                            <p className="text-slate-400 text-sm">{exp.desc}</p>
+                                <h3 className="font-editorial font-black text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-none">
+                                    HELLO
+                                </h3>
+                                <p className="font-display font-bold text-lg sm:text-xl text-red-500 tracking-wide mt-2 mb-5">
+                                    Hi, I'm Priyanshu Dandapath.
+                                </p>
+
+                                <div className="space-y-4 text-base sm:text-[17px] md:text-[18px] text-zinc-200 font-normal leading-relaxed">
+                                    <p>
+                                        Creating edits has never felt like a job to me; it's how I process stories, rhythm, and retention.
+                                    </p>
+                                    <p>
+                                        I've spent the past 4 years turning raw, unpolished footage into high-retention content that captivates audiences. From fast-paced gym edits to docu-style YouTube storytelling, every cut is calculated.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 pt-4 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm font-mono text-zinc-400">
+                                <span>📍 Howrah, Bagnan (India)</span>
+                                <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    <span>Available worldwide for remote work</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* BENTO CARD 3: TRACK RECORD / STATISTICS CARD */}
+                        <div className="col-span-12 sm:col-span-6 lg:col-span-4 rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-6 sm:p-7 flex flex-col justify-between">
+                            <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4 pb-2 border-b border-zinc-800">
+                                <span className="text-red-400 font-bold tracking-wider">// STATS</span>
+                                <span>METRICS</span>
+                            </div>
+
+                            <div className="space-y-4 my-auto">
+                                <div className="flex items-baseline justify-between border-b border-zinc-800/80 pb-3">
+                                    <div>
+                                        <div className="font-editorial font-black text-3xl sm:text-4xl text-white tracking-tight">
+                                            4+
+                                        </div>
+                                        <div className="text-xs font-bold text-zinc-300 uppercase tracking-wider mt-0.5">
+                                            Years Experience
                                         </div>
                                     </div>
-
-                                    <div className="hidden md:block md:w-1/2"></div>
+                                    <span className="text-xs font-mono text-zinc-400 font-semibold">2022 – NOW</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </WindowCard>
-            </section>
 
-            {/* --- Work Showcase Section (Folder Style) --- */}
-            <section id="work" className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
-                <h2 className="text-4xl font-black mb-10 text-center text-white drop-shadow-sm">
-                    Project <span className="text-purple-500">Files</span>
-                </h2>
-
-                {/* --- Fast Paced Folder --- */}
-                <div className="mb-16">
-                    <div className="flex items-center gap-2 mb-4 pl-2">
-                        <Folder className="text-yellow-500 fill-yellow-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Fast Paced Edits</h3>
-                    </div>
-                    <WindowCard title="Viewer">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {portfolioItems.fastPaced.map((item, idx) => (
-                                <div key={idx} className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-yellow-500/20 transition-all hover:-translate-y-1 border border-white/5">
-                                    {item.videoId && (
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${item.videoId}`}
-                                            title={item.title}
-                                            className="w-full h-full border-0 absolute inset-0 z-10"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        ></iframe>
-                                    )}
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <Play className="w-12 h-12 text-white opacity-80 group-hover:scale-110 transition-transform" fill="white" />
+                                <div className="flex items-baseline justify-between border-b border-zinc-800/80 pb-3">
+                                    <div>
+                                        <div className="font-editorial font-black text-3xl sm:text-4xl text-white tracking-tight">
+                                            150+
+                                        </div>
+                                        <div className="text-xs font-bold text-zinc-300 uppercase tracking-wider mt-0.5">
+                                            Delivered Edits
+                                        </div>
                                     </div>
-                                    <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
-                                        <p className="text-white text-xs font-mono">{item.title}</p>
-                                    </div>
+                                    <span className="text-xs font-mono text-zinc-400 font-semibold">Fitness • YT</span>
                                 </div>
-                            ))}
-                        </div>
-                    </WindowCard>
-                </div>
 
-                {/* --- Motion Graphics Folder --- */}
-                <div className="mb-16">
-                    <div className="flex items-center gap-2 mb-4 pl-2">
-                        <Folder className="text-purple-500 fill-purple-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Motion Graphics</h3>
-                    </div>
-                    <WindowCard title="After_Effects_Renders">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {portfolioItems.motionGraphics.map((item, idx) => (
-                                <div key={idx} className="aspect-[9/16] rounded-lg bg-black relative group cursor-pointer overflow-hidden shadow-lg hover:shadow-purple-500/20 transition-all hover:-translate-y-1 border border-white/5">
-                                    {item.videoId && (
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${item.videoId}`}
-                                            title={item.title}
-                                            className="w-full h-full border-0 absolute inset-0 z-10"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        ></iframe>
-                                    )}
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <Play className="w-12 h-12 text-white opacity-80 group-hover:scale-110 transition-transform" fill="white" />
+                                <div className="flex items-baseline justify-between">
+                                    <div>
+                                        <div className="font-editorial font-black text-3xl sm:text-4xl text-white tracking-tight">
+                                            100%
+                                        </div>
+                                        <div className="text-xs font-bold text-zinc-300 uppercase tracking-wider mt-0.5">
+                                            Remote Delivery
+                                        </div>
                                     </div>
-                                    <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black to-transparent">
-                                        <p className="text-white text-xs font-mono">{item.title}</p>
-                                    </div>
+                                    <span className="text-xs font-mono text-zinc-400 font-semibold">Worldwide</span>
                                 </div>
-                            ))}
+                            </div>
+
+                            <div className="mt-4 pt-3 border-t border-zinc-800 text-[11px] font-mono text-zinc-400 text-center">
+                                PROVEN AUDIENCE RETENTION FOCUS
+                            </div>
                         </div>
-                    </WindowCard>
-                </div>
 
+                        {/* BENTO CARD 4: SKILLS CARD (Full Names, No Ellipses) */}
+                        <div className="col-span-12 sm:col-span-6 lg:col-span-4 rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-6 sm:p-7 flex flex-col justify-between">
+                            <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4 pb-2 border-b border-zinc-800">
+                                <span className="text-red-400 font-bold tracking-wider">// TOOLKIT</span>
+                                <span>SOFTWARE</span>
+                            </div>
 
-                {/* --- YouTube Folder --- */}
-                <div>
-                    <div className="flex items-center gap-2 mb-4 pl-2">
-                        <Folder className="text-red-500 fill-red-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">YouTube Uploads</h3>
-                    </div>
-                    <WindowCard title="Web_Browser">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {portfolioItems.youtube.map((item, idx) => (
-                                <div key={idx} className="group">
-                                    <div className="aspect-video rounded-lg bg-slate-800 border border-white/10 overflow-hidden relative mb-4 shadow-inner flex items-center justify-center">
-                                        {item.videoId ? (
-                                            <iframe
-                                                src={`https://www.youtube.com/embed/${item.videoId}`}
-                                                title={item.title}
-                                                className="w-full h-full border-0 absolute inset-0 z-10"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe>
-                                        ) : (
-                                            <MonitorPlay size={48} className="text-slate-600 mb-2" />
-                                        )}
-                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
+                            <div className="grid grid-cols-2 gap-3 my-auto">
+                                {softwareSkills.map((soft) => (
+                                    <div 
+                                        key={soft.name}
+                                        className="p-3 rounded-2xl bg-zinc-800/70 border border-zinc-700/60 flex items-center gap-3 hover:border-red-500/80 transition-colors group"
+                                        title={soft.desc}
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-zinc-900 p-1.5 flex items-center justify-center shrink-0 border border-zinc-700 group-hover:scale-105 transition-transform">
+                                            <img 
+                                                src={soft.icon} 
+                                                alt={soft.name} 
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <span className="font-display font-bold text-xs sm:text-[13px] text-white block leading-tight whitespace-normal">
+                                                {soft.name}
+                                            </span>
+                                            <span className="text-[10px] sm:text-[11px] text-red-400 block font-mono font-semibold mt-0.5">
+                                                {soft.code}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
-                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">{item.type}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </WindowCard>
-                </div>
+                                ))}
+                            </div>
 
-                {/* --- Saas Animation Folder --- */}
-                <div className="mt-16">
-                    <div className="flex items-center gap-2 mb-4 pl-2">
-                        <Folder className="text-cyan-500 fill-cyan-500/20" size={28} />
-                        <h3 className="text-2xl font-bold text-slate-200">Saas Animation</h3>
-                    </div>
-                    <WindowCard title="Web_Browser">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {portfolioItems.saasAnimation.map((item, idx) => (
-                                <div key={idx} className="group">
-                                    <div className="aspect-video rounded-lg bg-slate-800 border border-white/10 overflow-hidden relative mb-4 shadow-inner flex items-center justify-center">
-                                        {item.videoId ? (
-                                            <iframe
-                                                src={`https://www.youtube.com/embed/${item.videoId}`}
-                                                title={item.title}
-                                                className="w-full h-full border-0 absolute inset-0 z-10"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe>
-                                        ) : (
-                                            <MonitorPlay size={48} className="text-slate-600 mb-2" />
-                                        )}
-                                        <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors z-20 pointer-events-none"></div>
+                            <div className="mt-4 pt-3 border-t border-zinc-800 text-[11px] font-mono text-zinc-400 text-center">
+                                INDUSTRY STANDARD POST-PRODUCTION
+                            </div>
+                        </div>
+
+                        {/* BENTO CARD 5: SERVICES // CREATIVE SUITE CARD */}
+                        <div id="services" className="col-span-12 lg:col-span-4 rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-6 sm:p-7 flex flex-col justify-between card-hover-lift">
+                            <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-4 pb-2 border-b border-zinc-800">
+                                <span className="text-red-400 font-bold tracking-wider">// SERVICES</span>
+                                <span className="text-zinc-400">CREATIVE ARSENAL</span>
+                            </div>
+
+                            <div className="space-y-3.5 my-auto">
+                                {creativeServices.map((srv, idx) => (
+                                    <div key={idx} className="group border-b border-zinc-800/80 pb-2.5 last:border-b-0 hover:border-zinc-700 transition-colors">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="font-display font-bold text-white text-xs sm:text-[13px] group-hover:text-red-400 transition-colors leading-tight">
+                                                {srv.title}
+                                            </span>
+                                            <span className="px-1.5 py-0.5 rounded bg-zinc-800 text-[10px] font-mono font-bold text-red-400 border border-zinc-700 shrink-0 ml-2">
+                                                {srv.tag}
+                                            </span>
+                                        </div>
+                                        <p className="text-zinc-300 text-xs leading-relaxed font-normal">
+                                            {srv.desc}
+                                        </p>
+                                        <div className="mt-1 flex items-center gap-1.5 text-[10px] font-mono text-zinc-400">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                            <span>{srv.metrics}</span>
+                                        </div>
                                     </div>
-                                    <h4 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{item.title}</h4>
-                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">{item.type}</p>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+
+                            <div className="mt-4 pt-3 border-t border-zinc-800 text-[11px] font-mono text-zinc-300 text-center flex items-center justify-center gap-2">
+                                <span className="text-red-500">⚡</span>
+                                <span className="font-bold tracking-wider">24–48HR RAPID TURNAROUND • 4K ULTRA-HD</span>
+                            </div>
                         </div>
-                    </WindowCard>
-                </div>
 
-            </section>
+                    </div>
+                </section>
 
-            {/* --- Get In Touch Section --- */}
-            <section id="contact" className="relative z-10 py-24 px-6">
-                <WindowCard title="Compose_Mail.exe" className="max-w-4xl mx-auto bg-slate-900/80 border-white/10">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">
-                            Let's <span className="text-purple-500">Collaborate!</span>
+                {/* =========================================================================
+                   CENTRAL TORN-PAPER BANNER (New Banner My photoo.mov with Prominent Portrait)
+                   ========================================================================= */}
+                <CentralTornBanner fallbackPoster="/images/banner-poster.png" />
+
+                {/* =========================================================================
+                   WORK SECTION (Fluid 93vw Wide Container up to 1,920px: 4 Vertical in Row 1, 2 Horizontal in Row 2)
+                   Improved Hierarchy, Enhanced Category Filter Buttons & Seamless Responsive Rows
+                   ========================================================================= */}
+                <section id="work" className="relative pt-10 sm:pt-14 pb-16 sm:pb-24 w-[93vw] max-w-[1920px] mx-auto px-2 sm:px-4 md:px-6">
+                    
+                    {/* Section Header with Strengthened Hierarchy */}
+                    <div className="text-center mb-6 sm:mb-8">
+                        <div className="inline-flex items-center justify-center gap-2.5 px-3.5 py-1 rounded-full bg-red-950/60 border border-red-800/60 mb-3">
+                            <GlyphStar className="w-3.5 h-3.5 text-red-500" />
+                            <span className="text-xs font-mono font-bold tracking-widest uppercase text-red-300">
+                                SELECTED ARCHIVE
+                            </span>
+                            <GlyphStar className="w-3.5 h-3.5 text-red-500" />
+                        </div>
+                        <h2 className="font-editorial font-black text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight">
+                            THE WORK
                         </h2>
-                        <p className="text-slate-400 text-lg">
-                            Have a project in mind? Let's make it happen.
+                        <p className="text-xs sm:text-sm font-mono text-zinc-400 mt-2 max-w-md mx-auto">
+                            HIGH-RETENTION SHORTS & DOCU-STYLE STORYTELLING
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                            <a href="tel:+916289392176" className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-green-500/20 hover:border-green-500/30 transition-all group">
-                                <div className="p-3 rounded-full bg-green-500/20 text-green-400 group-hover:scale-110 transition-transform">
-                                    <Phone size={20} />
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-slate-500 uppercase">Phone</div>
-                                    <div className="text-white font-bold">+91 6289392176</div>
-                                </div>
-                            </a>
-
-                            <a href="mailto:artpriyans@gmail.com" className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-500/20 hover:border-blue-500/30 transition-all group">
-                                <div className="p-3 rounded-full bg-blue-500/20 text-blue-400 group-hover:scale-110 transition-transform">
-                                    <Mail size={20} />
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-slate-500 uppercase">Email</div>
-                                    <div className="text-white font-bold">artpriyans@gmail.com</div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div className="space-y-4">
-                            <a href="https://www.instagram.com/priyansart/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all group">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 rounded-full bg-pink-500/20 text-pink-400 group-hover:scale-110 transition-transform">
-                                        <Instagram size={20} />
-                                    </div>
-                                    <span className="font-bold text-white">Instagram</span>
-                                </div>
-                                <ExternalLink size={16} className="text-slate-500 group-hover:text-purple-400" />
-                            </a>
-
-                            <a href="https://www.linkedin.com/in/priyanshu-dandapath-a99773300/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-blue-700/20 hover:border-blue-700/30 transition-all group">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 rounded-full bg-blue-700/20 text-blue-400 group-hover:scale-110 transition-transform">
-                                        <Linkedin size={20} />
-                                    </div>
-                                    <span className="font-bold text-white">LinkedIn</span>
-                                </div>
-                                <ExternalLink size={16} className="text-slate-500 group-hover:text-purple-400" />
-                            </a>
-                        </div>
+                    {/* Category Filter Pills (Restyled with Comfortable Tap Targets, High Contrast & Focus States) */}
+                    <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-8 sm:mb-12">
+                        {filterCategories.map((cat) => {
+                            const isSelected = activeWorkCategory === cat.id;
+                            return (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setActiveWorkCategory(cat.id)}
+                                    className={`min-h-[44px] px-5 sm:px-6 py-2.5 rounded-full font-mono text-xs sm:text-[13px] font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
+                                        isSelected 
+                                            ? 'bg-red-600 text-white border-2 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)] scale-[1.02]' 
+                                            : 'bg-zinc-900/90 text-zinc-300 border-2 border-zinc-700/70 hover:border-zinc-500 hover:text-white hover:bg-zinc-800/90 hover:scale-[1.01]'
+                                    }`}
+                                    aria-pressed={isSelected}
+                                >
+                                    {isSelected && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
+                                    <span>{cat.label}</span>
+                                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isSelected ? 'bg-red-700 text-white' : 'bg-zinc-800 text-zinc-400'}`}>
+                                        {cat.count}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
-                </WindowCard>
-            </section>
 
-            <footer className="py-8 text-center text-slate-500 text-sm border-t border-white/5 relative z-10 bg-slate-900/50 backdrop-blur-md mb-20">
-                <p>&copy; {new Date().getFullYear()} by Priyanshu Dandapath . System Status: Online.</p>
+                    {/* -------------------------------------------------------------------------
+                        WORK CONTENT ACCORDING TO SELECTED CATEGORY
+                        ------------------------------------------------------------------------- */}
+
+                    {/* SHOW ALL FILES: ROW 1 (All 7 Vertical Videos) + ROW 2 (All 3 Horizontal Videos) */}
+                    {activeWorkCategory === 'all' && (
+                        <div className="space-y-12 sm:space-y-16">
+                            
+                            {/* ROW 1: ALL SEVEN VERTICAL VIDEOS (9:16 Portrait) */}
+                            <div>
+                                <div className="flex items-center justify-between mb-5 border-b border-zinc-800 pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                                        <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                            01 // VERTICAL VIDEOS & SHORTS (9:16) — ALL 7 FILES
+                                        </h3>
+                                    </div>
+                                    <span className="text-[11px] font-mono text-zinc-400 hidden sm:inline">
+                                        4 FAST PACED EDITS + 3 MOTION GRAPHICS SHORTS
+                                    </span>
+                                </div>
+
+                                {/* Responsive Grid Displaying All 7 Vertical Cards */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {allVerticalProjects.map((project) => (
+                                        <div key={project.id} className="w-full">
+                                            <ProjectCardVertical
+                                                project={project}
+                                                isPlaying={playingVideoId === project.id}
+                                                onPlay={() => setPlayingVideoId(project.id)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* ROW 2: ALL THREE HORIZONTAL VIDEOS (16:9 Landscape) */}
+                            <div>
+                                <div className="flex items-center justify-between mb-5 border-b border-zinc-800 pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                                        <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                            02 // HORIZONTAL VIDEOS & STORYTELLING (16:9) — ALL 3 FILES
+                                        </h3>
+                                    </div>
+                                    <span className="text-[11px] font-mono text-zinc-400 hidden sm:inline">
+                                        2 YOUTUBE LONG-FORM + 1 SAAS PRODUCT ANIMATION
+                                    </span>
+                                </div>
+
+                                {/* Responsive Grid Displaying All 3 Horizontal Cards Side by Side */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                    {allHorizontalProjects.map((project) => (
+                                        <ProjectCardHorizontal
+                                            key={project.id}
+                                            project={project}
+                                            isPlaying={playingVideoId === project.id}
+                                            onPlay={() => setPlayingVideoId(project.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
+                    {/* CATEGORY: FAST PACED EDITS (4 Vertical Videos) */}
+                    {activeWorkCategory === 'fastPaced' && (
+                        <div>
+                            <div className="flex items-center justify-between mb-4 border-b border-zinc-800 pb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                    <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                        FAST PACED EDITS (9:16)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4 pt-1 gap-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 sm:overflow-visible">
+                                {fastPacedProjects.map((project) => (
+                                    <div key={project.id} className="shrink-0 w-[270px] xs:w-[290px] snap-center sm:w-auto">
+                                        <ProjectCardVertical
+                                            project={project}
+                                            isPlaying={playingVideoId === project.id}
+                                            onPlay={() => setPlayingVideoId(project.id)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CATEGORY: MOTION GRAPHICS (Vertical Videos) */}
+                    {activeWorkCategory === 'motionGraphics' && (
+                        <div>
+                            <div className="flex items-center justify-between mb-4 border-b border-zinc-800 pb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                    <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                        MOTION GRAPHICS SHORTS (9:16)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4 pt-1 gap-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6 sm:overflow-visible">
+                                {motionGraphicsProjects.map((project) => (
+                                    <div key={project.id} className="shrink-0 w-[270px] xs:w-[290px] snap-center sm:w-auto">
+                                        <ProjectCardVertical
+                                            project={project}
+                                            isPlaying={playingVideoId === project.id}
+                                            onPlay={() => setPlayingVideoId(project.id)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CATEGORY: YOUTUBE UPLOADS (2 Horizontal Videos) */}
+                    {activeWorkCategory === 'youtube' && (
+                        <div>
+                            <div className="flex items-center justify-between mb-4 border-b border-zinc-800 pb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                    <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                        YOUTUBE UPLOADS (16:9)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                                {youtubeProjects.map((project) => (
+                                    <ProjectCardHorizontal
+                                        key={project.id}
+                                        project={project}
+                                        isPlaying={playingVideoId === project.id}
+                                        onPlay={() => setPlayingVideoId(project.id)}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CATEGORY: SAAS ANIMATION (Horizontal Videos) */}
+                    {activeWorkCategory === 'saasAnimation' && (
+                        <div>
+                            <div className="flex items-center justify-between mb-4 border-b border-zinc-800 pb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                    <h3 className="font-display font-black text-xs sm:text-sm tracking-wider uppercase text-white">
+                                        SAAS ANIMATION (16:9)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                                {saasAnimationProjects.map((project) => (
+                                    <ProjectCardHorizontal
+                                        key={project.id}
+                                        project={project}
+                                        isPlaying={playingVideoId === project.id}
+                                        onPlay={() => setPlayingVideoId(project.id)}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                </section>
+
+                {/* =========================================================================
+                   COLLABORATION & CONTACT SECTION (Dark Translucent Card)
+                   ========================================================================= */}
+                <section id="contact" className="relative py-16 sm:py-20 px-4 sm:px-6 max-w-4xl mx-auto">
+                    
+                    <div className="rounded-3xl border border-zinc-700/60 bg-zinc-900/80 backdrop-blur-md shadow-2xl p-6 sm:p-10 md:p-12 relative overflow-hidden">
+                        
+                        {/* Red Corner Accent */}
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-red-600 transform rotate-45 translate-x-8 -translate-y-8" aria-hidden="true" />
+
+                        <div className="text-center max-w-xl mx-auto mb-10">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 text-red-400 border border-red-800/60 text-xs font-bold tracking-wider uppercase mb-3">
+                                <span>✉</span> LET'S COLLABORATE
+                            </div>
+                            <h2 className="font-editorial font-black text-3xl sm:text-5xl text-white tracking-tight leading-tight">
+                                Have an edit in mind? Let's make it happen.
+                            </h2>
+                            <p className="font-medium text-zinc-300 text-sm sm:text-base mt-3">
+                                Currently open to agency retainers, high-retention creator contracts, and motion graphics campaigns.
+                            </p>
+                        </div>
+
+                        {/* Contact Action Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            {/* Email Card with 1-Click Copy */}
+                            <div className="p-4 sm:p-5 rounded-2xl bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-between group hover:border-red-500/80 active:scale-[0.98] transition-all">
+                                <a 
+                                    href="mailto:artpriyans@gmail.com" 
+                                    className="flex items-center gap-3 min-w-0"
+                                >
+                                    <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 group-hover:scale-105 active:scale-95 transition-transform">
+                                        <Mail size={18} />
+                                    </div>
+                                    <div className="truncate">
+                                        <span className="text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase block">EMAIL</span>
+                                        <span className="font-display font-bold text-sm text-white truncate block">artpriyans@gmail.com</span>
+                                    </div>
+                                </a>
+                                <button
+                                    onClick={handleCopyEmail}
+                                    className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700/60 active:scale-90 transition-all ml-2 cursor-pointer"
+                                    aria-label="Copy email address"
+                                    title="Copy email"
+                                >
+                                    {copiedEmail ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+                                </button>
+                            </div>
+
+                            {/* Phone Card */}
+                            <a 
+                                href="tel:+916289392176" 
+                                className="p-4 sm:p-5 rounded-2xl bg-zinc-800/80 border border-zinc-700/60 flex items-center gap-3 group hover:border-red-500/80 active:scale-[0.98] transition-all cursor-pointer"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-zinc-900 text-white flex items-center justify-center shrink-0 group-hover:bg-red-600 active:scale-95 transition-all">
+                                    <Phone size={18} />
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase block">PHONE / WHATSAPP</span>
+                                    <span className="font-display font-bold text-sm text-white block">+91 6289392176</span>
+                                </div>
+                            </a>
+
+                            {/* Instagram Card */}
+                            <a 
+                                href="https://www.instagram.com/priyansart/" 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="p-4 sm:p-5 rounded-2xl bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-between group hover:border-red-500/80 active:scale-[0.98] transition-all cursor-pointer"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-zinc-900 text-white flex items-center justify-center shrink-0 group-hover:bg-pink-600 active:scale-95 transition-all">
+                                        <Instagram size={18} />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase block">INSTAGRAM</span>
+                                        <span className="font-display font-bold text-sm text-white block">@priyansart</span>
+                                    </div>
+                                </div>
+                                <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-white transition-transform" />
+                            </a>
+
+                            {/* LinkedIn Card */}
+                            <a 
+                                href="https://www.linkedin.com/in/priyanshu-dandapath-a99773300/" 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="p-4 sm:p-5 rounded-2xl bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-between group hover:border-red-500/80 active:scale-[0.98] transition-all cursor-pointer"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-zinc-900 text-white flex items-center justify-center shrink-0 group-hover:bg-blue-600 active:scale-95 transition-all">
+                                        <Linkedin size={18} />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase block">LINKEDIN</span>
+                                        <span className="font-display font-bold text-sm text-white block">Priyanshu Dandapath</span>
+                                    </div>
+                                </div>
+                                <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-white transition-transform" />
+                            </a>
+
+                        </div>
+
+                        {/* Location Footnote */}
+                        <div className="mt-8 text-center pt-6 border-t border-zinc-800">
+                            <span className="font-mono text-xs text-zinc-400">
+                                BASED IN HOWRAH, BAGNAN (INDIA) • AVAILABLE WORLDWIDE • UTC +5:30
+                            </span>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+
+            {/* =========================================================================
+               MINIMAL EDITORIAL FOOTER (Dark Theme)
+               ========================================================================= */}
+            <footer className="py-8 px-4 text-center border-t border-zinc-800/80 bg-[#0A0B0E]">
+                <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-400">
+                    <div>
+                        © {new Date().getFullYear()} PRIYANSHU DANDAPATH • ALL RIGHTS RESERVED
+                    </div>
+
+                    <button 
+                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        className="hover:text-white font-bold cursor-pointer active:scale-95 transition-all"
+                    >
+                        BACK TO TOP ↑
+                    </button>
+                </div>
             </footer>
 
         </div>
