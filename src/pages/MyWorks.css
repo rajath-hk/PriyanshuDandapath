@@ -1,0 +1,329 @@
+/* =========================================================================
+   MY WORKS — BENTO-ROW VIDEO GALLERY STYLES
+   ========================================================================= */
+
+.myworks-page {
+  min-height: 100vh;
+  background-color: var(--backgroundColor, #0b080c);
+  padding: 60px 24px 100px 24px;
+  box-sizing: border-box;
+  color: #eae5ec;
+}
+
+.myworks-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header & Breadcrumb */
+.myworks-header {
+  text-align: center;
+  max-width: 1100px;
+  margin: 0 auto 50px auto;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accentColor, #c2a4ff);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+  transition: all 0.25s ease;
+  padding: 8px 20px;
+  border: 1px solid rgba(194, 164, 255, 0.35);
+  border-radius: 9999px;
+  background: rgba(194, 164, 255, 0.04);
+}
+
+.back-button:hover {
+  background: var(--accentColor, #c2a4ff);
+  color: #0b080c;
+  box-shadow: 0 0 20px rgba(194, 164, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.myworks-header h1 {
+  font-size: clamp(38px, 6vw, 68px);
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.myworks-header h1 span {
+  color: var(--accentColor, #c2a4ff);
+}
+
+.myworks-subtitle {
+  font-size: 16px;
+  color: #a79fb0;
+  max-width: 600px;
+  margin: 0 auto 32px auto;
+  line-height: 1.5;
+}
+
+/* Filter Navigation Bar */
+.myworks-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(22, 17, 28, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 8px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(194, 164, 255, 0.15);
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.filter-btn {
+  background: transparent;
+  border: none;
+  color: #a79fb0;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.filter-btn.filter-active {
+  background: var(--accentColor, #c2a4ff);
+  color: #0b080c;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(194, 164, 255, 0.35);
+}
+
+.filter-sub {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+.filter-divider {
+  color: rgba(255, 255, 255, 0.15);
+  padding: 0 4px;
+  user-select: none;
+}
+
+/* Division Headers (Section A: Short Form, Section B: Long Form) */
+.portfolio-division {
+  margin-bottom: 40px;
+}
+
+.division-header {
+  border-bottom: 1px solid rgba(194, 164, 255, 0.15);
+  padding-bottom: 18px;
+  margin-bottom: 30px;
+}
+
+.division-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--accentColor, #c2a4ff);
+  background: rgba(194, 164, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.division-title {
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.division-title span {
+  color: var(--accentColor, #c2a4ff);
+}
+
+.division-desc {
+  font-size: 14px;
+  color: #a79fb0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Bento Subcategory Section */
+.bento-subcategory {
+  margin-bottom: 48px;
+}
+
+.bento-sub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.bento-sub-header h3 {
+  font-size: 19px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sub-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accentColor, #c2a4ff);
+  background: rgba(194, 164, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+.sub-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8c8296;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================================================
+   BENTO GRIDS (RESPONSIVE ROWS)
+   ========================================================================= */
+
+/* 4 Reels Row (Fast-Paced, Talking Head) */
+.bento-grid-4-reels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* 3 Reels Row (Podcast Highlights) */
+.bento-grid-3-reels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 2 Landscape Videos (Case Studies) */
+.bento-grid-2-landscape {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* 3 Landscape Videos (Music Videos, Podcast, SaaS) */
+.bento-grid-3-landscape {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Single category filter view */
+.bento-section-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(194, 164, 255, 0.15);
+  padding-bottom: 14px;
+}
+
+.bento-section-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.bento-count {
+  font-size: 16px;
+  color: var(--accentColor, #c2a4ff);
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.bento-grid-portrait {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.bento-grid-landscape {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* =========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================= */
+
+@media screen and (max-width: 1100px) {
+  .bento-grid-4-reels {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .bento-grid-3-reels {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .bento-grid-3-landscape {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .bento-grid-portrait {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-grid-landscape {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .myworks-page {
+    padding: 40px 16px 80px 16px;
+  }
+
+  .myworks-filter-bar {
+    border-radius: 16px;
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .filter-divider {
+    display: none;
+  }
+
+  /* Efficient 2-column layout for 9:16 reels on mobile */
+  .bento-grid-4-reels,
+  .bento-grid-3-reels,
+  .bento-grid-portrait {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Single column for 16:9 landscape videos on mobile */
+  .bento-grid-2-landscape,
+  .bento-grid-3-landscape,
+  .bento-grid-landscape {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .bento-sub-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

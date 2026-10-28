@@ -1,0 +1,266 @@
+/* =========================================================================
+   VIDEO CARD COMPONENT STYLES
+   ========================================================================= */
+
+.video-card {
+  position: relative;
+  background: #120f18;
+  border: 1px solid rgba(194, 164, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  user-select: none;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(194, 164, 255, 0.38);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(194, 164, 255, 0.12);
+}
+
+.video-card-has-video {
+  cursor: pointer;
+}
+
+/* Media wrapper & aspect ratios */
+.video-card-media-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #09070c;
+}
+
+/* 9:16 Portrait for Reels */
+.video-card-media-wrapper.ratio-9-16 {
+  aspect-ratio: 9 / 16;
+}
+
+/* 16:9 Landscape for Long Form */
+.video-card-media-wrapper.ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.video-card-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.video-card:hover .video-card-thumbnail {
+  transform: scale(1.04);
+}
+
+/* Placeholder Mesh & Graphics */
+.video-card-empty-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(194, 164, 255, 0.08) 0%, rgba(11, 8, 12, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.placeholder-mesh-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(194, 164, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 164, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.6;
+}
+
+.placeholder-center-badge {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  gap: 8px;
+}
+
+.placeholder-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(194, 164, 255, 0.1);
+  border: 1px solid rgba(194, 164, 255, 0.3);
+  color: #c2a4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.video-card:hover .placeholder-icon-circle {
+  background: #c2a4ff;
+  color: #0b080c;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(194, 164, 255, 0.5);
+}
+
+.placeholder-status-text {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c2a4ff;
+}
+
+.placeholder-slot-code {
+  font-size: 10px;
+  font-family: monospace;
+  color: #7e7587;
+  letter-spacing: 0.05em;
+}
+
+/* Top bar badges */
+.video-card-top-bar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.video-badge-aspect {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #eae5ec;
+  background: rgba(11, 8, 12, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-badge-featured {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0b080c;
+  background: #c2a4ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(194, 164, 255, 0.4);
+}
+
+/* Play button hover overlay */
+.video-card-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 8, 12, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+
+.video-card:hover .video-card-play-overlay {
+  opacity: 1;
+}
+
+.play-button-glow {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #c2a4ff;
+  color: #0b080c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(194, 164, 255, 0.7);
+  transform: scale(0.9);
+  transition: transform 0.25s ease;
+}
+
+.video-card:hover .play-button-glow {
+  transform: scale(1);
+}
+
+/* Card Body */
+.video-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.video-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.video-card-category {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c2a4ff;
+}
+
+.video-card-aspect-tag {
+  font-size: 10px;
+  font-family: monospace;
+  color: #9d94a6;
+}
+
+.video-card-title {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.video-card-desc {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #a79fb0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.video-card-tags {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.video-card-tag-pill {
+  font-size: 10px;
+  font-weight: 500;
+  color: #c4b5fd;
+  background: rgba(194, 164, 255, 0.08);
+  border: 1px solid rgba(194, 164, 255, 0.15);
+  padding: 3px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
