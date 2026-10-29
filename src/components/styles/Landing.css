@@ -480,16 +480,17 @@ h2.landing-info-h2 {
   }
 
   .landing-intro {
-    top: 48%;
+    position: absolute;
+    top: 50%;
     left: 4vw;
     right: auto;
     transform: translateY(-50%);
     max-width: 320px;
     z-index: 20;
-    position: relative;
   }
 
   .landing-info {
+    position: absolute;
     bottom: auto;
     top: 50%;
     z-index: 20;
@@ -499,13 +500,13 @@ h2.landing-info-h2 {
     left: auto;
     width: 440px;
     max-width: 36vw;
-    position: relative;
   }
 }
 
 @media screen and (min-width: 1200px) {
   .landing-intro {
-    top: 48%;
+    position: absolute;
+    top: 50%;
     left: 4vw;
     right: auto;
     transform: translateY(-50%);
@@ -513,6 +514,7 @@ h2.landing-info-h2 {
   }
 
   .landing-info {
+    position: absolute;
     bottom: auto;
     top: 50%;
     z-index: 20;
@@ -527,11 +529,13 @@ h2.landing-info-h2 {
 
 @media screen and (min-width: 1600px) {
   .landing-intro {
+    position: absolute;
     left: 5vw;
     max-width: 380px;
   }
 
   .landing-info {
+    position: absolute;
     right: 5vw;
     width: 500px;
     max-width: 34vw;

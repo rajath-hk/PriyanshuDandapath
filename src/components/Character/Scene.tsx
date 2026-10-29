@@ -41,7 +41,7 @@ const Scene = () => {
       containerEl.appendChild(renderer.domElement);
 
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
-      camera.position.set(0, 12.8, 26.5);
+      camera.position.set(0, 12.8, 27.2);
       camera.zoom = 1.0;
       camera.updateProjectionMatrix();
 

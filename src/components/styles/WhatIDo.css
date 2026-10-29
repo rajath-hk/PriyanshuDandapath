@@ -1,7 +1,7 @@
 .whatIDO {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   place-items: center;
   position: relative;
   opacity: 1;
@@ -11,6 +11,7 @@
   margin: auto;
   margin-bottom: 60px;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .what-box {
@@ -21,9 +22,10 @@
 }
 
 .what-box:first-child {
-  width: 42%;
+  width: 38%;
+  max-width: 420px;
   justify-content: flex-start;
-  padding-left: 4vw;
+  padding-left: 2vw;
 }
 
 .what-box:first-child h2 {
@@ -35,9 +37,10 @@
 }
 
 .what-box:last-child {
-  width: 58%;
+  width: 42%;
+  max-width: 460px;
   justify-content: flex-end;
-  padding-right: 4vw;
+  padding-right: 2vw;
 }
 
 .hat-h2 {
@@ -284,17 +287,7 @@
   border-radius: 30px;
 }
 
-@media only screen and (max-width: 1600px) {
-  .what-box h2 {
-    margin-right: 18%;
-  }
-}
-
 @media only screen and (max-width: 1400px) {
-  .what-box h2 {
-    margin-right: 20%;
-  }
-
   .what-box-in {
     height: 400px;
   }
@@ -329,10 +322,6 @@
 }
 
 @media only screen and (max-width: 1400px) {
-  .what-box-in {
-    margin-left: 50px;
-  }
-
   .what-content {
     width: 380px;
   }
