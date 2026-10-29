@@ -71,7 +71,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Navbar />
       <SocialIcons />
       {isDesktopView && !isMobile && shouldRenderCharacter && children}
-      <div className="container-main">
+      <main className="main-content">
         <Landing />
         <About />
         <WhatIDo />
@@ -80,7 +80,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
         <TechStackNew />
         <CallToAction />
         <Contact />
-      </div>
+      </main>
     </div>
   );
 };

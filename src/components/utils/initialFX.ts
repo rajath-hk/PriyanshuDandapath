@@ -63,75 +63,15 @@ export function initialFX() {
     }
   );
   gsap.fromTo(
-    [".header", ".icons-section", ".nav-fade"],
-    { opacity: 0 },
+    [".header", ".icons-section", ".nav-fade", ".hero-tagline", ".hero-cta-group"],
+    { opacity: 0, y: 20 },
     {
       opacity: 1,
+      y: 0,
       duration: 1.2,
       ease: "power1.inOut",
-      delay: 0.1,
+      delay: 0.6,
+      stagger: 0.1,
     }
   );
-
-  const landingText3 = new TextSplitter(".landing-h2-info-1", TextProps);
-  const landingText4 = new TextSplitter(".landing-h2-1", TextProps);
-  const landingText5 = new TextSplitter(".landing-h2-2", TextProps);
-
-  LoopText(landingText2, landingText3);
-  LoopText(landingText4, landingText5);
-}
-
-function LoopText(Text1: TextSplitter, Text2: TextSplitter) {
-  const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-  const delay = 4;
-  const delay2 = delay * 2 + 1;
-
-  tl.fromTo(
-    Text2.chars,
-    { opacity: 0, y: 80 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.1,
-      delay: delay,
-    },
-    0
-  )
-    .fromTo(
-      Text1.chars,
-      { y: 80 },
-      {
-        duration: 1.2,
-        ease: "power3.inOut",
-        y: 0,
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    )
-    .fromTo(
-      Text1.chars,
-      { y: 0 },
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay,
-      },
-      0
-    )
-    .to(
-      Text2.chars,
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    );
 }

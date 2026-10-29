@@ -5,12 +5,9 @@ export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
   camera: THREE.PerspectiveCamera
 ) {
-  let intensity: number = 0;
-  setInterval(() => {
-    intensity = Math.random();
-  }, 200);
   const tl1 = gsap.timeline({
     scrollTrigger: {
+      id: "char-tl1",
       trigger: ".landing-section",
       start: "top top",
       end: "bottom top",
@@ -20,6 +17,7 @@ export function setCharTimeline(
   });
   const tl2 = gsap.timeline({
     scrollTrigger: {
+      id: "char-tl2",
       trigger: ".about-section",
       start: "center 55%",
       end: "bottom top",
@@ -29,6 +27,7 @@ export function setCharTimeline(
   });
   const tl3 = gsap.timeline({
     scrollTrigger: {
+      id: "char-tl3",
       trigger: ".whatIDO",
       start: "top top",
       end: "bottom top",
@@ -52,10 +51,14 @@ export function setCharTimeline(
       object.material.transparent = true;
       object.material.opacity = 0;
       object.material.emissive.set("#C8BFFF");
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
-        emissiveIntensity: () => intensity * 8,
-        duration: () => Math.random() * 0.6,
-        delay: () => Math.random() * 0.1,
+      object.material.emissiveIntensity = 1.2;
+      // Gentle subtle breathing animation, NOT random flashing
+      gsap.to(object.material, {
+        emissiveIntensity: 1.6,
+        duration: 2.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
       screenLight = object;
     }
@@ -82,7 +85,7 @@ export function setCharTimeline(
         .fromTo(
           ".character-model",
           { pointerEvents: "inherit" },
-          { pointerEvents: "none", x: "-12%", delay: 2, duration: 5 },
+          { pointerEvents: "none", x: "-6%", delay: 2, duration: 5 },
           0
         )
         .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)

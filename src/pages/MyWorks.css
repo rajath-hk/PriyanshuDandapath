@@ -30,6 +30,8 @@
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
   letter-spacing: 0.05em;
   margin-bottom: 24px;
   transition: all 0.25s ease;

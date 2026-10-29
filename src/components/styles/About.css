@@ -78,7 +78,7 @@
 @media only screen and (min-width: 1025px) {
   .about-section {
     width: var(--cWidth);
-    justify-content: right;
+    justify-content: flex-end;
     max-width: 1920px;
     height: var(--vh);
     padding: 0px;
@@ -86,16 +86,19 @@
   }
   .about-me {
     padding: 0px;
-    width: 50%;
+    width: 48%;
+    max-width: 580px;
+    padding-right: 4vw;
+    box-sizing: border-box;
   }
   .about-me p {
-    font-size: 1.9vw;
-    line-height: 2.3vw;
+    font-size: clamp(18px, 1.8vw, 30px);
+    line-height: 1.45;
   }
 }
 @media only screen and (min-width: 1950px) {
   .about-me p {
-    font-size: 2.5rem;
-    line-height: 2.7rem;
+    font-size: 2.2rem;
+    line-height: 2.6rem;
   }
 }

@@ -53,8 +53,8 @@ export const config = {
     experiences: [
         {
             position: "AI Filmmaking & GenAI Visuals",
-            company: "Creative Production",
-            period: "2025 - Present",
+            company: "Generative Direction & Cinematic AI",
+            period: "2025",
             location: "Remote",
             description: "Pioneering generative AI video workflows with Midjourney, Runway Gen-3, Kling AI, and Topaz Video AI to create hyper-cinematic concept commercials and hybrid motion scenes.",
             responsibilities: [
@@ -66,8 +66,8 @@ export const config = {
         },
         {
             position: "Motion Designer & 3D Animator",
-            company: "Client & Brand Motion",
-            period: "2024 - Present",
+            company: "Motion Graphics & 3D Visuals",
+            period: "2024",
             location: "Remote",
             description: "Designing kinetic typography, dynamic lower thirds, 3D camera projections, and UI explainer animations that bring static brands to life.",
             responsibilities: [
@@ -79,8 +79,8 @@ export const config = {
         },
         {
             position: "High-Retention Video Editor",
-            company: "YouTube & Short-Form Creators",
-            period: "2023 - Present",
+            company: "Viral Shorts, Reels & Creator Pacing",
+            period: "2023",
             location: "Remote",
             description: "Delivering fast-paced, retention-optimized video editing for YouTube Shorts, Instagram Reels, and podcasts with tight rhythmic pacing and pattern interrupts.",
             responsibilities: [
@@ -92,8 +92,8 @@ export const config = {
         },
         {
             position: "Docu-Style & Long-Form Video Editor",
-            company: "Storytelling & Digital Media",
-            period: "2022 - 2023",
+            company: "Narrative Documentary & Multi-Cam",
+            period: "2022",
             location: "Remote",
             description: "Crafting long-form documentary narratives, multi-camera podcast edits, and cinematic video essays with seamless narrative flow.",
             responsibilities: [
@@ -328,7 +328,7 @@ export const config = {
             aspectRatio: "16:9",
             videoUrl: "", // Ready for YouTube URL
             thumbnailUrl: "",
-            featured: true,
+            featured: false,
             tags: ["Beat Sync", "Color Grade", "Rhythmic Cuts"]
         },
 

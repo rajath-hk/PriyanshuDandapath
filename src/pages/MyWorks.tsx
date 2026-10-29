@@ -1,13 +1,25 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { config } from "../config";
 import VideoCard from "../components/VideoCard";
 import VideoModal from "../components/VideoModal";
+import { MdArrowBack } from "react-icons/md";
 import "./MyWorks.css";
 
-type FilterTab = "ALL" | "SHORT FORM" | "LONG FORM" | "fast-paced" | "talking-head" | "podcast-highlights" | "case-studies" | "music-videos" | "podcast" | "saas";
+type FilterTab =
+  | "ALL"
+  | "SHORT FORM"
+  | "LONG FORM"
+  | "fast-paced"
+  | "talking-head"
+  | "podcast-highlights"
+  | "case-studies"
+  | "music-videos"
+  | "podcast"
+  | "saas";
 
 const MyWorks = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [modalVideo, setModalVideo] = useState<{
     isOpen: boolean;
@@ -21,6 +33,17 @@ const MyWorks = () => {
     category: "",
   });
 
+  // Ensure body scroll is unlocked when opening this page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "auto";
+    document.body.style.overflowY = "auto";
+
+    return () => {
+      // Clean up if returning
+    };
+  }, []);
+
   const handlePlayVideo = (videoId: string, title: string, category: string) => {
     setModalVideo({
       isOpen: true,
@@ -28,6 +51,14 @@ const MyWorks = () => {
       title,
       category,
     });
+  };
+
+  const handleBackNavigation = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
   };
 
   const allProjects = config.projects;
@@ -43,11 +74,11 @@ const MyWorks = () => {
   const podcastEpisodes = allProjects.filter((p) => p.subCategoryKey === "podcast");
   const saasVideos = allProjects.filter((p) => p.subCategoryKey === "saas");
 
-  // Determine which sections to render based on activeTab
+  // Determine visibility
   const showShortForm = activeTab === "ALL" || activeTab === "SHORT FORM";
   const showLongForm = activeTab === "ALL" || activeTab === "LONG FORM";
 
-  // Individual category filters
+  // Individual subcategory filters
   const isSpecificFilter = !["ALL", "SHORT FORM", "LONG FORM"].includes(activeTab);
   const specificProjects = isSpecificFilter
     ? allProjects.filter((p) => p.subCategoryKey === activeTab)
@@ -56,18 +87,27 @@ const MyWorks = () => {
   return (
     <div className="myworks-page">
       <div className="myworks-header">
-        <Link to="/" className="back-button" data-cursor="disable">
-          ← Back to Home
-        </Link>
+        <div className="myworks-nav-row">
+          <button
+            onClick={handleBackNavigation}
+            className="back-button"
+            data-cursor="disable"
+            aria-label="Back to home page"
+          >
+            <MdArrowBack size={18} />
+            <span>Back to Home</span>
+          </button>
+        </div>
+
         <h1>
           PriyansArt <span>Works</span>
         </h1>
         <p className="myworks-subtitle">
-          16 Project Slots · Short-Form Viral Retention &amp; Long-Form Visual Storytelling
+          16 Project Slots · High-Velocity Short-Form Viral Retention &amp; Cinematic Long-Form Storytelling
         </p>
 
         {/* Filter Navigation Bar */}
-        <div className="myworks-filter-bar">
+        <div className="myworks-filter-bar" role="tablist" aria-label="Portfolio filters">
           <button
             className={`filter-btn ${activeTab === "ALL" ? "filter-active" : ""}`}
             onClick={() => setActiveTab("ALL")}
@@ -89,7 +129,9 @@ const MyWorks = () => {
           >
             Long Form ({longFormProjects.length})
           </button>
+
           <span className="filter-divider">|</span>
+
           <button
             className={`filter-btn filter-sub ${activeTab === "fast-paced" ? "filter-active" : ""}`}
             onClick={() => setActiveTab("fast-paced")}
@@ -109,7 +151,7 @@ const MyWorks = () => {
             onClick={() => setActiveTab("podcast-highlights")}
             data-cursor="disable"
           >
-            Podcast Clips (3)
+            Podcast Highlights (3)
           </button>
           <button
             className={`filter-btn filter-sub ${activeTab === "case-studies" ? "filter-active" : ""}`}
@@ -308,6 +350,14 @@ const MyWorks = () => {
             </div>
           </div>
         )}
+
+        {/* Back to Home Bottom Link */}
+        <div style={{ textAlign: "center", marginTop: "80px", marginBottom: "40px" }}>
+          <Link to="/" className="back-button" data-cursor="disable">
+            <MdArrowBack size={18} />
+            <span>Return to PriyansArt Homepage</span>
+          </Link>
+        </div>
       </div>
 
       {/* Video Modal Player */}

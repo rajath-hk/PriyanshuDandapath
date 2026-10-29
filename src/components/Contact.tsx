@@ -1,4 +1,5 @@
-import { MdArrowOutward, MdCopyright } from "react-icons/md";
+import { MdArrowOutward, MdCopyright, MdEmail, MdLocationOn } from "react-icons/md";
+import { FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import "./styles/Contact.css";
 import { config } from "../config";
 import gsap from "gsap";
@@ -18,137 +19,126 @@ const Contact = () => {
       },
     });
 
-    // Animate title from bottom
     contactTimeline.fromTo(
-      ".contact-section h3",
-      {
-        opacity: 0,
-        y: 50,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      }
+      ".contact-header-block",
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
     );
 
-    // Animate contact boxes with stagger from bottom
     contactTimeline.fromTo(
-      ".contact-box",
-      {
-        opacity: 0,
-        y: 50,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: "power3.out",
-      },
+      ".contact-card-box",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: "power3.out" },
       "-=0.4"
     );
 
-    // Clean up
     return () => {
       contactTimeline.kill();
     };
   }, []);
 
   return (
-    <div className="contact-section section-container" id="contact">
+    <footer className="contact-section" id="contact">
       <div className="contact-container">
-        <h3>{config.developer.brandName}</h3>
-        <div className="contact-flex">
-          <div className="contact-box">
-            <h4>Email</h4>
-            <p>
-              <a href={`mailto:${config.social.email}`} data-cursor="disable">
-                {config.social.email}
-              </a>
-            </p>
-            <h4>Location</h4>
-            <p>
+        {/* Contact Invitation Header */}
+        <div className="contact-header-block">
+          <span className="contact-eyebrow">START A PROJECT</span>
+          <h2 className="contact-title">
+            Let's Build Something <span>Exceptional</span>
+          </h2>
+          <p className="contact-invitation">
+            Have an upcoming YouTube channel, brand campaign, motion design, or high-velocity short-form project? Let's bring your vision to life.
+          </p>
+
+          {/* Big Direct Email CTA Button */}
+          <div className="contact-primary-cta">
+            <a
+              href={`mailto:${config.social.email}`}
+              className="contact-email-btn"
+              data-cursor="disable"
+              title="Send email to Priyanshu"
+            >
+              <MdEmail size={22} />
+              <span>{config.social.email}</span>
+              <MdArrowOutward size={20} className="cta-arrow" />
+            </a>
+          </div>
+        </div>
+
+        {/* Contact Information & Verified Socials Grid */}
+        <div className="contact-grid">
+          {/* Card 1: Location & Availability */}
+          <div className="contact-card-box">
+            <h4 className="card-heading">Availability &amp; Location</h4>
+            <div className="contact-status-item">
+              <span className="status-indicator"></span>
+              <span className="status-text">{config.social.availability}</span>
+            </div>
+            <div className="contact-location-item">
+              <MdLocationOn size={18} className="loc-icon" />
               <span>{config.social.location}</span>
-            </p>
-            <h4>Availability</h4>
-            <p>
-              <span style={{ color: "#4ade80" }}>● {config.social.availability}</span>
-            </p>
+            </div>
           </div>
-          <div className="contact-box">
-            <h4>Social Links</h4>
-            {config.social.instagram && (
-              <a
-                href={config.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="disable"
-                className="contact-social"
-              >
-                Instagram <MdArrowOutward />
-              </a>
-            )}
-            {config.social.linkedin && (
-              <a
-                href={config.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="disable"
-                className="contact-social"
-              >
-                LinkedIn <MdArrowOutward />
-              </a>
-            )}
-            {config.social.youtube && (
-              <a
-                href={config.social.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="disable"
-                className="contact-social"
-              >
-                YouTube <MdArrowOutward />
-              </a>
-            )}
-            {config.social.twitter && (
-              <a
-                href={config.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="disable"
-                className="contact-social"
-              >
-                Twitter / X <MdArrowOutward />
-              </a>
-            )}
-            {config.social.github && (
-              <a
-                href={config.social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="disable"
-                className="contact-social"
-              >
-                GitHub <MdArrowOutward />
-              </a>
-            )}
+
+          {/* Card 2: Verified Social Profiles */}
+          <div className="contact-card-box">
+            <h4 className="card-heading">Verified Social Profiles</h4>
+            <div className="contact-social-pills">
+              {config.social.instagram && (
+                <a
+                  href={config.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-pill-link"
+                  data-cursor="disable"
+                >
+                  <FaInstagram size={17} />
+                  <span>Instagram</span>
+                  <MdArrowOutward size={15} />
+                </a>
+              )}
+              {config.social.linkedin && (
+                <a
+                  href={config.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-pill-link"
+                  data-cursor="disable"
+                >
+                  <FaLinkedinIn size={17} />
+                  <span>LinkedIn</span>
+                  <MdArrowOutward size={15} />
+                </a>
+              )}
+            </div>
           </div>
-          <div className="contact-box">
-            <h2>
-              Crafted for Visual Impact <br /> by <span>{config.developer.brandName}</span>
-            </h2>
-            <h5>
-              <MdCopyright /> {new Date().getFullYear()} {config.developer.fullName}. All rights reserved.
-            </h5>
-            <p style={{ fontSize: "11px", color: "#6e6677", marginTop: "12px", letterSpacing: "0.02em" }}>
+
+          {/* Card 3: Creative Identity & Monogram */}
+          <div className="contact-card-box">
+            <h4 className="card-heading">Creative Brand</h4>
+            <p className="contact-brand-statement">
+              Visual storytelling through rhythm, pacing, and retention. Engineered for high-retention engagement.
+            </p>
+            <span className="contact-brand-name">{config.developer.brandName}</span>
+          </div>
+        </div>
+
+        {/* Clean Footer Attribution Bar */}
+        <div className="contact-footer-bar">
+          <div className="footer-copyright">
+            <MdCopyright size={16} />
+            <span>
+              {new Date().getFullYear()} {config.developer.fullName} ({config.developer.brandName}). All rights reserved.
+            </span>
+          </div>
+          <div className="footer-attribution">
+            <span>
               Core 3D experience based on open-source template by Redoyanul Haque (MIT License).
-            </p>
+            </span>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

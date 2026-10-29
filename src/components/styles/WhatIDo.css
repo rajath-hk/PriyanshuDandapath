@@ -15,17 +15,28 @@
 .what-box {
   width: 50%;
   display: flex;
-  justify-content: center;
   position: relative;
   z-index: 9;
 }
 
-.what-box h2 {
-  font-size: calc(4vw + 25px);
-  line-height: calc(4vw + 20px);
+.what-box:first-child {
+  width: 42%;
+  justify-content: flex-start;
+  padding-left: 4vw;
+}
+
+.what-box:first-child h2 {
+  font-size: clamp(36px, 4vw + 10px, 72px);
+  line-height: 1.1;
   font-weight: 600;
-  margin-right: 10%;
-  margin-bottom: 100px;
+  margin: 0;
+  margin-bottom: 60px;
+}
+
+.what-box:last-child {
+  width: 58%;
+  justify-content: flex-end;
+  padding-right: 4vw;
 }
 
 .hat-h2 {
@@ -39,9 +50,11 @@
 .what-box-in {
   flex-direction: column;
   height: 500px;
-  margin-left: 200px;
+  margin-left: 0;
   position: relative;
   display: flex;
+  width: 450px;
+  max-width: 100%;
 }
 
 .what-content {
