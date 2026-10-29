@@ -39,6 +39,36 @@ const toolCategories: ToolCategory[] = [
     ],
   },
   {
+    category: "Motion Design",
+    badge: "ANIMATION & 3D",
+    tools: [
+      {
+        name: "Adobe After Effects",
+        role: "Motion Graphics & Animation",
+        icon: "/images/tools/aftereffects.svg",
+        url: "https://www.adobe.com/products/aftereffects.html",
+      },
+      {
+        name: "Blender",
+        role: "3D Modeling & Animation",
+        icon: "/images/tools/blender.svg",
+        url: "https://www.blender.org",
+      },
+      {
+        name: "Duik Angela",
+        role: "Character Rigging & Animation",
+        icon: "/images/tools/duik.svg",
+        url: "https://rxlaboratory.org/tools/duik-angela/",
+      },
+      {
+        name: "Adobe Illustrator",
+        role: "Vector Assets & Design",
+        icon: "/images/tools/illustrator.svg",
+        url: "https://www.adobe.com/products/illustrator.html",
+      },
+    ],
+  },
+  {
     category: "AI Filmmaking",
     badge: "GENERATIVE AI & PRODUCTION",
     tools: [
@@ -113,7 +143,7 @@ const TechStackNew = () => {
           </p>
         </div>
 
-        {/* 3 Categorized Studio Cards */}
+        {/* 4 Categorized Studio Cards */}
         <div className="techstack-categories-grid">
           {toolCategories.map((cat, idx) => (
             <div key={idx} className="techstack-category-card">
