@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProjectItem } from "../config";
 import { extractYouTubeId, getYouTubeThumbnail } from "../utils/youtube";
 import { MdPlayArrow, MdVideocam } from "react-icons/md";
@@ -6,7 +6,7 @@ import "./styles/VideoCard.css";
 
 interface VideoCardProps {
   project: ProjectItem;
-  onPlay?: (videoId: string, title: string, category: string) => void;
+  onPlay?: (videoId: string, title: string, category: string, aspectRatio?: "9:16" | "16:9") => void;
   className?: string;
 }
 
@@ -15,19 +15,33 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   onPlay,
   className = "",
 }) => {
-  const [imageError, setImageError] = useState(false);
   const videoId = extractYouTubeId(project.videoUrl);
   const hasVideo = Boolean(videoId);
   const isPortrait = project.aspectRatio === "9:16";
 
-  const thumbnailSrc =
-    project.thumbnailUrl ||
-    (hasVideo && videoId ? getYouTubeThumbnail(videoId) : null);
+  const [thumbSrc, setThumbSrc] = useState<string | null>(
+    project.thumbnailUrl || (videoId ? getYouTubeThumbnail(videoId, "maxres") : null)
+  );
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setThumbSrc(project.thumbnailUrl || (videoId ? getYouTubeThumbnail(videoId, "maxres") : null));
+    setImageError(false);
+  }, [project.thumbnailUrl, videoId]);
+
+  const handleImageError = () => {
+    if (videoId && thumbSrc?.includes("maxresdefault")) {
+      // Fallback to hqdefault
+      setThumbSrc(getYouTubeThumbnail(videoId, "hq"));
+    } else {
+      setImageError(true);
+    }
+  };
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (hasVideo && videoId && onPlay) {
-      onPlay(videoId, project.title, project.subCategory);
+      onPlay(videoId, project.title, project.subCategory, project.aspectRatio);
     }
   };
 
@@ -50,14 +64,14 @@ export const VideoCard: React.FC<VideoCardProps> = ({
     >
       {/* Media / Thumbnail / Placeholder Container */}
       <div className={`video-card-media-wrapper ${isPortrait ? "ratio-9-16" : "ratio-16-9"}`}>
-        {thumbnailSrc && !imageError ? (
+        {thumbSrc && !imageError ? (
           <img
-            src={thumbnailSrc}
+            src={thumbSrc}
             alt={project.title}
             className="video-card-thumbnail"
             loading="lazy"
             decoding="async"
-            onError={() => setImageError(true)}
+            onError={handleImageError}
           />
         ) : (
           <div className="video-card-empty-placeholder">
@@ -98,22 +112,17 @@ export const VideoCard: React.FC<VideoCardProps> = ({
       <div className="video-card-body">
         <div className="video-card-meta">
           <span className="video-card-category">{project.subCategory}</span>
-          <span className="video-card-aspect-tag">{project.aspectRatio}</span>
+          <span className="video-card-slot">SLOT {project.order.toString().padStart(2, "0")}</span>
         </div>
-
         <h3 className="video-card-title">{project.title}</h3>
         <p className="video-card-desc">{project.description}</p>
-
-        {/* Tags */}
-        {project.tags && project.tags.length > 0 && (
-          <div className="video-card-tags">
-            {project.tags.map((tag, idx) => (
-              <span key={idx} className="video-card-tag-pill">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="video-card-tags">
+          {project.tags.map((tag, idx) => (
+            <span key={idx} className="video-tag-pill">
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

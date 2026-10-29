@@ -9,6 +9,7 @@ interface VideoModalProps {
   videoId: string | null;
   title: string;
   category: string;
+  aspectRatio?: "9:16" | "16:9";
 }
 
 export const VideoModal: React.FC<VideoModalProps> = ({
@@ -17,6 +18,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
   videoId,
   title,
   category,
+  aspectRatio = "16:9",
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -37,12 +39,23 @@ export const VideoModal: React.FC<VideoModalProps> = ({
 
   if (!isOpen || !videoId) return null;
 
+  const isPortrait = aspectRatio === "9:16";
+
   return (
-    <div className="video-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="video-modal-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Playing ${title}`}
+    >
+      <div
+        className={`video-modal-content ${isPortrait ? "modal-portrait" : "modal-landscape"}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="video-modal-header">
           <div className="video-modal-info">
-            <span className="video-modal-tag">{category}</span>
+            <span className="video-modal-tag">{category} · {aspectRatio}</span>
             <h3 className="video-modal-title">{title}</h3>
           </div>
           <button
@@ -55,7 +68,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
           </button>
         </div>
 
-        <div className="video-modal-iframe-wrapper">
+        <div className={`video-modal-iframe-wrapper ${isPortrait ? "wrapper-portrait" : "wrapper-landscape"}`}>
           <iframe
             src={getYouTubeEmbedUrl(videoId, true)}
             title={title}
@@ -70,4 +83,3 @@ export const VideoModal: React.FC<VideoModalProps> = ({
 };
 
 export default VideoModal;
-

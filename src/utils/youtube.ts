@@ -26,8 +26,8 @@ export function extractYouTubeId(url: string | undefined): string | null {
     return null;
 }
 
-export function getYouTubeThumbnail(videoId: string): string {
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+export function getYouTubeThumbnail(videoId: string, quality: 'maxres' | 'hq' = 'maxres'): string {
+    return `https://img.youtube.com/vi/${videoId}/${quality === 'maxres' ? 'maxresdefault' : 'hqdefault'}.jpg`;
 }
 
 export function getYouTubeEmbedUrl(videoId: string, autoplay: boolean = true): string {

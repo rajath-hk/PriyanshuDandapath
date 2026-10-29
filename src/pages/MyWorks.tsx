@@ -10,13 +10,13 @@ type FilterTab =
   | "ALL"
   | "SHORT FORM"
   | "LONG FORM"
-  | "fast-paced"
   | "talking-head"
+  | "fast-paced"
   | "podcast-highlights"
   | "case-studies"
+  | "saas"
   | "music-videos"
-  | "podcast"
-  | "saas";
+  | "podcast";
 
 interface FilterOption {
   key: FilterTab;
@@ -28,15 +28,15 @@ const categoryDescriptions: Record<
   string,
   { title: string; subtitle: string; desc: string }
 > = {
-  "fast-paced": {
-    title: "Fast-Paced Edits",
-    subtitle: "High-Retention Visual Engineering",
-    desc: "Rhythm-matched kinetic cuts, rapid velocity shifts, and pattern interrupts engineered to maximize viewer retention and stop the scroll instantly.",
-  },
   "talking-head": {
     title: "Talking Head Edits",
     subtitle: "Kinetic Typography & Creator Storytelling",
     desc: "High-converting creator and thought-leader storytelling powered by kinetic typography, animated graphic callouts, and seamless B-roll flow.",
+  },
+  "fast-paced": {
+    title: "Fast-Paced Edits",
+    subtitle: "High-Retention Visual Engineering",
+    desc: "Rhythm-matched kinetic cuts, rapid velocity shifts, and pattern interrupts engineered to maximize viewer retention and stop the scroll instantly.",
   },
   "podcast-highlights": {
     title: "Podcast Highlights",
@@ -48,6 +48,11 @@ const categoryDescriptions: Record<
     subtitle: "Narrative Documentary & Deep Dives",
     desc: "In-depth documentary-style breakdowns, client case studies, and cinematic video essays with structured narrative arcs and custom sound design.",
   },
+  "saas": {
+    title: "SaaS Product Motion",
+    subtitle: "UI Choreography & Explainer Motion",
+    desc: "Product demo and UI motion choreography illustrating complex software workflows with crisp 60fps animations and kinetic camera moves.",
+  },
   "music-videos": {
     title: "Music Video Edits",
     subtitle: "Stylized Rhythm & Creative VFX",
@@ -57,11 +62,6 @@ const categoryDescriptions: Record<
     title: "Full Podcast Production",
     subtitle: "Multi-Camera Mastery & Audio Balancing",
     desc: "Full-length multi-camera podcast mastering with seamless multi-angle switching, broadcast audio leveling, and brand-consistent lower thirds.",
-  },
-  "saas": {
-    title: "SaaS Product Motion",
-    subtitle: "UI Choreography & Explainer Motion",
-    desc: "Product demo and UI motion choreography illustrating complex software workflows with crisp 60fps animations and kinetic camera moves.",
   },
 };
 
@@ -73,6 +73,7 @@ const MyWorks = () => {
     videoId: string | null;
     title: string;
     category: string;
+    aspectRatio?: "9:16" | "16:9";
   }>({
     isOpen: false,
     videoId: null,
@@ -87,12 +88,18 @@ const MyWorks = () => {
     document.body.style.overflowY = "auto";
   }, []);
 
-  const handlePlayVideo = (videoId: string, title: string, category: string) => {
+  const handlePlayVideo = (
+    videoId: string,
+    title: string,
+    category: string,
+    aspectRatio?: "9:16" | "16:9"
+  ) => {
     setModalVideo({
       isOpen: true,
       videoId,
       title,
       category,
+      aspectRatio,
     });
   };
 
@@ -108,14 +115,14 @@ const MyWorks = () => {
   const shortFormProjects = allProjects.filter((p) => p.topLevelCategory === "SHORT FORM");
   const longFormProjects = allProjects.filter((p) => p.topLevelCategory === "LONG FORM");
 
-  // Subcategory filters
-  const fastPaced = allProjects.filter((p) => p.subCategoryKey === "fast-paced");
+  // Subcategory filters (Exact 7 categories matching user specification)
   const talkingHead = allProjects.filter((p) => p.subCategoryKey === "talking-head");
+  const fastPaced = allProjects.filter((p) => p.subCategoryKey === "fast-paced");
   const podcastHighlights = allProjects.filter((p) => p.subCategoryKey === "podcast-highlights");
   const caseStudies = allProjects.filter((p) => p.subCategoryKey === "case-studies");
+  const saasVideos = allProjects.filter((p) => p.subCategoryKey === "saas");
   const musicVideos = allProjects.filter((p) => p.subCategoryKey === "music-videos");
   const podcastEpisodes = allProjects.filter((p) => p.subCategoryKey === "podcast");
-  const saasVideos = allProjects.filter((p) => p.subCategoryKey === "saas");
 
   // Determine visibility
   const showShortForm = activeTab === "ALL" || activeTab === "SHORT FORM";
@@ -131,13 +138,13 @@ const MyWorks = () => {
     { key: "ALL", label: "All", count: allProjects.length },
     { key: "SHORT FORM", label: "Short Form", count: shortFormProjects.length },
     { key: "LONG FORM", label: "Long Form", count: longFormProjects.length },
-    { key: "fast-paced", label: "Fast-Paced", count: fastPaced.length },
     { key: "talking-head", label: "Talking Head", count: talkingHead.length },
+    { key: "fast-paced", label: "Fast-Paced", count: fastPaced.length },
     { key: "podcast-highlights", label: "Podcast Highlights", count: podcastHighlights.length },
     { key: "case-studies", label: "Case Studies", count: caseStudies.length },
+    { key: "saas", label: "SaaS", count: saasVideos.length },
     { key: "music-videos", label: "Music Videos", count: musicVideos.length },
     { key: "podcast", label: "Podcast", count: podcastEpisodes.length },
-    { key: "saas", label: "SaaS", count: saasVideos.length },
   ];
 
   return (
@@ -162,10 +169,10 @@ const MyWorks = () => {
           PriyansArt <span className="title-accent">Works</span>
         </h1>
         <p className="myworks-subtitle">
-          16 Project Slots · High-Velocity Short-Form Viral Retention &amp; Cinematic Long-Form Storytelling
+          16 Curated Projects · High-Velocity Short-Form Viral Retention &amp; Cinematic Long-Form Storytelling
         </p>
 
-        {/* Redesigned Category Filter Bar */}
+        {/* Category Filter Bar */}
         <div className="works-filter-wrapper">
           <div
             className="works-filter-scroll-track"
@@ -288,16 +295,16 @@ const MyWorks = () => {
               </p>
             </div>
 
-            {/* Subcategory 1: Fast-Paced Edits (4 Reels) */}
+            {/* Subcategory 1: Talking Head (4 Reels) */}
             <div className="bento-subcategory">
               <div className="bento-sub-header">
                 <h3>
-                  01. Fast-Paced Edits <span className="sub-count">4 Reels</span>
+                  01. Talking Head <span className="sub-count">4 Reels</span>
                 </h3>
-                <span className="sub-pill">Rhythm &amp; Speed Cuts</span>
+                <span className="sub-pill">Kinetic Typography &amp; B-Roll</span>
               </div>
               <div className="bento-grid-4-reels">
-                {fastPaced.map((project) => (
+                {talkingHead.map((project) => (
                   <VideoCard
                     key={project.id}
                     project={project}
@@ -307,16 +314,16 @@ const MyWorks = () => {
               </div>
             </div>
 
-            {/* Subcategory 2: Talking Head (4 Reels) */}
+            {/* Subcategory 2: Fast-Paced Edits (4 Reels) */}
             <div className="bento-subcategory">
               <div className="bento-sub-header">
                 <h3>
-                  02. Talking Head <span className="sub-count">4 Reels</span>
+                  02. Fast-Paced Edits <span className="sub-count">4 Reels</span>
                 </h3>
-                <span className="sub-pill">Kinetic Typography &amp; B-Roll</span>
+                <span className="sub-pill">Rhythm &amp; Speed Cuts</span>
               </div>
               <div className="bento-grid-4-reels">
-                {talkingHead.map((project) => (
+                {fastPaced.map((project) => (
                   <VideoCard
                     key={project.id}
                     project={project}
@@ -359,7 +366,7 @@ const MyWorks = () => {
                 LONG FORM <span className="title-accent">CINEMATICS &amp; EPISODES</span>
               </h2>
               <p className="division-desc">
-                16:9 widescreen docu-style visual essays, music video cuts, full podcasts, and SaaS product motion.
+                16:9 widescreen docu-style visual essays, commercial case studies, SaaS product motion, music videos, and full podcasts.
               </p>
             </div>
 
@@ -382,15 +389,22 @@ const MyWorks = () => {
               </div>
             </div>
 
-            {/* Subcategories 5, 6, 7: Music Videos, Podcast, SaaS */}
+            {/* Subcategories 5, 6, 7: SaaS Motion · Music Videos · Podcast */}
             <div className="bento-subcategory">
               <div className="bento-sub-header">
                 <h3>
-                  05 – 07. Music Videos · Podcast · SaaS Motion <span className="sub-count">3 Videos</span>
+                  05 – 07. SaaS · Music Videos · Podcast <span className="sub-count">3 Videos</span>
                 </h3>
                 <span className="sub-pill">Widescreen Master Cuts</span>
               </div>
               <div className="bento-grid-3-landscape">
+                {saasVideos.map((project) => (
+                  <VideoCard
+                    key={project.id}
+                    project={project}
+                    onPlay={handlePlayVideo}
+                  />
+                ))}
                 {musicVideos.map((project) => (
                   <VideoCard
                     key={project.id}
@@ -399,13 +413,6 @@ const MyWorks = () => {
                   />
                 ))}
                 {podcastEpisodes.map((project) => (
-                  <VideoCard
-                    key={project.id}
-                    project={project}
-                    onPlay={handlePlayVideo}
-                  />
-                ))}
-                {saasVideos.map((project) => (
                   <VideoCard
                     key={project.id}
                     project={project}
@@ -450,6 +457,7 @@ const MyWorks = () => {
         videoId={modalVideo.videoId}
         title={modalVideo.title}
         category={modalVideo.category}
+        aspectRatio={modalVideo.aspectRatio}
       />
     </div>
   );

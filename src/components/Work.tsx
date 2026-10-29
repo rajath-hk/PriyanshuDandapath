@@ -12,6 +12,7 @@ const Work = () => {
     videoId: string | null;
     title: string;
     category: string;
+    aspectRatio?: "9:16" | "16:9";
   }>({
     isOpen: false,
     videoId: null,
@@ -104,12 +105,18 @@ const Work = () => {
     }
   };
 
-  const handleOpenVideo = (videoId: string, title: string, category: string) => {
+  const handleOpenVideo = (
+    videoId: string,
+    title: string,
+    category: string,
+    aspectRatio?: "9:16" | "16:9"
+  ) => {
     setModalVideo({
       isOpen: true,
       videoId,
       title,
       category,
+      aspectRatio,
     });
   };
 
@@ -170,7 +177,7 @@ const Work = () => {
           const isPortrait = project.aspectRatio === "9:16";
           const thumb =
             project.thumbnailUrl ||
-            (hasVideo && videoId ? getYouTubeThumbnail(videoId) : null);
+            (hasVideo && videoId ? getYouTubeThumbnail(videoId, "maxres") : null);
 
           return (
             <div
@@ -188,7 +195,11 @@ const Work = () => {
               {/* Media Preview Box */}
               <div
                 className={`card-media-box ${isPortrait ? "media-ratio-9-16" : "media-ratio-16-9"}`}
-                onClick={hasVideo && videoId ? () => handleOpenVideo(videoId, project.title, project.subCategory) : undefined}
+                onClick={
+                  hasVideo && videoId
+                    ? () => handleOpenVideo(videoId, project.title, project.subCategory, project.aspectRatio)
+                    : undefined
+                }
                 role={hasVideo ? "button" : undefined}
                 tabIndex={hasVideo ? 0 : undefined}
                 aria-label={hasVideo ? `Play ${project.title}` : project.title}
@@ -201,6 +212,11 @@ const Work = () => {
                     className="card-media-img"
                     loading="lazy"
                     decoding="async"
+                    onError={(e) => {
+                      if (videoId && (e.currentTarget.src.includes("maxresdefault"))) {
+                        e.currentTarget.src = getYouTubeThumbnail(videoId, "hq");
+                      }
+                    }}
                   />
                 ) : (
                   <div className="card-placeholder-mesh">
@@ -281,6 +297,7 @@ const Work = () => {
         videoId={modalVideo.videoId}
         title={modalVideo.title}
         category={modalVideo.category}
+        aspectRatio={modalVideo.aspectRatio}
       />
     </section>
   );
