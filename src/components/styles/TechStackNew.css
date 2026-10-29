@@ -50,22 +50,27 @@
   margin: 0;
 }
 
-/* 4-Category Studio Grid */
+/* 3-Category Studio Grid */
 .techstack-categories-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1024px) {
   .techstack-categories-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    max-width: 540px;
+    margin: 0 auto;
+    gap: 24px;
   }
 }
 
 @media screen and (max-width: 640px) {
   .techstack-categories-grid {
-    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 

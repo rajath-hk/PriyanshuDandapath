@@ -30,65 +30,29 @@ const toolCategories: ToolCategory[] = [
         icon: "/images/tools/davinci.png",
         url: "https://www.blackmagicdesign.com/products/davinciresolve",
       },
-    ],
-  },
-  {
-    category: "Motion & 3D",
-    badge: "VISUAL FX",
-    tools: [
       {
-        name: "Adobe After Effects",
-        role: "Kinetic Motion & VFX",
-        icon: "/images/tools/aftereffects.png",
-        url: "https://www.adobe.com/products/aftereffects.html",
-      },
-      {
-        name: "Blender",
-        role: "3D Animation & Scenes",
-        icon: "/images/tools/blender.svg",
-        url: "https://www.blender.org",
-      },
-      {
-        name: "Spline 3D",
-        role: "Interactive 3D Web",
-        icon: "/images/tools/spline.svg",
-        url: "https://spline.design",
-      },
-    ],
-  },
-  {
-    category: "Design",
-    badge: "CREATIVE ASSETS",
-    tools: [
-      {
-        name: "Adobe Photoshop",
-        role: "Thumbnails & Matte",
-        icon: "/images/tools/photoshop.png",
-        url: "https://www.adobe.com/products/photoshop.html",
-      },
-      {
-        name: "Adobe Illustrator",
-        role: "Vectors & Brand Marks",
-        icon: "/images/tools/illustrator.svg",
-        url: "https://www.adobe.com/products/illustrator.html",
+        name: "CapCut",
+        role: "Short-Form Editing",
+        icon: "/images/tools/capcut.svg",
+        url: "https://www.capcut.com",
       },
     ],
   },
   {
     category: "AI Filmmaking",
-    badge: "GENERATIVE VIDEO",
+    badge: "GENERATIVE AI & PRODUCTION",
     tools: [
       {
-        name: "Midjourney",
-        role: "Photoreal Concept Art",
-        icon: "/images/tools/midjourney.svg",
-        url: "https://www.midjourney.com",
+        name: "Flow",
+        role: "Generative Video & Prompts",
+        icon: "/images/tools/flow.svg",
+        url: "https://labs.google/flow",
       },
       {
-        name: "Runway",
-        role: "Gen-3 Cinematic Video",
-        icon: "/images/tools/runway.svg",
-        url: "https://runwayml.com",
+        name: "Higgsfield AI",
+        role: "Character & World Motion",
+        icon: "/images/tools/higgsfield.png",
+        url: "https://higgsfield.ai",
       },
       {
         name: "Kling AI",
@@ -97,22 +61,40 @@ const toolCategories: ToolCategory[] = [
         url: "https://klingai.com",
       },
       {
-        name: "Luma Dream Machine",
-        role: "Camera Movement & 3D",
-        icon: "/images/tools/luma.svg",
-        url: "https://lumalabs.ai/dream-machine",
-      },
-      {
-        name: "Topaz Video AI",
-        role: "4K Motion Upscaling",
-        icon: "/images/tools/topaz.svg",
-        url: "https://www.topazlabs.com/topaz-video-ai",
+        name: "Adobe Photoshop",
+        role: "Generative Fill & Concepts",
+        icon: "/images/tools/photoshop.png",
+        url: "https://www.adobe.com/products/photoshop.html",
       },
       {
         name: "ElevenLabs",
-        role: "Cinematic Voice & SFX",
+        role: "Voice & Sound FX",
         icon: "/images/tools/elevenlabs.svg",
         url: "https://elevenlabs.io",
+      },
+    ],
+  },
+  {
+    category: "Design",
+    badge: "DIGITAL ART & GRAPHICS",
+    tools: [
+      {
+        name: "Adobe Illustrator",
+        role: "Vectors & Brand Marks",
+        icon: "/images/tools/illustrator.svg",
+        url: "https://www.adobe.com/products/illustrator.html",
+      },
+      {
+        name: "Adobe Photoshop",
+        role: "Thumbnails & Matte",
+        icon: "/images/tools/photoshop.png",
+        url: "https://www.adobe.com/products/photoshop.html",
+      },
+      {
+        name: "Procreate",
+        role: "Digital Illustration & Art",
+        icon: "/images/tools/procreate.png",
+        url: "https://procreate.com",
       },
     ],
   },
@@ -131,7 +113,7 @@ const TechStackNew = () => {
           </p>
         </div>
 
-        {/* 4 Categorized Studio Cards */}
+        {/* 3 Categorized Studio Cards */}
         <div className="techstack-categories-grid">
           {toolCategories.map((cat, idx) => (
             <div key={idx} className="techstack-category-card">

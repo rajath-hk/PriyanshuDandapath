@@ -370,22 +370,19 @@ export const config = {
     // CREATIVE SUITE & AI TOOLS
     creativeTools: [
         // Editing & Color
-        { name: "Premiere Pro", category: "Editing & Color", icon: "/images/tools/premiere.png", url: "https://www.adobe.com/products/premiere.html" },
+        { name: "Adobe Premiere Pro", category: "Editing & Color", icon: "/images/tools/premiere.png", url: "https://www.adobe.com/products/premiere.html" },
         { name: "DaVinci Resolve", category: "Editing & Color", icon: "/images/tools/davinci.png", url: "https://www.blackmagicdesign.com/products/davinciresolve" },
-        // Motion Graphics & 3D
-        { name: "After Effects", category: "Motion & VFX", icon: "/images/tools/aftereffects.png", url: "https://www.adobe.com/products/aftereffects.html" },
-        { name: "Blender", category: "3D Motion", icon: "/images/tools/blender.svg", url: "https://www.blender.org" },
-        { name: "Spline 3D", category: "3D Web", icon: "/images/tools/spline.svg", url: "https://spline.design" },
-        // Design
-        { name: "Photoshop", category: "Design & Thumbnails", icon: "/images/tools/photoshop.png", url: "https://www.adobe.com/products/photoshop.html" },
-        { name: "Illustrator", category: "Vector & Graphics", icon: "/images/tools/illustrator.svg", url: "https://www.adobe.com/products/illustrator.html" },
+        { name: "CapCut", category: "Editing & Color", icon: "/images/tools/capcut.svg", url: "https://www.capcut.com" },
         // AI Filmmaking
-        { name: "Midjourney", category: "GenAI Concept", icon: "/images/tools/midjourney.svg", url: "https://www.midjourney.com" },
-        { name: "Runway Gen-3", category: "AI Video", icon: "/images/tools/runway.svg", url: "https://runwayml.com" },
-        { name: "Kling AI", category: "AI Motion", icon: "/images/tools/kling.svg", url: "https://klingai.com" },
-        { name: "Luma Dream Machine", category: "AI Camera", icon: "/images/tools/luma.svg", url: "https://lumalabs.ai/dream-machine" },
-        { name: "Topaz Video AI", category: "AI Upscaling", icon: "/images/tools/topaz.svg", url: "https://www.topazlabs.com/topaz-video-ai" },
-        { name: "ElevenLabs", category: "AI Voice & SFX", icon: "/images/tools/elevenlabs.svg", url: "https://elevenlabs.io" }
+        { name: "Flow", category: "AI Filmmaking", icon: "/images/tools/flow.svg", url: "https://labs.google/flow" },
+        { name: "Higgsfield AI", category: "AI Filmmaking", icon: "/images/tools/higgsfield.png", url: "https://higgsfield.ai" },
+        { name: "Kling AI", category: "AI Filmmaking", icon: "/images/tools/kling.svg", url: "https://klingai.com" },
+        { name: "Adobe Photoshop", category: "AI Filmmaking", icon: "/images/tools/photoshop.png", url: "https://www.adobe.com/products/photoshop.html" },
+        { name: "ElevenLabs", category: "AI Filmmaking", icon: "/images/tools/elevenlabs.svg", url: "https://elevenlabs.io" },
+        // Design
+        { name: "Adobe Illustrator", category: "Design", icon: "/images/tools/illustrator.svg", url: "https://www.adobe.com/products/illustrator.html" },
+        { name: "Adobe Photoshop", category: "Design", icon: "/images/tools/photoshop.png", url: "https://www.adobe.com/products/photoshop.html" },
+        { name: "Procreate", category: "Design", icon: "/images/tools/procreate.png", url: "https://procreate.com" }
     ] as CreativeTool[],
 
     skills: {
