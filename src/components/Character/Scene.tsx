@@ -52,6 +52,7 @@ const Scene = () => {
       camera.position.set(0, camY, camZ);
       camera.zoom = 1.0;
       camera.updateProjectionMatrix();
+      (window as any).__three = { camera, getChar: () => charRef.current };
 
       let headBone: THREE.Object3D | null = null;
       let screenLight: any | null = null;

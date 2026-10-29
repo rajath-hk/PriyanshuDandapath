@@ -75,7 +75,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    padding: 40px 18px calc(48px + env(safe-area-inset-bottom, 0px)) 18px;
+    padding: calc(64px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -83,15 +83,15 @@
 
   .about-me {
     width: 100%;
-    max-width: 520px;
+    max-width: 440px;
     margin: 0 auto;
-    background: rgba(13, 10, 18, 0.78);
+    background: rgba(10, 8, 15, 0.82);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(118, 84, 255, 0.25);
+    border: 1px solid rgba(118, 84, 255, 0.22);
     border-radius: 20px;
-    padding: 22px 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(118, 84, 255, 0.15);
+    padding: 20px 20px 18px 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 24px rgba(118, 84, 255, 0.12);
     box-sizing: border-box;
     position: relative;
     z-index: 10;
@@ -99,23 +99,30 @@
 
   .about-me h3 {
     font-size: 11px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     margin-bottom: 8px;
     color: var(--color-soft-lavender, #c3a0ff);
     font-weight: 700;
   }
 
   .about-me p {
-    font-size: clamp(14px, 3.8vw, 16.5px);
+    font-size: clamp(13px, 3.4vw, 14.5px);
     line-height: 1.62;
     color: var(--text-primary, #f4f0fa);
+    letter-spacing: 0.01em;
     margin: 0;
   }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .about-me {
-    padding: 28px 26px;
+    max-width: 520px;
+    padding: 24px 26px;
+  }
+  .about-me p {
+    font-size: 15px;
+    line-height: 1.65;
   }
 }
 

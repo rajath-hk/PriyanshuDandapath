@@ -198,7 +198,7 @@ export function setCharTimeline(
       .fromTo(
         ".character-model",
         { x: 0, y: 0, opacity: 1 },
-        { x: aboutModelX, y: "-26%", opacity: 1, duration: 3.0, ease: "power1.inOut" },
+        { x: aboutModelX, y: "-10%", opacity: 1, duration: 3.0, ease: "power1.inOut" },
         0
       )
       .to(".landing-container", { opacity: 0, y: "-20%", duration: 1.6, ease: "power1.out" }, 0)

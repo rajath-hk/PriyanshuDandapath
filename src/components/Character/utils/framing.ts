@@ -40,26 +40,27 @@ export function getCameraFraming(aspect: number, height: number) {
   }
 
   // MOBILE / TABLET PORTRAIT FRAMING (aspect < 1.05 or width <= 1024)
-  // Perfectly balanced between the top name header and bottom role info / CTAs
-  let camY = 10.0;
-  let camZ = 37.5;
-  let scale = 0.72;
+  // Rebalanced hero: character is large and focused, eliminating empty headroom,
+  // with hands and desk framed cleanly above the role dock
+  let camY = 9.45;
+  let camZ = 32.5;
+  let scale = 0.78;
 
   if (aspect <= 0.52) {
     // Modern narrow phones (e.g. 360x800, 390x844, 430x932)
-    camY = 9.90;
-    camZ = 37.5;
-    scale = 0.70;
+    camY = 9.40;
+    camZ = 32.0;
+    scale = 0.78;
   } else if (aspect <= 0.65) {
     // Compact phones (e.g. 320x568, 375x667)
-    camY = 9.95;
-    camZ = 36.5;
-    scale = 0.68;
+    camY = 9.45;
+    camZ = 33.0;
+    scale = 0.74;
   } else {
     // Tablets (e.g. 768x1024)
-    camY = 10.25;
-    camZ = 34.0;
-    scale = 0.78;
+    camY = 10.15;
+    camZ = 32.0;
+    scale = 0.82;
   }
 
   return { camY, camZ, scale };
@@ -109,28 +110,28 @@ export function getAboutCameraFraming(aspect: number, height: number) {
   }
 
   // MOBILE / TABLET ABOUT FRAMING
-  // Keeps character centered in top portion without clipping at screen edges
-  let aboutCamY = 9.55;
-  let aboutCamZ = 37.0;
+  // Keeps character centered in upper screen portion as an intentional portrait above the About card
+  let aboutCamY = 9.40;
+  let aboutCamZ = 32.5;
   let aboutModelX = "0%";
-  let charRotY = 0.16;
+  let charRotY = 0.18;
 
   if (aspect <= 0.52) {
     // Narrow phones
-    aboutCamY = 9.50;
-    aboutCamZ = 38.0;
+    aboutCamY = 9.35;
+    aboutCamZ = 32.5;
     aboutModelX = "0%";
-    charRotY = 0.14;
+    charRotY = 0.18;
   } else if (aspect <= 0.65) {
     // Compact phones
-    aboutCamY = 9.52;
-    aboutCamZ = 36.5;
+    aboutCamY = 9.40;
+    aboutCamZ = 33.0;
     aboutModelX = "0%";
-    charRotY = 0.14;
+    charRotY = 0.16;
   } else {
     // Tablets
-    aboutCamY = 9.95;
-    aboutCamZ = 32.0;
+    aboutCamY = 9.85;
+    aboutCamZ = 31.0;
     aboutModelX = "-14%";
     charRotY = 0.38;
   }
