@@ -69,3 +69,4 @@ export const VideoModal: React.FC<VideoModalProps> = ({
 };
 
 export default VideoModal;
+

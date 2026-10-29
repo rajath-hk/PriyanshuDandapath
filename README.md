@@ -91,3 +91,4 @@ Once a URL is added, the card automatically fetches the YouTube cover image, sho
 
 - **Creator / Portfolio Owner:** Priyanshu Dandapath (PriyansArt).
 - **Core 3D WebGL Template:** Adapted from open-source repository by [Redoyanul Haque](https://github.com/red1-for-hek/portfolio-website) under the **MIT License**. See [`LICENSE`](LICENSE) for full legal text.
+
