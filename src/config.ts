@@ -399,7 +399,7 @@ export const config = {
             title: "MOTION & AI FILM",
             description: "Kinetic typography, visual VFX & GenAI cinematography",
             details: "Bringing concepts into dynamic motion with After Effects, Blender, Spline, and next-gen AI video models (Runway, Kling, Midjourney) for high-impact visual alchemy.",
-            tools: ["After Effects", "Blender", "Photoshop", "Midjourney", "Runway Gen-3", "Kling AI", "Topaz AI", "ElevenLabs"]
+            tools: ["After Effects", "Blender", "Photoshop", "Flow", "Higgsfield AI", "Kling AI", "Topaz AI", "ElevenLabs"]
         }
     }
 };
