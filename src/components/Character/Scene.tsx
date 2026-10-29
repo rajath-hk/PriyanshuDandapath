@@ -130,13 +130,13 @@ const Scene = () => {
       let animationFrameId: number;
       const animate = () => {
         animationFrameId = requestAnimationFrame(animate);
-        const delta = clock.getDelta();
+        const delta = Math.min(clock.getDelta(), 0.1);
+        if (mixer) {
+          mixer.update(delta);
+        }
         if (headBone) {
           handleHeadRotation(headBone, mouse.x, mouse.y, delta);
           light.setPointLight(screenLight);
-        }
-        if (mixer) {
-          mixer.update(delta);
         }
         renderer.render(scene, camera);
       };

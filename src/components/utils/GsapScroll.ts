@@ -6,6 +6,7 @@ import { getCameraFraming, getAboutCameraFraming } from "../Character/utils/fram
 gsap.registerPlugin(ScrollTrigger);
 
 export function killCharTimeline() {
+  ScrollTrigger.getById("char-master")?.kill();
   ScrollTrigger.getById("char-tl1")?.kill();
   ScrollTrigger.getById("char-tl2")?.kill();
   ScrollTrigger.getById("char-tl3")?.kill();
@@ -17,43 +18,31 @@ export function setCharTimeline(
 ) {
   killCharTimeline();
 
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const scrubSpeed = prefersReducedMotion ? false : 0.8;
+  if (!character) return;
 
-  const tl1 = gsap.timeline({
-    scrollTrigger: {
-      id: "char-tl1",
-      trigger: ".landing-section",
-      start: "top top",
-      end: "bottom top",
-      scrub: scrubSpeed,
-      invalidateOnRefresh: true,
-    },
-  });
-  const tl2 = gsap.timeline({
-    scrollTrigger: {
-      id: "char-tl2",
-      trigger: ".about-section",
-      start: "center 55%",
-      end: "bottom top",
-      scrub: scrubSpeed,
-      invalidateOnRefresh: true,
-    },
-  });
-  const tl3 = gsap.timeline({
-    scrollTrigger: {
-      id: "char-tl3",
-      trigger: ".whatIDO",
-      start: "top top",
-      end: "bottom top",
-      scrub: scrubSpeed,
-      invalidateOnRefresh: true,
-    },
-  });
+  const isDesktop = typeof window !== "undefined" && window.innerWidth > 1024;
+  if (!isDesktop) {
+    const tM2 = gsap.timeline({
+      scrollTrigger: {
+        id: "char-tl1",
+        trigger: ".what-box-in",
+        start: "top 70%",
+        end: "bottom top",
+      },
+    });
+    tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
+    return;
+  }
+
+  // Pre-calculate responsive framing for current viewport
+  const { camY, camZ } = getCameraFraming(camera.aspect, window.innerHeight);
+  const { aboutCamY, aboutCamZ, aboutModelX, charRotY } = getAboutCameraFraming(
+    camera.aspect,
+    window.innerHeight
+  );
+
   let screenLight: any, monitor: any;
-  character?.children.forEach((object: any) => {
+  character.children.forEach((object: any) => {
     if (object.name === "Plane004") {
       object.children.forEach((child: any) => {
         child.material.transparent = true;
@@ -69,7 +58,6 @@ export function setCharTimeline(
       object.material.opacity = 0;
       object.material.emissive.set("#7654FF");
       object.material.emissiveIntensity = 1.35;
-      // Gentle subtle breathing animation, NOT random flashing
       gsap.to(object.material, {
         emissiveIntensity: 1.6,
         duration: 2.8,
@@ -80,79 +68,113 @@ export function setCharTimeline(
       screenLight = object;
     }
   });
-  const neckBone = character?.getObjectByName("spine005");
-  if (window.innerWidth > 1024) {
-    if (character) {
-      const { camY, camZ } = getCameraFraming(camera.aspect, window.innerHeight);
-      const { aboutCamY, aboutCamZ, aboutModelX, charRotY } = getAboutCameraFraming(
-        camera.aspect,
-        window.innerHeight
-      );
 
-      tl1
-        .fromTo(character.rotation, { y: 0 }, { y: charRotY, duration: 1 }, 0)
-        .fromTo(camera.position, { y: camY, z: camZ }, { y: aboutCamY, z: aboutCamZ, duration: 1 }, 0)
-        .fromTo(".character-model", { x: 0 }, { x: aboutModelX, duration: 1 }, 0)
-        .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
-        .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-30%", opacity: 0 }, { y: "0%", opacity: 1, duration: 0.8 }, 0);
+  const neckBone = character.getObjectByName("spine005");
 
-      tl2
-        .to(
-          camera.position,
-          { z: 75, y: 8.4, duration: 6, delay: 2, ease: "power3.inOut" },
-          0
-        )
-        .to(".about-section", { y: "30%", duration: 6 }, 0)
-        .to(".about-section", { opacity: 0, delay: 3, duration: 2 }, 0)
-        .to(
-          ".character-model",
-          { pointerEvents: "none", x: "-6%", delay: 2, duration: 5 },
-          0
-        )
-        .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)
-        .to(neckBone!.rotation, { x: 0.6, delay: 2, duration: 3 }, 0)
-        .to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0)
-        .to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0)
-        .fromTo(
-          ".what-box-in",
-          { display: "none" },
-          { display: "flex", duration: 0.1, delay: 6, immediateRender: false },
-          0
-        )
-        .fromTo(
-          monitor.position,
-          { y: -10, z: 2 },
-          { y: 0, z: 0, delay: 1.5, duration: 3, immediateRender: false },
-          0
-        )
-        .fromTo(
-          ".character-rim",
-          { opacity: 1, scaleX: 1.4 },
-          { opacity: 0, scale: 0, y: "-70%", duration: 5, delay: 2, immediateRender: false },
-          0.3
-        );
-
-      tl3
-        .to(
-          ".character-model",
-          { opacity: 0, y: "-35%", duration: 2, ease: "power2.in" },
-          0
-        )
-        .to(character.rotation, { x: -0.04, duration: 2 }, 0);
-    }
-  } else {
-    if (character) {
-      const tM2 = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".what-box-in",
-          start: "top 70%",
-          end: "bottom top",
-        },
-      });
-      tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
-    }
+  // Reset initial Hero values cleanly
+  if (window.scrollY < 50) {
+    camera.position.set(0, camY, camZ);
+    character.rotation.set(0, 0, 0);
   }
+
+  // Master unified timeline: controls the entire 3D character & camera journey
+  // Eliminates competing timelines, race conditions, and rapid scroll desync
+  const masterTl = gsap.timeline({
+    scrollTrigger: {
+      id: "char-master",
+      trigger: ".landing-section",
+      start: "top top",
+      endTrigger: ".whatIDO",
+      end: "bottom top",
+      scrub: true,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  // Total timeline duration: 10 units
+  // Phase 1 (0.0 -> 3.2): Hero to About transition
+  masterTl
+    .fromTo(
+      character.rotation,
+      { y: 0, x: 0 },
+      { y: charRotY, x: 0, duration: 3.2, ease: "power1.inOut" },
+      0
+    )
+    .fromTo(
+      camera.position,
+      { x: 0, y: camY, z: camZ },
+      { x: 0, y: aboutCamY, z: aboutCamZ, duration: 3.2, ease: "power1.inOut" },
+      0
+    )
+    .fromTo(
+      ".character-model",
+      { x: 0, y: 0, opacity: 1, pointerEvents: "inherit" },
+      { x: aboutModelX, y: 0, opacity: 1, pointerEvents: "inherit", duration: 3.2, ease: "power1.inOut" },
+      0
+    )
+    .to(".landing-container", { opacity: 0, duration: 1.6, ease: "power1.out" }, 0)
+    .to(".landing-container", { y: "40%", duration: 2.8, ease: "power1.in" }, 0)
+    .fromTo(
+      ".about-me",
+      { y: "-30%", opacity: 0 },
+      { y: "0%", opacity: 1, duration: 2.4, ease: "power1.out" },
+      0.8
+    );
+
+  // Phase 2 (3.2 -> 4.4): Stable hold in About section (Reading zone)
+  // Character remains stably framed while user reads About content
+
+  // Phase 3 (4.4 -> 7.8): About to What I Do (Workspace transition)
+  masterTl
+    .to(
+      camera.position,
+      { z: 75, y: 8.4, duration: 3.4, ease: "power2.inOut" },
+      4.4
+    )
+    .to(".about-section", { y: "30%", opacity: 0, duration: 2.8, ease: "power1.in" }, 4.4)
+    .to(
+      ".character-model",
+      { x: "-6%", duration: 3.4, ease: "power2.inOut" },
+      4.4
+    )
+    .to(character.rotation, { y: 0.92, x: 0.12, duration: 3.4, ease: "power2.inOut" }, 4.4);
+
+  if (neckBone) {
+    masterTl.to(neckBone.rotation, { x: 0.6, duration: 3.0, ease: "power2.inOut" }, 4.6);
+  }
+  if (monitor && monitor.material) {
+    masterTl.to(monitor.material, { opacity: 1, duration: 1.5, ease: "power1.out" }, 5.2);
+  }
+  if (screenLight && screenLight.material) {
+    masterTl.to(screenLight.material, { opacity: 1, duration: 1.8, ease: "power1.out" }, 5.4);
+  }
+  if (monitor) {
+    masterTl.fromTo(
+      monitor.position,
+      { y: -10, z: 2 },
+      { y: 0, z: 0, duration: 2.4, ease: "power2.out", immediateRender: false },
+      4.8
+    );
+  }
+  masterTl
+    .fromTo(
+      ".what-box-in",
+      { display: "none" },
+      { display: "flex", duration: 0.1, immediateRender: false },
+      6.0
+    )
+    .fromTo(
+      ".character-rim",
+      { opacity: 1, scaleX: 1.4 },
+      { opacity: 0, scale: 0, y: "-70%", duration: 3.0, immediateRender: false },
+      4.5
+    );
+
+  // Phase 4 (7.8 -> 10.0): What I Do to Lower sections exit
+  masterTl
+    .to(".character-model", { opacity: 0, y: "-35%", duration: 2.2, ease: "power2.in" }, 7.8)
+    .to(character.rotation, { x: -0.04, duration: 2.2, ease: "power1.inOut" }, 7.8)
+    .set(".character-model", { pointerEvents: "none" }, 8.0);
 }
 
 export function setAllTimeline() {

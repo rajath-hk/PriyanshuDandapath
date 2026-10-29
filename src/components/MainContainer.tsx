@@ -21,16 +21,20 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
     const resizeHandler = () => {
-      setSplitText();
-      const desktop = window.innerWidth > 1024;
-      const mobile = window.innerWidth <= 768;
-      setIsDesktopView(desktop);
-      setIsMobile(mobile);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        setSplitText();
+        const desktop = window.innerWidth > 1024;
+        const mobile = window.innerWidth <= 768;
+        setIsDesktopView(desktop);
+        setIsMobile(mobile);
+      }, 150);
     };
-    resizeHandler();
     window.addEventListener("resize", resizeHandler);
     return () => {
+      clearTimeout(resizeTimer);
       window.removeEventListener("resize", resizeHandler);
     };
   }, []);

@@ -30,9 +30,9 @@ export const handleTouchEnd = (
 };
 
 /**
- * Delta-time damped head rotation that responds smoothly to mouse and scroll position.
- * Eliminates sudden jumps, jitter, and frame-rate discrepancies across 60Hz/120Hz/144Hz displays.
- * Respects prefers-reduced-motion by remaining stable.
+ * Continuous, smoothly blended head rotation that responds to mouse cursor and normalized scroll progress.
+ * Uses piecewise continuous curves to prevent abrupt target jumps during rapid scroll reversals.
+ * Delta-time exponential damping eliminates stutter across 60Hz/120Hz/144Hz displays.
  */
 export const handleHeadRotation = (
   headBone: THREE.Object3D,
@@ -59,27 +59,47 @@ export const handleHeadRotation = (
   }
 
   const vh = window.innerHeight || 900;
-  const scrollY = window.scrollY;
+  const scrollY = window.scrollY || 0;
 
-  let targetX = 0;
-  let targetY = 0;
+  // 1. Hero gaze: responsive to cursor
+  const clampedMouseX = Math.max(-0.8, Math.min(0.8, mouseX));
+  const clampedMouseY = Math.max(-0.7, Math.min(0.7, mouseY));
+  const heroTargetY = clampedMouseX * 0.24;
+  const heroTargetX = -clampedMouseY * 0.18;
 
-  if (scrollY < vh * 0.7) {
-    // 1. Hero section: subtle, responsive gaze toward cursor
-    const clampedMouseX = Math.max(-0.8, Math.min(0.8, mouseX));
-    const clampedMouseY = Math.max(-0.7, Math.min(0.7, mouseY));
-    targetY = clampedMouseX * 0.24;
-    targetX = -clampedMouseY * 0.18;
-  } else if (scrollY < vh * 1.8) {
-    // 2. About section: character gracefully glances toward the About text with subtle micro-tracking
-    const clampedMouseX = Math.max(-0.6, Math.min(0.6, mouseX));
-    const clampedMouseY = Math.max(-0.5, Math.min(0.5, mouseY));
-    targetY = 0.06 + clampedMouseX * 0.05;
-    targetX = -0.04 - clampedMouseY * 0.04;
+  // 2. About glance: subtle gaze toward right-side about text
+  const aboutTargetY = 0.06 + clampedMouseX * 0.05;
+  const aboutTargetX = -0.04 - clampedMouseY * 0.04;
+
+  // 3. Workspace gaze: focused down on monitor / typing keyboard
+  const workTargetY = -0.15;
+  const workTargetX = -0.32;
+
+  let targetX = heroTargetX;
+  let targetY = heroTargetY;
+
+  if (scrollY <= vh * 0.5) {
+    // Pure Hero section
+    targetX = heroTargetX;
+    targetY = heroTargetY;
+  } else if (scrollY <= vh * 1.1) {
+    // Smooth continuous blend: Hero -> About
+    const t = (scrollY - vh * 0.5) / (vh * 0.6);
+    targetX = THREE.MathUtils.lerp(heroTargetX, aboutTargetX, t);
+    targetY = THREE.MathUtils.lerp(heroTargetY, aboutTargetY, t);
+  } else if (scrollY <= vh * 1.4) {
+    // Stable About reading zone
+    targetX = aboutTargetX;
+    targetY = aboutTargetY;
+  } else if (scrollY <= vh * 2.0) {
+    // Smooth continuous blend: About -> Workspace
+    const t = (scrollY - vh * 1.4) / (vh * 0.6);
+    targetX = THREE.MathUtils.lerp(aboutTargetX, workTargetX, t);
+    targetY = THREE.MathUtils.lerp(aboutTargetY, workTargetY, t);
   } else {
-    // 3. Lower sections: gaze settles naturally toward workspace/monitor
-    targetY = -0.15;
-    targetX = -0.32;
+    // Lower sections
+    targetX = workTargetX;
+    targetY = workTargetY;
   }
 
   headBone.rotation.x = THREE.MathUtils.lerp(headBone.rotation.x, targetX, dampFactor);
