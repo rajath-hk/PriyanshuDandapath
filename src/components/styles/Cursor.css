@@ -21,13 +21,25 @@
   transition: all 0.5s ease-out, height 0.5s ease-in-out;
 }
 .cursor-disable {
-  --size: 0px;
+  --size: 0px !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
+
+body:has(#tools:hover) .cursor-main,
+body:has(.techstack-section:hover) .cursor-main {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @media only screen and (min-width: 600px) {
   .cursor-main {
     --size: 50px;
   }
   .cursor-disable {
-    --size: 0px;
+    --size: 0px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 }

@@ -21,7 +21,7 @@ const toolCategories: ToolCategory[] = [
       {
         name: "Adobe Premiere Pro",
         role: "Rhythm & Pacing",
-        icon: "/images/tools/premiere.png",
+        icon: "/images/tools/premiere.svg",
         url: "https://www.adobe.com/products/premiere.html",
       },
       {
@@ -63,7 +63,7 @@ const toolCategories: ToolCategory[] = [
       {
         name: "Adobe Photoshop",
         role: "Generative Fill & Concepts",
-        icon: "/images/tools/photoshop.png",
+        icon: "/images/tools/photoshop.svg",
         url: "https://www.adobe.com/products/photoshop.html",
       },
       {
@@ -87,7 +87,7 @@ const toolCategories: ToolCategory[] = [
       {
         name: "Adobe Photoshop",
         role: "Thumbnails & Matte",
-        icon: "/images/tools/photoshop.png",
+        icon: "/images/tools/photoshop.svg",
         url: "https://www.adobe.com/products/photoshop.html",
       },
       {

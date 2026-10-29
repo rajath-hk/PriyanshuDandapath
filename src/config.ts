@@ -370,18 +370,18 @@ export const config = {
     // CREATIVE SUITE & AI TOOLS
     creativeTools: [
         // Editing & Color
-        { name: "Adobe Premiere Pro", category: "Editing & Color", icon: "/images/tools/premiere.png", url: "https://www.adobe.com/products/premiere.html" },
+        { name: "Adobe Premiere Pro", category: "Editing & Color", icon: "/images/tools/premiere.svg", url: "https://www.adobe.com/products/premiere.html" },
         { name: "DaVinci Resolve", category: "Editing & Color", icon: "/images/tools/davinci.png", url: "https://www.blackmagicdesign.com/products/davinciresolve" },
         { name: "CapCut", category: "Editing & Color", icon: "/images/tools/capcut.svg", url: "https://www.capcut.com" },
         // AI Filmmaking
         { name: "Flow", category: "AI Filmmaking", icon: "/images/tools/flow.svg", url: "https://labs.google/flow" },
         { name: "Higgsfield AI", category: "AI Filmmaking", icon: "/images/tools/higgsfield.png", url: "https://higgsfield.ai" },
         { name: "Kling AI", category: "AI Filmmaking", icon: "/images/tools/kling.svg", url: "https://klingai.com" },
-        { name: "Adobe Photoshop", category: "AI Filmmaking", icon: "/images/tools/photoshop.png", url: "https://www.adobe.com/products/photoshop.html" },
+        { name: "Adobe Photoshop", category: "AI Filmmaking", icon: "/images/tools/photoshop.svg", url: "https://www.adobe.com/products/photoshop.html" },
         { name: "ElevenLabs", category: "AI Filmmaking", icon: "/images/tools/elevenlabs.svg", url: "https://elevenlabs.io" },
         // Design
         { name: "Adobe Illustrator", category: "Design", icon: "/images/tools/illustrator.svg", url: "https://www.adobe.com/products/illustrator.html" },
-        { name: "Adobe Photoshop", category: "Design", icon: "/images/tools/photoshop.png", url: "https://www.adobe.com/products/photoshop.html" },
+        { name: "Adobe Photoshop", category: "Design", icon: "/images/tools/photoshop.svg", url: "https://www.adobe.com/products/photoshop.html" },
         { name: "Procreate", category: "Design", icon: "/images/tools/procreate.png", url: "https://procreate.com" }
     ] as CreativeTool[],
 
