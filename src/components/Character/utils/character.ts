@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { DRACOLoader, GLTF, GLTFLoader } from "three-stdlib";
 import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
 import { decryptFile } from "./decrypt";
+import { getCameraFraming } from "./framing";
 
 /**
  * Applies tailored PBR materials for the 3D character:
@@ -183,6 +184,9 @@ const setCharacter = (
           modelUrl,
           async (gltf) => {
             character = gltf.scene;
+
+            const { scale } = getCameraFraming(camera.aspect, window.innerHeight);
+            character.scale.set(scale, scale, scale);
 
             // Apply premium custom PBR materials
             applyCharacterMaterials(character);

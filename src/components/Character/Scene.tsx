@@ -12,6 +12,7 @@ import {
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
 import { setProgress } from "../Loading";
+import { getCameraFraming } from "./utils/framing";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
@@ -40,8 +41,10 @@ const Scene = () => {
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       containerEl.appendChild(renderer.domElement);
 
+      const { camY, camZ, scale } = getCameraFraming(aspect, container.height);
+
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
-      camera.position.set(0, 12.8, 27.2);
+      camera.position.set(0, camY, camZ);
       camera.zoom = 1.0;
       camera.updateProjectionMatrix();
 
@@ -75,6 +78,7 @@ const Scene = () => {
           }
           mixer = animations.mixer;
           const charScene = gltf.scene;
+          charScene.scale.set(scale, scale, scale);
           charRef.current = charScene;
           scene.add(charScene);
           headBone = charScene.getObjectByName("spine006") || null;

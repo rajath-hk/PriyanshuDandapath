@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import { getCameraFraming } from "../Character/utils/framing";
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
@@ -66,9 +67,10 @@ export function setCharTimeline(
   const neckBone = character?.getObjectByName("spine005");
   if (window.innerWidth > 1024) {
     if (character) {
+      const { camY, camZ } = getCameraFraming(camera.aspect, window.innerHeight);
       tl1
         .fromTo(character.rotation, { y: 0 }, { y: 0.7, duration: 1 }, 0)
-        .to(camera.position, { z: 24, y: 12.8 }, 0)
+        .fromTo(camera.position, { y: camY, z: camZ }, { y: 12.8, z: 24, duration: 1 }, 0)
         .fromTo(".character-model", { x: 0 }, { x: "-30%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
