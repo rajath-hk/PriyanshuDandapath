@@ -1,6 +1,13 @@
 .section-container {
-  width: 1300px;
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(16px, 4vw, 48px);
+  padding-right: clamp(16px, 4vw, 48px);
+  box-sizing: border-box;
 }
+
 .title,
 .para {
   font-kerning: normal;
@@ -10,20 +17,24 @@
   transform: translateZ(0);
   word-spacing: 0.15em;
 }
-@media only screen and (max-width: 1600px) {
-  .section-container {
-    width: 1200px;
-    max-width: calc(100% - 160px);
-  }
-}
+
 @media only screen and (max-width: 1400px) {
   .section-container {
-    width: 900px;
+    max-width: 1160px;
   }
 }
-@media only screen and (max-width: 900px) {
+
+@media only screen and (max-width: 1024px) {
   .section-container {
-    width: 500px;
-    max-width: var(--cWidth);
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .section-container {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

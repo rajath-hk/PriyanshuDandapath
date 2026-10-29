@@ -1,83 +1,123 @@
+/* =========================================================================
+   PRIYANSART NAVBAR — RESPONSIVE, COLLISION-FREE & BLURRED TOP BAR
+   ========================================================================= */
+
 .header {
-  display: flex;
-  max-width: var(--cMaxWidth);
-  width: var(--cWidth);
-  justify-content: space-between;
-  padding: 15px 0px;
-  margin-bottom: -80px;
-  box-sizing: border-box;
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
   top: 0;
-  z-index: 9999;
-}
-.header ul {
-  font-size: 11px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100vw;
   display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  column-gap: 20px;
-  row-gap: 6px;
-  align-items: end;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px clamp(16px, 4vw, 48px);
+  box-sizing: border-box;
+  z-index: 9999;
+  background: rgba(11, 8, 12, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
-.header ul li {
-  margin-left: 0px;
-  letter-spacing: 0.8px;
-  color: #ccc;
-  font-weight: 600;
-  cursor: pointer;
+
+.navbar-title {
+  font-weight: 700;
+  font-size: clamp(15px, 1.6vw, 18px);
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
 }
+
+.navbar-title:hover {
+  color: var(--accentColor, #c2a4ff);
+}
+
+/* Center Email Link — only shown on wide viewports to prevent link collision */
 .navbar-connect {
-  position: absolute;
   display: none;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 13px;
-  letter-spacing: 0.8px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
   font-weight: 500;
+  color: #a79fb0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
 }
-.navbar-title {
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.2px;
+
+.navbar-connect:hover {
+  color: var(--accentColor, #c2a4ff);
 }
-@media only screen and (min-width: 500px) {
+
+/* Navigation Links List */
+.header ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: clamp(12px, 2.5vw, 24px);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.header ul li {
+  letter-spacing: 0.06em;
+  color: #eae5ec;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.header ul li:hover {
+  color: var(--accentColor, #c2a4ff);
+}
+
+/* Tablet & Laptop (>768px) */
+@media only screen and (min-width: 768px) {
   .header {
-    padding: 20px 0px;
+    padding: 18px clamp(24px, 4vw, 56px);
   }
+
   .header ul {
-    flex-direction: row;
-    align-items: center;
-    font-size: 14px;
-  }
-  .header ul li {
-    color: #eae5ec;
-  }
-  .navbar-title {
-    font-size: 16px;
+    gap: clamp(20px, 3vw, 36px);
+    font-size: 13px;
   }
 }
-@media only screen and (min-width: 900px) {
+
+/* Wide Desktop (>1150px) — Safe to display center email without collision */
+@media only screen and (min-width: 1150px) {
+  .header {
+    padding: 22px clamp(32px, 4vw, 64px);
+  }
+
   .navbar-connect {
     display: block;
+    font-size: 15px;
+  }
+
+  .header ul {
+    gap: 40px;
+    font-size: 14px;
   }
 }
-@media only screen and (min-width: 1200px) {
-  .header {
-    padding: 35px 0px;
-  }
+
+@media only screen and (min-width: 1600px) {
   .header ul {
-    column-gap: 80px;
-    font-size: 16px;
+    gap: 52px;
+    font-size: 15px;
   }
+
   .navbar-connect {
     font-size: 16px;
-  }
-  .navbar-title {
-    font-size: 18px;
   }
 }

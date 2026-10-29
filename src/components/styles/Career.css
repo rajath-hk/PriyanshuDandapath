@@ -6,7 +6,7 @@
   width: 100%;
   max-width: var(--cMaxWidth);
   margin: 0 auto;
-  padding: 100px 4vw 90px 4vw;
+  padding: 100px clamp(16px, 4vw, 48px) 90px clamp(16px, 4vw, 48px);
   box-sizing: border-box;
   position: relative;
   z-index: 10;
@@ -59,7 +59,7 @@
 .creative-focus-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  gap: clamp(16px, 2.2vw, 28px);
 }
 
 @media screen and (max-width: 1024px) {
