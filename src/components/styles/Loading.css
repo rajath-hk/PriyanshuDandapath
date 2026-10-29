@@ -1,5 +1,5 @@
 /* =========================================================================
-   PRIYANSART PRELOADER — DARK CINEMATIC INITIAL LOADING SCREEN
+   PRIYANSART PRELOADER — EXPERIMENTAL CINEMATIC INITIAL LOADING SCREEN
    ========================================================================= */
 
 .loading-screen {
@@ -8,7 +8,7 @@
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  background-color: var(--backgroundColor, #0b080c);
+  background-color: var(--bg-base, #050407);
   z-index: 999999999;
   display: flex;
   flex-direction: column;
@@ -31,24 +31,25 @@
   pointer-events: none;
 }
 
-/* Atmospheric center glow */
+/* Atmospheric center glow with fluid chromatic bloom */
 .loading-ambient-glow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 580px;
-  height: 580px;
+  width: 640px;
+  height: 640px;
   background: radial-gradient(
     circle,
-    rgba(194, 164, 255, 0.08) 0%,
-    rgba(139, 92, 246, 0.03) 40%,
-    transparent 70%
+    rgba(118, 84, 255, 0.18) 0%,
+    rgba(56, 43, 255, 0.12) 36%,
+    rgba(255, 74, 53, 0.05) 58%,
+    transparent 72%
   );
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  filter: blur(50px);
+  filter: blur(55px);
 }
 
 /* Top bar */
@@ -75,8 +76,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--accentColor, #c2a4ff);
-  box-shadow: 0 0 10px rgba(194, 164, 255, 0.7);
+  background-color: var(--color-ultraviolet, #7654ff);
+  box-shadow: 0 0 10px rgba(118, 84, 255, 0.8), 0 0 16px rgba(255, 59, 53, 0.4);
   animation: pulseDot 2s ease-in-out infinite;
 }
 
@@ -88,7 +89,7 @@
   50% {
     opacity: 1;
     transform: scale(1.2);
-    box-shadow: 0 0 14px rgba(194, 164, 255, 1);
+    box-shadow: 0 0 14px rgba(118, 84, 255, 1), 0 0 8px rgba(255, 74, 53, 0.8);
   }
 }
 
@@ -96,14 +97,15 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
-  color: #c4bacc;
+  color: #e8f0ff;
 }
 
 .loading-sys-tag {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: #7a7085;
+  color: #7654ff;
+  opacity: 0.85;
 }
 
 /* Center card */
@@ -125,28 +127,31 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: rgba(22, 17, 28, 0.9);
-  border: 1px solid rgba(194, 164, 255, 0.28);
+  background: rgba(13, 10, 18, 0.92);
+  border: 1px solid rgba(118, 84, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 22px;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(194, 164, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 24px rgba(118, 84, 255, 0.22);
 }
 
 .loading-monogram {
   font-size: 17px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: var(--accentColor, #c2a4ff);
+  color: #f4f0fa;
+  background: linear-gradient(135deg, #e8f0ff 0%, #c3a0ff 60%, #7654ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .monogram-glow-ring {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 1px solid rgba(194, 164, 255, 0.15);
+  border: 1px solid rgba(118, 84, 255, 0.22);
   animation: ringPulse 3s ease-in-out infinite;
   pointer-events: none;
 }
@@ -157,9 +162,10 @@
     opacity: 0.3;
   }
   50% {
-    transform: scale(1.1);
-    opacity: 0.7;
-    border-color: rgba(194, 164, 255, 0.35);
+    transform: scale(1.12);
+    opacity: 0.8;
+    border-color: rgba(118, 84, 255, 0.5);
+    box-shadow: 0 0 16px rgba(255, 74, 53, 0.25);
   }
 }
 
@@ -167,7 +173,7 @@
 .loading-brand-title {
   font-size: clamp(26px, 4vw, 34px);
   font-weight: 700;
-  color: #ffffff;
+  color: #f4f0fa;
   letter-spacing: -0.02em;
   margin: 0 0 10px 0;
   line-height: 1.15;
@@ -178,7 +184,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: #a79fb0;
+  color: #aaa2b8;
   margin: 0 0 32px 0;
   text-transform: uppercase;
   line-height: 1.5;
@@ -186,9 +192,9 @@
 }
 
 .role-sep {
-  color: var(--accentColor, #c2a4ff);
+  color: var(--color-ultraviolet, #7654ff);
   margin: 0 4px;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 /* Progress Box */
@@ -209,9 +215,9 @@
 
 .loading-track-fill {
   height: 100%;
-  background: linear-gradient(90deg, #8b5cf6, #c2a4ff);
+  background: linear-gradient(90deg, #382bff 0%, #7654ff 45%, #c3a0ff 80%, #ff5738 100%);
   border-radius: 9999px;
-  box-shadow: 0 0 12px rgba(194, 164, 255, 0.7);
+  box-shadow: 0 0 14px rgba(118, 84, 255, 0.75), 0 0 6px rgba(255, 74, 53, 0.4);
   transition: width 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   min-width: 4px;
 }
@@ -234,10 +240,11 @@
 }
 
 .loading-percent-value {
-  color: var(--accentColor, #c2a4ff);
+  color: var(--color-soft-lavender, #c3a0ff);
   font-weight: 700;
   font-family: monospace;
   font-size: 12px;
+  text-shadow: 0 0 8px rgba(118, 84, 255, 0.4);
 }
 
 /* Mobile responsive adjustments */

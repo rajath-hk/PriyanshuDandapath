@@ -142,6 +142,7 @@ const MyWorks = () => {
 
   return (
     <div className="myworks-page">
+      <div className="film-grain-overlay" aria-hidden="true" />
       {/* Header Area */}
       <header className="myworks-header">
         <div className="myworks-nav-row">

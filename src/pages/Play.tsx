@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Chess, Square, PieceSymbol, Color } from "chess.js";
 import RedoxChessEngine from "../utils/redoxchessEngine";
@@ -312,6 +312,7 @@ const Play = () => {
 
   return (
     <div className="play-page">
+      <div className="film-grain-overlay" aria-hidden="true" />
       {/* Header */}
       <div className="play-header">
         <Link to="/" className="back-button" data-cursor="disable">

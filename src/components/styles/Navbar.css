@@ -1,5 +1,5 @@
 /* =========================================================================
-   PRIYANSART NAVBAR — RESPONSIVE, COLLISION-FREE & BLURRED TOP BAR
+   PRIYANSART NAVBAR — EXPERIMENTAL CINEMATIC THEME
    ========================================================================= */
 
 .header {
@@ -15,25 +15,28 @@
   padding: 14px clamp(16px, 4vw, 48px);
   box-sizing: border-box;
   z-index: 9999;
-  background: rgba(11, 8, 12, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(5, 4, 7, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(118, 84, 255, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(118, 84, 255, 0.08);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .navbar-title {
-  font-weight: 700;
+  font-weight: 800;
   font-size: clamp(15px, 1.6vw, 18px);
-  letter-spacing: 0.04em;
-  color: #ffffff;
+  letter-spacing: 0.06em;
+  color: #f4f0fa;
   text-decoration: none;
   flex-shrink: 0;
-  transition: color 0.2s ease;
+  transition: all 0.25s ease;
+  position: relative;
 }
 
 .navbar-title:hover {
-  color: var(--accentColor, #c2a4ff);
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(118, 84, 255, 0.8), 0 0 30px rgba(56, 43, 255, 0.4);
 }
 
 /* Center Email Link — only shown on wide viewports to prevent link collision */
@@ -46,14 +49,15 @@
   font-size: 14px;
   letter-spacing: 0.04em;
   font-weight: 500;
-  color: #a79fb0;
+  color: #aaa2b8;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.25s ease;
   white-space: nowrap;
 }
 
 .navbar-connect:hover {
-  color: var(--accentColor, #c2a4ff);
+  color: #c3a0ff;
+  text-shadow: 0 0 16px rgba(118, 84, 255, 0.5);
 }
 
 /* Navigation Links List */
@@ -70,16 +74,17 @@
 }
 
 .header ul li {
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   color: #eae5ec;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .header ul li:hover {
-  color: var(--accentColor, #c2a4ff);
+  color: #c3a0ff;
+  text-shadow: 0 0 14px rgba(118, 84, 255, 0.6);
 }
 
 /* Tablet & Laptop (>768px) */

@@ -50,8 +50,8 @@ export function setCharTimeline(
     if (object.name === "screenlight") {
       object.material.transparent = true;
       object.material.opacity = 0;
-      object.material.emissive.set("#C8BFFF");
-      object.material.emissiveIntensity = 1.2;
+      object.material.emissive.set("#7654FF");
+      object.material.emissiveIntensity = 1.35;
       // Gentle subtle breathing animation, NOT random flashing
       gsap.to(object.material, {
         emissiveIntensity: 1.6,

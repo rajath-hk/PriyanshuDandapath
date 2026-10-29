@@ -12,28 +12,50 @@
   margin: auto;
 }
 
+.about-section::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(56, 43, 255, 0.09) 0%,
+    rgba(118, 84, 255, 0.05) 45%,
+    rgba(255, 59, 53, 0.02) 70%,
+    transparent 85%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .about-me {
   padding: 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 .about-me h3 {
   font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  font-weight: 600;
-  color: var(--accentColor);
+  letter-spacing: 5px;
+  font-weight: 700;
+  color: var(--color-ultraviolet, #7654ff);
   margin-bottom: 16px;
 }
 
 .about-me p {
   font-size: clamp(16px, 4.2vw, 22px);
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.68;
   letter-spacing: 0.3px;
-  color: #eae5ec;
+  color: var(--text-primary, #f4f0fa);
 }
 
 .about-me .split-word {

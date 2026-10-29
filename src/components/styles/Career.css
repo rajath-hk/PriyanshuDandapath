@@ -29,8 +29,8 @@
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--accentColor, #c2a4ff);
+  letter-spacing: 0.16em;
+  color: var(--color-ultraviolet, #7654ff);
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -45,13 +45,14 @@
 }
 
 .creative-focus-title span {
-  color: var(--accentColor, #c2a4ff);
+  color: #c3a0ff;
+  text-shadow: 0 0 28px rgba(118, 84, 255, 0.4);
 }
 
 .creative-focus-subtitle {
   font-size: 15px;
   line-height: 1.6;
-  color: #a79fb0;
+  color: var(--text-secondary, #aaa2b8);
   margin: 0;
 }
 
@@ -72,8 +73,8 @@
 
 /* Focus Card */
 .creative-focus-card {
-  background: rgba(18, 14, 24, 0.85);
-  border: 1px solid rgba(194, 164, 255, 0.16);
+  background: rgba(13, 10, 18, 0.85);
+  border: 1px solid rgba(118, 84, 255, 0.2);
   border-radius: 20px;
   padding: 32px 28px;
   box-sizing: border-box;
@@ -84,8 +85,8 @@
 }
 
 .creative-focus-card:hover {
-  border-color: rgba(194, 164, 255, 0.45);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(194, 164, 255, 0.12);
+  border-color: rgba(118, 84, 255, 0.55);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75), 0 0 32px rgba(118, 84, 255, 0.25), 0 0 12px rgba(255, 59, 53, 0.14);
   transform: translateY(-4px);
 }
 
@@ -100,12 +101,13 @@
   font-family: monospace;
   font-size: 16px;
   font-weight: 700;
-  color: var(--accentColor, #c2a4ff);
-  background: rgba(194, 164, 255, 0.1);
-  border: 1px solid rgba(194, 164, 255, 0.25);
+  color: #e8f0ff;
+  background: linear-gradient(135deg, rgba(56, 43, 255, 0.22) 0%, rgba(118, 84, 255, 0.22) 100%);
+  border: 1px solid rgba(118, 84, 255, 0.35);
   padding: 4px 12px;
   border-radius: 8px;
   letter-spacing: 0.05em;
+  box-shadow: 0 0 15px rgba(56, 43, 255, 0.25);
 }
 
 .focus-subtitle-tag {

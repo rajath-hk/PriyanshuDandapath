@@ -45,22 +45,23 @@
   transform: translate(-50%, -50%);
   display: flex;
   font-size: 20px;
-  color: #a79fb0;
+  color: #aaa2b8;
   will-change: left, top;
-  transition: color 0.25s ease, transform 0.25s ease;
+  transition: color 0.25s ease, transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   pointer-events: auto;
   border-radius: 50%;
   padding: 8px;
-  background: rgba(22, 17, 28, 0.4);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(194, 164, 255, 0.15);
+  background: rgba(13, 10, 18, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(118, 84, 255, 0.2);
 }
 
 .social-icons a:hover {
-  color: #0b080c;
-  background: var(--accentColor, #c2a4ff);
-  border-color: var(--accentColor, #c2a4ff);
-  box-shadow: 0 0 20px rgba(194, 164, 255, 0.5);
+  color: #ffffff;
+  background: linear-gradient(135deg, #382bff 0%, #7654ff 100%);
+  border-color: rgba(195, 160, 255, 0.5);
+  box-shadow: 0 0 22px rgba(118, 84, 255, 0.6), 0 0 10px rgba(255, 59, 53, 0.3);
   transform: translate(-50%, -50%) scale(1.1);
 }
 
@@ -77,27 +78,28 @@
   font-size: 13px;
   line-height: 13px;
   font-weight: 600;
-  color: #8b8098;
+  color: #aaa2b8;
   cursor: pointer;
   transition: all 0.3s ease;
   pointer-events: auto;
   text-decoration: none;
-  background: rgba(22, 17, 28, 0.6);
-  backdrop-filter: blur(8px);
+  background: rgba(13, 10, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 10px 18px;
   border-radius: 9999px;
-  border: 1px solid rgba(194, 164, 255, 0.18);
+  border: 1px solid rgba(118, 84, 255, 0.22);
 }
 
 .resume-button:hover {
   color: #ffffff;
-  border-color: var(--accentColor, #c2a4ff);
-  box-shadow: 0 0 20px rgba(194, 164, 255, 0.3);
+  border-color: var(--color-ultraviolet, #7654ff);
+  box-shadow: 0 0 22px rgba(118, 84, 255, 0.45), 0 0 10px rgba(255, 59, 53, 0.25);
   transform: translateY(-2px);
 }
 
 .resume-button span {
-  color: var(--accentColor, #c2a4ff);
+  color: var(--color-soft-lavender, #c3a0ff);
   font-size: 16px;
   display: flex;
   align-items: center;

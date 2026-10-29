@@ -9,12 +9,12 @@ export function initialFX() {
   }
   document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {
-    backgroundColor: "#0b080c",
+    backgroundColor: "#050407",
     duration: 0.5,
     delay: 1,
   });
 
-  const selectors = [".landing-info h3", ".landing-intro h2", ".landing-intro h1"];
+  const selectors = [".landing-info h3", ".landing-intro h2", ".landing-intro h1 .hero-name-row"];
   const elements = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
   const landingText = new TextSplitter(elements, {
     type: "chars,lines",

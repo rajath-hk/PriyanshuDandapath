@@ -67,6 +67,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
 
   return (
     <div className="container-main">
+      <div className="film-grain-overlay" aria-hidden="true" />
       <Cursor />
       <Navbar />
       <SocialIcons />
