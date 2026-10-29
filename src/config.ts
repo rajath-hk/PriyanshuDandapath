@@ -192,7 +192,7 @@ export const config = {
             order: 6,
             description: "Rhythm-matched kinetic cuts syncing aggressive audio beats with explosive motion punches and rapid pacing.",
             aspectRatio: "9:16",
-            videoUrl: "https://youtube.com/shorts/_fIOLS-wdM8?feature=share",
+            videoUrl: "https://youtube.com/shorts/dHJg6uceDyw?feature=share",
             featured: false,
             tags: ["Beat Drop", "Dynamic VFX", "Velocity"]
         },
