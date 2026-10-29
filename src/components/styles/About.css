@@ -83,22 +83,37 @@
     height: var(--vh);
     padding: 0px;
     opacity: 1;
+    position: relative;
+    z-index: 10;
   }
   .about-me {
     padding: 0px;
-    width: 48%;
-    max-width: 580px;
+    width: 56%;
+    max-width: 780px;
     padding-right: 4vw;
     box-sizing: border-box;
+    position: relative;
+    z-index: 20;
+  }
+  .about-me h3 {
+    font-size: 14px;
+    letter-spacing: 5px;
+    margin-bottom: 24px;
   }
   .about-me p {
-    font-size: clamp(18px, 1.8vw, 30px);
-    line-height: 1.45;
+    font-size: clamp(20px, 1.6vw, 28px);
+    line-height: 1.65;
+    font-weight: 400;
+    color: #e4ddf0;
+    letter-spacing: 0.3px;
   }
 }
 @media only screen and (min-width: 1950px) {
+  .about-me {
+    max-width: 900px;
+  }
   .about-me p {
-    font-size: 2.2rem;
-    line-height: 2.6rem;
+    font-size: 30px;
+    line-height: 1.7;
   }
 }

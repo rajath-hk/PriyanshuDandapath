@@ -29,7 +29,8 @@ export const VideoModal: React.FC<VideoModalProps> = ({
       window.addEventListener("keydown", handleKeyDown);
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "auto";
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);

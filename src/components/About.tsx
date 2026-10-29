@@ -9,11 +9,6 @@ const About = () => {
         <p className="para">
           {config.about.description}
         </p>
-        {config.about.philosophy && (
-          <p className="para" style={{ marginTop: "1rem", opacity: 0.85, fontSize: "0.95em" }}>
-            {config.about.philosophy}
-          </p>
-        )}
       </div>
     </div>
   );

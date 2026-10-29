@@ -34,6 +34,11 @@ h6 {
 }
 
 body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.loading {
   overflow: hidden;
 }
 

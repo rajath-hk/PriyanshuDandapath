@@ -68,11 +68,11 @@ export function setCharTimeline(
     if (character) {
       tl1
         .fromTo(character.rotation, { y: 0 }, { y: 0.7, duration: 1 }, 0)
-        .to(camera.position, { z: 22 }, 0)
-        .fromTo(".character-model", { x: 0 }, { x: "-25%", duration: 1 }, 0)
+        .to(camera.position, { z: 24, y: 12.8 }, 0)
+        .fromTo(".character-model", { x: 0 }, { x: "-30%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-50%" }, { y: "0%" }, 0);
+        .fromTo(".about-me", { y: "-30%", opacity: 0 }, { y: "0%", opacity: 1, duration: 0.8 }, 0);
 
       tl2
         .to(
@@ -112,14 +112,12 @@ export function setCharTimeline(
         );
 
       tl3
-        .fromTo(
+        .to(
           ".character-model",
-          { y: "0%" },
-          { y: "-100%", duration: 4, ease: "none", delay: 1 },
+          { opacity: 0, y: "-35%", duration: 2, ease: "power2.in" },
           0
         )
-        .fromTo(".whatIDO", { y: 0 }, { y: "15%", duration: 2 }, 0)
-        .to(character.rotation, { x: -0.04, duration: 2, delay: 1 }, 0);
+        .to(character.rotation, { x: -0.04, duration: 2 }, 0);
     }
   } else {
     if (character) {
@@ -136,59 +134,19 @@ export function setCharTimeline(
 }
 
 export function setAllTimeline() {
-  const careerTimeline = gsap.timeline({
+  ScrollTrigger.getById("creative-focus-tl")?.kill();
+  const focusTimeline = gsap.timeline({
     scrollTrigger: {
-      trigger: ".career-section",
-      start: "top 50%",
+      id: "creative-focus-tl",
+      trigger: ".creative-focus-section",
+      start: "top 75%",
       end: "bottom 30%",
-      scrub: 1.5,
-      invalidateOnRefresh: true,
+      toggleActions: "play none none reverse",
     },
   });
-  careerTimeline
-    .fromTo(
-      ".career-timeline",
-      { maxHeight: "0%" },
-      { maxHeight: "100%", duration: 1, ease: "none" },
-      0
-    )
-
-    .fromTo(
-      ".career-timeline",
-      { opacity: 0 },
-      { opacity: 1, duration: 0.2 },
-      0
-    )
-    .fromTo(
-      ".career-info-box",
-      { opacity: 0 },
-      { opacity: 1, stagger: 0.1, duration: 0.5 },
-      0
-    )
-    .fromTo(
-      ".career-dot",
-      { animationIterationCount: "infinite" },
-      {
-        animationIterationCount: "1",
-        delay: 0.3,
-        duration: 0.1,
-      },
-      0
-    );
-
-  if (window.innerWidth > 1024) {
-    careerTimeline.fromTo(
-      ".career-section",
-      { y: 0 },
-      { y: "20%", duration: 0.5, delay: 0.2 },
-      0
-    );
-  } else {
-    careerTimeline.fromTo(
-      ".career-section",
-      { y: 0 },
-      { y: 0, duration: 0.5, delay: 0.2 },
-      0
-    );
-  }
+  focusTimeline.fromTo(
+    ".creative-focus-card",
+    { opacity: 0, y: 35 },
+    { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" }
+  );
 }

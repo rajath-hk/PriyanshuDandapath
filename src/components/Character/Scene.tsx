@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
@@ -17,9 +17,8 @@ const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
   const hoverDivRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef(new THREE.Scene());
+  const charRef = useRef<THREE.Object3D | null>(null);
   const { setLoading } = useLoading();
-
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
 
   useEffect(() => {
     if (canvasDiv.current) {
@@ -42,9 +41,8 @@ const Scene = () => {
       containerEl.appendChild(renderer.domElement);
 
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
-      camera.position.z = 10;
-      camera.position.set(0, 13.1, 24.7);
-      camera.zoom = 1.1;
+      camera.position.set(0, 12.8, 26.5);
+      camera.zoom = 1.0;
       camera.updateProjectionMatrix();
 
       let headBone: THREE.Object3D | null = null;
@@ -58,6 +56,16 @@ const Scene = () => {
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
       let isMounted = true;
+      let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+
+      const onResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (isMounted) {
+            handleResize(renderer, camera, canvasDiv, charRef.current || sceneRef.current);
+          }
+        }, 200);
+      };
 
       loadCharacter().then((gltf) => {
         if (gltf && isMounted) {
@@ -67,7 +75,7 @@ const Scene = () => {
           }
           mixer = animations.mixer;
           const charScene = gltf.scene;
-          setChar(charScene);
+          charRef.current = charScene;
           scene.add(charScene);
           headBone = charScene.getObjectByName("spine006") || null;
           screenLight = charScene.getObjectByName("screenlight") || null;
@@ -80,9 +88,7 @@ const Scene = () => {
             light.turnOnLights();
           });
 
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, charScene)
-          );
+          window.addEventListener("resize", onResize);
         }
       });
 
@@ -142,11 +148,10 @@ const Scene = () => {
         isMounted = false;
         cancelAnimationFrame(animationFrameId);
         clearTimeout(debounce);
+        clearTimeout(resizeTimer);
+        window.removeEventListener("resize", onResize);
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
         if (containerEl && renderer.domElement && containerEl.contains(renderer.domElement)) {
           containerEl.removeChild(renderer.domElement);
         }

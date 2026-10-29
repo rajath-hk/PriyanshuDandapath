@@ -130,6 +130,8 @@
   gap: 28px;
   overflow-x: auto;
   overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding: 10px 4px 30px 4px;
