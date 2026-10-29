@@ -96,8 +96,7 @@ const Scene = () => {
         }
       });
 
-      let mouse = { x: 0, y: 0 },
-        interpolation = { x: 0.1, y: 0.2 };
+      let mouse = { x: 0, y: 0 };
 
       const onMouseMove = (event: MouseEvent) => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
@@ -113,9 +112,8 @@ const Scene = () => {
       };
 
       const onTouchEnd = () => {
-        handleTouchEnd((x, y, interpolationX, interpolationY) => {
+        handleTouchEnd((x, y) => {
           mouse = { x, y };
-          interpolation = { x: interpolationX, y: interpolationY };
         });
       };
 
@@ -129,18 +127,11 @@ const Scene = () => {
       let animationFrameId: number;
       const animate = () => {
         animationFrameId = requestAnimationFrame(animate);
+        const delta = clock.getDelta();
         if (headBone) {
-          handleHeadRotation(
-            headBone,
-            mouse.x,
-            mouse.y,
-            interpolation.x,
-            interpolation.y,
-            THREE.MathUtils.lerp
-          );
+          handleHeadRotation(headBone, mouse.x, mouse.y, delta);
           light.setPointLight(screenLight);
         }
-        const delta = clock.getDelta();
         if (mixer) {
           mixer.update(delta);
         }

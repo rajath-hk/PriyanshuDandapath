@@ -1,18 +1,23 @@
 import * as THREE from "three";
 import gsap from "gsap";
-import { getCameraFraming } from "../Character/utils/framing";
+import { getCameraFraming, getAboutCameraFraming } from "../Character/utils/framing";
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
   camera: THREE.PerspectiveCamera
 ) {
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const scrubSpeed = prefersReducedMotion ? false : 0.8;
+
   const tl1 = gsap.timeline({
     scrollTrigger: {
       id: "char-tl1",
       trigger: ".landing-section",
       start: "top top",
       end: "bottom top",
-      scrub: true,
+      scrub: scrubSpeed,
       invalidateOnRefresh: true,
     },
   });
@@ -22,7 +27,7 @@ export function setCharTimeline(
       trigger: ".about-section",
       start: "center 55%",
       end: "bottom top",
-      scrub: true,
+      scrub: scrubSpeed,
       invalidateOnRefresh: true,
     },
   });
@@ -32,7 +37,7 @@ export function setCharTimeline(
       trigger: ".whatIDO",
       start: "top top",
       end: "bottom top",
-      scrub: true,
+      scrub: scrubSpeed,
       invalidateOnRefresh: true,
     },
   });
@@ -68,17 +73,23 @@ export function setCharTimeline(
   if (window.innerWidth > 1024) {
     if (character) {
       const { camY, camZ } = getCameraFraming(camera.aspect, window.innerHeight);
+      const { aboutCamY, aboutCamZ, aboutModelX, charRotY } = getAboutCameraFraming(
+        camera.aspect,
+        window.innerHeight
+      );
+
       tl1
-        .fromTo(character.rotation, { y: 0 }, { y: 0.7, duration: 1 }, 0)
-        .fromTo(camera.position, { y: camY, z: camZ }, { y: 12.8, z: 24, duration: 1 }, 0)
-        .fromTo(".character-model", { x: 0 }, { x: "-30%", duration: 1 }, 0)
+        .fromTo(character.rotation, { y: 0 }, { y: charRotY, duration: 1 }, 0)
+        .fromTo(camera.position, { y: camY, z: camZ }, { y: aboutCamY, z: aboutCamZ, duration: 1 }, 0)
+        .fromTo(".character-model", { x: 0 }, { x: aboutModelX, duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
         .fromTo(".about-me", { y: "-30%", opacity: 0 }, { y: "0%", opacity: 1, duration: 0.8 }, 0);
 
       tl2
-        .to(
+        .fromTo(
           camera.position,
+          { y: aboutCamY, z: aboutCamZ },
           { z: 75, y: 8.4, duration: 6, delay: 2, ease: "power3.inOut" },
           0
         )
@@ -86,11 +97,16 @@ export function setCharTimeline(
         .to(".about-section", { opacity: 0, delay: 3, duration: 2 }, 0)
         .fromTo(
           ".character-model",
-          { pointerEvents: "inherit" },
+          { pointerEvents: "inherit", x: aboutModelX },
           { pointerEvents: "none", x: "-6%", delay: 2, duration: 5 },
           0
         )
-        .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)
+        .fromTo(
+          character.rotation,
+          { y: charRotY, x: 0 },
+          { y: 0.92, x: 0.12, delay: 3, duration: 3 },
+          0
+        )
         .to(neckBone!.rotation, { x: 0.6, delay: 2, duration: 3 }, 0)
         .to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0)
         .to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0)
