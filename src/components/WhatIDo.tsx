@@ -1,32 +1,43 @@
-import { useEffect, useRef } from "react";
+import { useState, KeyboardEvent } from "react";
 import "./styles/WhatIDo.css";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { config } from "../config";
+import { MdExpandMore } from "react-icons/md";
+
+interface SkillCardData {
+  title: string;
+  description: string;
+  details: string;
+  tools: string[];
+}
 
 const WhatIDo = () => {
-  const containerRef = useRef<(HTMLDivElement | null)[]>([]);
-  const setRef = (el: HTMLDivElement | null, index: number) => {
-    containerRef.current[index] = el;
+  const [expandedCards, setExpandedCards] = useState<{ [key: number]: boolean }>({
+    0: false,
+    1: false,
+  });
+
+  const cards: SkillCardData[] = [
+    config.skills.develop,
+    config.skills.design,
+  ];
+
+  const toggleCard = (index: number) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
   };
-  useEffect(() => {
-    if (ScrollTrigger.isTouch) {
-      containerRef.current.forEach((container) => {
-        if (container) {
-          container.classList.remove("what-noTouch");
-          container.addEventListener("click", () => handleClick(container));
-        }
-      });
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>, index: number) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleCard(index);
     }
-    return () => {
-      containerRef.current.forEach((container) => {
-        if (container) {
-          container.removeEventListener("click", () => handleClick(container));
-        }
-      });
-    };
-  }, []);
+  };
+
   return (
-    <div className="whatIDO">
+    <div className="whatIDO" id="what-i-do">
+      {/* Left Section Heading */}
       <div className="what-box">
         <h2 className="title">
           W<span className="hat-h2">HAT</span>
@@ -35,106 +46,67 @@ const WhatIDo = () => {
           </div>
         </h2>
       </div>
+
+      {/* Right Service Cards Container */}
       <div className="what-box">
         <div className="what-box-in">
-          <div className="what-border2">
-            <svg width="100%">
-              <line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="100%"
-                stroke="white"
-                strokeWidth="2"
-                strokeDasharray="7,7"
-              />
-              <line
-                x1="100%"
-                y1="0"
-                x2="100%"
-                y2="100%"
-                stroke="white"
-                strokeWidth="2"
-                strokeDasharray="7,7"
-              />
-            </svg>
-          </div>
-          <div
-            className="what-content what-noTouch"
-            ref={(el) => setRef(el, 0)}
-          >
-            <div className="what-border1">
-              <svg height="100%">
-                <line
-                  x1="0"
-                  y1="0"
-                  x2="100%"
-                  y2="0"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
-                <line
-                  x1="0"
-                  y1="100%"
-                  x2="100%"
-                  y2="100%"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
-              </svg>
-            </div>
-            <div className="what-corner"></div>
+          {cards.map((card, index) => {
+            const isExpanded = Boolean(expandedCards[index]);
+            return (
+              <div
+                key={index}
+                className={`what-content ${isExpanded ? "what-content-expanded" : ""}`}
+                onClick={() => toggleCard(index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                tabIndex={0}
+                role="button"
+                aria-expanded={isExpanded}
+                aria-label={`${card.title} - Click to toggle tool details`}
+                data-cursor="pointer"
+              >
+                {/* 4 Corner Sci-Fi Brackets */}
+                <div className="what-corner"></div>
 
-            <div className="what-content-in">
-              <h3>{config.skills.develop.title}</h3>
-              <h4>{config.skills.develop.description}</h4>
-              <p>
-                {config.skills.develop.details}
-              </p>
-              <h5>Skillset & tools</h5>
-              <div className="what-content-flex">
-                {config.skills.develop.tools.map((tool, index) => (
-                  <div key={index} className="what-tags">{tool}</div>
-                ))}
+                {/* Card Content Block */}
+                <div className="what-content-in">
+                  <h3 className="what-card-title">{card.title}</h3>
+                  <h4 className="what-card-subtitle">{card.description}</h4>
+                  <p className="what-card-details">{card.details}</p>
+
+                  {/* Expandable Skills Drawer */}
+                  <div
+                    className={`what-skills-drawer ${
+                      isExpanded ? "drawer-open" : ""
+                    }`}
+                  >
+                    <h5 className="what-skills-heading">Skillset &amp; Tools</h5>
+                    <div className="what-content-flex">
+                      {card.tools.map((tool, tIdx) => (
+                        <span key={tIdx} className="what-tags">
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bottom Toggle Bar with Animated Arrow */}
+                  <div className="what-card-bottom">
+                    <span className="what-toggle-label">
+                      {isExpanded ? "Hide Skillset" : "View Skillset & Tools"}
+                    </span>
+                    <div
+                      className={`what-arrow-btn ${
+                        isExpanded ? "arrow-rotated" : ""
+                      }`}
+                      aria-hidden="true"
+                    >
+                      <MdExpandMore size={20} />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="what-arrow"></div>
-            </div>
-          </div>
-          <div
-            className="what-content what-noTouch"
-            ref={(el) => setRef(el, 1)}
-          >
-            <div className="what-border1">
-              <svg height="100%">
-                <line
-                  x1="0"
-                  y1="100%"
-                  x2="100%"
-                  y2="100%"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
-              </svg>
-            </div>
-            <div className="what-corner"></div>
-            <div className="what-content-in">
-              <h3>{config.skills.design.title}</h3>
-              <h4>{config.skills.design.description}</h4>
-              <p>
-                {config.skills.design.details}
-              </p>
-              <h5>Skillset & tools</h5>
-              <div className="what-content-flex">
-                {config.skills.design.tools.map((tool, index) => (
-                  <div key={index} className="what-tags">{tool}</div>
-                ))}
-              </div>
-              <div className="what-arrow"></div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -142,18 +114,3 @@ const WhatIDo = () => {
 };
 
 export default WhatIDo;
-
-function handleClick(container: HTMLDivElement) {
-  container.classList.toggle("what-content-active");
-  container.classList.remove("what-sibling");
-  if (container.parentElement) {
-    const siblings = Array.from(container.parentElement.children);
-
-    siblings.forEach((sibling) => {
-      if (sibling !== container) {
-        sibling.classList.remove("what-content-active");
-        sibling.classList.toggle("what-sibling");
-      }
-    });
-  }
-}
