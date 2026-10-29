@@ -316,6 +316,7 @@
 
   .what-box-in {
     width: 100%;
+    display: flex !important;
   }
 }
 

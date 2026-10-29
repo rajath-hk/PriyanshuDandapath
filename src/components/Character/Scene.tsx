@@ -31,14 +31,16 @@ const Scene = () => {
       const container = { width, height };
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
+      const isMobileDevice = window.innerWidth <= 768;
 
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: window.devicePixelRatio < 2,
+        antialias: window.devicePixelRatio < 2 && !isMobileDevice,
         powerPreference: "high-performance",
       });
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Adaptive pixel ratio capped at 1.5 on mobile to eliminate GPU thermal throttling
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileDevice ? 1.5 : 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.0;
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -70,7 +72,7 @@ const Scene = () => {
           if (isMounted) {
             handleResize(renderer, camera, canvasDiv, charRef.current || sceneRef.current);
           }
-        }, 200);
+        }, 150);
       };
 
       loadCharacter().then((gltf) => {
@@ -96,6 +98,7 @@ const Scene = () => {
           });
 
           window.addEventListener("resize", onResize);
+          window.addEventListener("orientationchange", onResize);
         }
       });
 
@@ -108,10 +111,12 @@ const Scene = () => {
       const onTouchStart = (event: TouchEvent) => {
         const element = event.target as HTMLElement;
         debounce = window.setTimeout(() => {
-          element?.addEventListener("touchmove", (e: TouchEvent) =>
-            handleTouchMove(e, (x, y) => (mouse = { x, y }))
+          element?.addEventListener(
+            "touchmove",
+            (e: TouchEvent) => handleTouchMove(e, (x, y) => (mouse = { x, y })),
+            { passive: true }
           );
-        }, 200);
+        }, 150);
       };
 
       const onTouchEnd = () => {
@@ -123,13 +128,24 @@ const Scene = () => {
       document.addEventListener("mousemove", onMouseMove);
       const landingDiv = document.getElementById("landingDiv");
       if (landingDiv) {
-        landingDiv.addEventListener("touchstart", onTouchStart);
-        landingDiv.addEventListener("touchend", onTouchEnd);
+        landingDiv.addEventListener("touchstart", onTouchStart, { passive: true });
+        landingDiv.addEventListener("touchend", onTouchEnd, { passive: true });
       }
+
+      // Performance Optimization: Defer GPU render when offscreen (past About) or tab hidden
+      let isVisible = true;
+      const checkVisibility = () => {
+        const scrolledFar = window.scrollY > window.innerHeight * 2.8;
+        isVisible = !document.hidden && !scrolledFar;
+      };
+      document.addEventListener("visibilitychange", checkVisibility);
+      window.addEventListener("scroll", checkVisibility, { passive: true });
 
       let animationFrameId: number;
       const animate = () => {
         animationFrameId = requestAnimationFrame(animate);
+        if (!isVisible) return; // Skip GPU render when offscreen
+
         const delta = Math.min(clock.getDelta(), 0.1);
         if (mixer) {
           mixer.update(delta);
@@ -148,6 +164,9 @@ const Scene = () => {
         clearTimeout(debounce);
         clearTimeout(resizeTimer);
         window.removeEventListener("resize", onResize);
+        window.removeEventListener("orientationchange", onResize);
+        document.removeEventListener("visibilitychange", checkVisibility);
+        window.removeEventListener("scroll", checkVisibility);
         killCharTimeline();
         scene.clear();
         renderer.dispose();

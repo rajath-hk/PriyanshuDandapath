@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
@@ -13,23 +13,12 @@ import CallToAction from "./CallToAction";
 import setSplitText from "./utils/splitText";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
-  const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    () => typeof window !== "undefined" && window.innerWidth > 1024
-  );
-  const [isMobile, setIsMobile] = useState<boolean>(
-    () => typeof window !== "undefined" && window.innerWidth <= 768
-  );
-
   useEffect(() => {
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
     const resizeHandler = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         setSplitText();
-        const desktop = window.innerWidth > 1024;
-        const mobile = window.innerWidth <= 768;
-        setIsDesktopView(desktop);
-        setIsMobile(mobile);
       }, 150);
     };
     window.addEventListener("resize", resizeHandler);
@@ -45,7 +34,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && !isMobile && children}
+      {children}
       <main className="main-content">
         <Landing />
         <About />
