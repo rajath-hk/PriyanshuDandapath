@@ -12,6 +12,7 @@ import {
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
 import { setProgress } from "../Loading";
+import { killCharTimeline } from "../utils/GsapScroll";
 import { getCameraFraming } from "./utils/framing";
 
 const Scene = () => {
@@ -25,7 +26,9 @@ const Scene = () => {
     if (canvasDiv.current) {
       const containerEl = canvasDiv.current;
       const rect = containerEl.getBoundingClientRect();
-      const container = { width: rect.width, height: rect.height };
+      const width = rect.width > 0 ? rect.width : window.innerWidth;
+      const height = rect.height > 0 ? rect.height : window.innerHeight;
+      const container = { width, height };
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
 
@@ -145,6 +148,7 @@ const Scene = () => {
         clearTimeout(debounce);
         clearTimeout(resizeTimer);
         window.removeEventListener("resize", onResize);
+        killCharTimeline();
         scene.clear();
         renderer.dispose();
         if (containerEl && renderer.domElement && containerEl.contains(renderer.domElement)) {

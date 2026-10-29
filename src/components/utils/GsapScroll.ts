@@ -1,11 +1,22 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getCameraFraming, getAboutCameraFraming } from "../Character/utils/framing";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function killCharTimeline() {
+  ScrollTrigger.getById("char-tl1")?.kill();
+  ScrollTrigger.getById("char-tl2")?.kill();
+  ScrollTrigger.getById("char-tl3")?.kill();
+}
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
   camera: THREE.PerspectiveCamera
 ) {
+  killCharTimeline();
+
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -87,45 +98,38 @@ export function setCharTimeline(
         .fromTo(".about-me", { y: "-30%", opacity: 0 }, { y: "0%", opacity: 1, duration: 0.8 }, 0);
 
       tl2
-        .fromTo(
+        .to(
           camera.position,
-          { y: aboutCamY, z: aboutCamZ },
           { z: 75, y: 8.4, duration: 6, delay: 2, ease: "power3.inOut" },
           0
         )
         .to(".about-section", { y: "30%", duration: 6 }, 0)
         .to(".about-section", { opacity: 0, delay: 3, duration: 2 }, 0)
-        .fromTo(
+        .to(
           ".character-model",
-          { pointerEvents: "inherit", x: aboutModelX },
           { pointerEvents: "none", x: "-6%", delay: 2, duration: 5 },
           0
         )
-        .fromTo(
-          character.rotation,
-          { y: charRotY, x: 0 },
-          { y: 0.92, x: 0.12, delay: 3, duration: 3 },
-          0
-        )
+        .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)
         .to(neckBone!.rotation, { x: 0.6, delay: 2, duration: 3 }, 0)
         .to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0)
         .to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0)
         .fromTo(
           ".what-box-in",
           { display: "none" },
-          { display: "flex", duration: 0.1, delay: 6 },
+          { display: "flex", duration: 0.1, delay: 6, immediateRender: false },
           0
         )
         .fromTo(
           monitor.position,
           { y: -10, z: 2 },
-          { y: 0, z: 0, delay: 1.5, duration: 3 },
+          { y: 0, z: 0, delay: 1.5, duration: 3, immediateRender: false },
           0
         )
         .fromTo(
           ".character-rim",
           { opacity: 1, scaleX: 1.4 },
-          { opacity: 0, scale: 0, y: "-70%", duration: 5, delay: 2 },
+          { opacity: 0, scale: 0, y: "-70%", duration: 5, delay: 2, immediateRender: false },
           0.3
         );
 

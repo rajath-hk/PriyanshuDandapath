@@ -14,54 +14,24 @@ import setSplitText from "./utils/splitText";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    window.innerWidth > 1024
+    () => typeof window !== "undefined" && window.innerWidth > 1024
   );
-  const [isMobile] = useState<boolean>(window.innerWidth <= 768);
-  const [shouldRenderCharacter, setShouldRenderCharacter] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    () => typeof window !== "undefined" && window.innerWidth <= 768
+  );
 
   useEffect(() => {
     const resizeHandler = () => {
       setSplitText();
-      setIsDesktopView(window.innerWidth > 1024);
+      const desktop = window.innerWidth > 1024;
+      const mobile = window.innerWidth <= 768;
+      setIsDesktopView(desktop);
+      setIsMobile(mobile);
     };
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
     return () => {
       window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Safety fallback: ensure scroll is unlocked even if loader animation is delayed
-    const unlockTimer = setTimeout(() => {
-      document.body.style.overflowY = "auto";
-    }, 2800);
-
-    if (window.innerWidth <= 1024) return () => clearTimeout(unlockTimer);
-
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-    let idleId: number | undefined;
-    const win = window as Window & {
-      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
-      cancelIdleCallback?: (handle: number) => void;
-    };
-
-    const mountCharacter = () => setShouldRenderCharacter(true);
-
-    if (typeof win.requestIdleCallback === "function") {
-      idleId = win.requestIdleCallback(mountCharacter, { timeout: 1500 });
-    } else {
-      timeoutId = setTimeout(mountCharacter, 1200);
-    }
-
-    return () => {
-      clearTimeout(unlockTimer);
-      if (idleId !== undefined && typeof win.cancelIdleCallback === "function") {
-        win.cancelIdleCallback(idleId);
-      }
-      if (timeoutId !== undefined) {
-        clearTimeout(timeoutId);
-      }
     };
   }, []);
 
@@ -71,7 +41,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && !isMobile && shouldRenderCharacter && children}
+      {isDesktopView && !isMobile && children}
       <main className="main-content">
         <Landing />
         <About />

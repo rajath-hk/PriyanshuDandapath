@@ -1,3 +1,4 @@
+let isRefreshAttached = false;
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextSplitter } from "../../utils/textSplitter";
@@ -75,5 +76,8 @@ export default function setSplitText() {
     );
   });
 
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
+  if (!isRefreshAttached) {
+    isRefreshAttached = true;
+    ScrollTrigger.addEventListener("refresh", () => setSplitText());
+  }
 }
